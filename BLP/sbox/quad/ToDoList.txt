@@ -1,0 +1,198 @@
+
+To Do List:
+
+Lars says:
+
+  For numerical integration, BLP argue that because they are using MC integration,
+  the errors in integration become part of the estimation error. As long as the 
+  number of draws of the MC integration rule increases to infinity with sample 
+  size, these methods will produce consistent estimates. They also adjust the 
+  standard errors for the MC integration error. Not all applications of BLP are 
+  careful about these points. Their arguments do not apply if the researcher's 
+  methods converges to a local optimiser and not a global optimizer. Also, in 
+  practice in finite samples because the MC integration rules typically use very 
+  few points, it is completely unclear what the finite sample properties are. 
+  Clearly, a much better integration rule will have  better finite sample 
+  properties and the issues along the lines of what you write below sound correct. 
+  Write this up and write up a discussion of these points. 
+
+  * Compute price elasticities
+
+Chicago Feedback:
+
+  * Compare performance in comparable settings, either CPU time for same accuracy 
+    or accuracy for same CPU time.
+  * Compare price elasticities
+  * Use a non-BLP model where there is a good estimator.
+
+Petrin Feedback:
+
+  * Must compare to BLP importance sampling
+
+================================================================================
+Other papers/topics
+
+  * Error bounds
+  * Fourier rule + shift/rotation
+  * pMC with different draws for each (j, t) in BLP (or mixed logit)
+  * C++ code (long double, Eigen)
+  * Try estimating BLP with optimal instruments and/or optimal
+    weighting matrix in one go as an MPEC -- see p. 204 in Cameron &
+    Trivedi.
+
+================================================================================
+Judd : 26oct2010
+
+  * Fix sparseness pattern so it is block diagonal
+  * New tables to show point estimates & standard errors side by side
+    : omit data set & inform code
+    : Merge f_k with point estimates & s.e.s
+  * Best practice:
+    : Increase accuracy of rule as needed
+      : Currently, SGI & Monomial rule aren't quite accurate enough
+      : Need to increase K for SGI or generate new Monomial rule (Ken)
+      : pMC faces curse of dimensionality (rapidly decreasing returns
+        to scale) when trying to increase accuracy because you
+        need 100x points for each extra decimal place whereas our 
+        rules don't.
+      : Check: does SGI match GH when I run with higher K?
+    : Good Practice - Sensitivity checking
+      : Good practice for MC
+        - good MC practice would require sensitivity checking -
+          redo 3-4x with different pMC samples
+        - Different samples for each integral
+        - We find excess sensitivity to draws and initial guesses
+      : With polynomial rules, increase accuracy until results do not
+        change
+      : Good practice for global optimization:
+        - Must use multiple restarts 
+
+      *** Don't follow best MC practice, i.e. multiple starts & multiple 
+        draws (both for each integral and replications). cite McFadden
+
+  * Tables:
+    - for talk compare each rule to GH
+    - for paper put all rules in one table
+    - different table for each dataset: robust across datasets, some
+      worse than others
+
+  * Do some of the MC estimates reject other estimates?
+    - product rule?
+    - truth?
+
+  * Pick results to illustrate key points
+
+  * Problems with MSL:
+    - log( 0 )
+    - simulation bias via Jensen's inequality from log
+
+================================================================================
+
+Alternative distributions:
+
+  - Want to get rid of type I extreme value
+  - If alternative distribution has compact support, we
+    can nail the orthant probabilities.
+
+  - Use wavelets
+  - Ken's new spline approximation stuff
+================================================================================
+
+In the paper:
+  X Improve numerical stability of code by computing exp( V_j - V_i ) 
+    instead of doing it the Dube' way.
+
+    Cannot use this method because of outside good. :-(
+
+  / Compute standard errors.  Are point estimates for pMC in confidence
+    interval for monomial or vice versa?
+  - Take starting values about good quadrature rule MPEC point estimate
+  - Take MPEC 'true' point estimate from good quadrature rule.  Then
+    solve for point estimates using multiple different pMC draws.
+    This should show that pMC adds error to point estimates.
+  - Does qMC work better with burn-in == 0?
+  - Compare MATLAB integrals to high precision integrals in Mma.  
+    What is the true reference value to use for integrals?  GH product?
+    Monomial?  SGI is close to GH because it uses a subset of GH nodes.
+  - Finish updating paper for latest results and conversion to larger dataset
+  - Compute max average L1 error and summarize in table
+  - CPU time/iterations under different quadrature rules:
+    - Solver
+    - Computing shares once
+  - Berry's mapping
+  - compare to pMC with R = 10,000 or R = 5,000 draws
+  - more focus on importance of approximating the gradient correctly
+  - Compute pMC point estimates with one starting value and different 
+    pMC draws to show that by choosing different pMC draws you can get 
+    the point estimates you want.
+  - drop qMC because we need to take enough points to get good coverage.  
+    With lower numbers of draws, there is a lot of clump. qMC is better 
+    than pMC and the gap increases when you take more draws.
+  - high order GH terms may add more wiggle and hence cause some local minima
+  - Take BLP point estimate and then compute objective function with different
+    pMC draws.  How often does the point estimate still fall inside the 
+    confidence interval?
+
+Experiments:
+
+  This is nice! It [SNOPT results with R=10,000 have multiple local 
+  solutions] shows that MC users are not using large enough samples.
+
+  When we do this with the Nevo data, we will probably get the same 
+  results, showing that he did not do basic diagnostics to determine
+  the appropriate sample size. Any responsible use of MC does some
+  testing to determine adequate sample size! So, even by the standards
+  of MC work they are careless and sloppy.
+
+  This is now a fourth dimension that we will examine. The dimensions are
+
+  1: different data sets (data sets - 5)
+  2: different starting points (starting points - 5)
+  3: different MC sample sizes (MC sample size -- I think we should 
+     do 1000, 1e4, and 1e5)
+  4: for each MC sample size, do different samples (seeds - 5)
+
+
+Quality of instruments:
+  - Does changing quality of cost shifter instruments (weak, strong instrumets) 
+    affect convergence of solver or point estimates computed under 
+    different quadrature rules?
+  - Is BLP identified without cost shifters?  Does MPEC find a solution
+
+Convergence of Solver of KNITRO or SNOPTA
+	-	why does the solver never find an optimum with monomial rules?
+
+Clenshaw-Curtis quadrature
+
+Selling the paper:
+  - Can we replace maximum simulated likelihood (MSL) or maximum simulated 
+    method of moments with FIML by using a better quadrature rule?
+
+	
+Berry Mapping
+	-	solve for the deltas.  Is this a contraction in delta space?
+		try a grid search?  Does it contract everywhere?  I.e., is it 
+		globally a contraction?
+		-	run contraction with a variety of starts
+		-	plot path of xi vs iteration number
+		-	multiple solutions to real or approximate operator
+	-	Compute Jacobian of the Berry mapping at parameter estimate
+	- Use quadrature (monomial rule) and simulation (N <= 10,000)
+
+Fraction of price coefficient alpha_i < 0
+	-	how often?  
+	-	does this affect convergence or point estimates or GMM value?
+
+  * Integration Paper
+     - Identification
+       - Answer Lars's low variance question
+       - Read Stefan's paper
+    - Rerun other scenarios
+    - Rerun with BLP data	
+    
+Stupid Questions from audience:
+  - Computation with outer product (Jean-Marc)
+  - Froebenius method to decrease memory usage by computing one integral 
+    at a time (Jean-Marc) - speed of convergence based on distance of 
+    starting value from optimum
+

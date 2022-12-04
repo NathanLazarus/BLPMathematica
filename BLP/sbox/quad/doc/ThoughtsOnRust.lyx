@@ -1,0 +1,1342 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Thoughts on Rust
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+This document collects my thoughts about Rust's work on Markov decision
+ processes, i.e.
+ optimal stopping models using discrete choice and dynamic programming such
+ as his paper 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "RustBusEngine1987"
+
+\end_inset
+
+ on optimal replacement of GMC bus engines.
+\end_layout
+
+\begin_layout Section
+Discussion of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "rust1994structural"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Markov Decision Processes
+\end_layout
+
+\begin_layout Itemize
+Terminology
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+State variables 
+\begin_inset Formula $s_{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Control variables 
+\begin_inset Formula $d_{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Discrete 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ 
+\emph on
+discrete decision process 
+\begin_inset Formula $\equiv$
+\end_inset
+
+ DDP
+\end_layout
+
+\begin_layout Itemize
+Continuous 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ 
+\emph on
+continuous decision process 
+\begin_inset Formula $\equiv$
+\end_inset
+
+ CDP
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $t=0,...T$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+primitives: 
+\begin_inset Formula $\left(u,p,\beta\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+utility: 
+\begin_inset Formula $u\left(s_{t,}d_{t}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Markov transition probability: 
+\begin_inset Formula $p\left(s_{t+1}\left|s_{t},d_{t}\right.\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Optimal Decision Rule:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+based on assumption of rationality
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta\left(s_{t}\right)$
+\end_inset
+
+ solves
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+V_{0}^{T}\left(s\right) & \equiv & \underset{\delta}{\max\,}\mathbb{E}_{\delta}\left[\underset{t=0}{\overset{T}{\sum}}\beta^{t}u\left(s_{t},d_{t}\right)\left|s_{0}=s\right.\right]\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Identification
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Choice of an MDP is already a strong assumption
+\end_layout
+
+\begin_layout Itemize
+Class of all MDPs is non-parameterically unidentified
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ must make other parametric assumptions.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given the assumption of MDP, this should not do any further harm to the
+ patient
+\end_layout
+
+\begin_layout Itemize
+Identified with: Rational Expectations + parametric utility
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Estimation
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For CDPs:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Common to use GMM on FOC 
+\end_layout
+
+\begin_layout Itemize
+See Pakes (1994) survey
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For DDPs:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+more complicated because there are no FOCs
+\end_layout
+
+\begin_layout Itemize
+Must solve for 
+\begin_inset Formula $d_{t}=\delta\left(s_{t},\epsilon_{t},\widehat{\theta}\right)$
+\end_inset
+
+ for each choice
+\end_layout
+
+\begin_layout Itemize
+Issues:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $d_{t}$
+\end_inset
+
+ is discrete 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ cannot use non-linear regression
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta$
+\end_inset
+
+'s functional form is unknown and must be determined by solving stochastic
+ control problem
+\end_layout
+
+\begin_layout Itemize
+Error term 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ is non-additive, non-separable, and multi-dimensional
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ is ....
+ an unobserved state variable?!
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $s_{t}=\left(x_{t},\epsilon_{t}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ is an observed state variable
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ is unobserved state variable
+\end_layout
+
+\begin_layout Itemize
+Need additional assumptions:
+\end_layout
+
+\begin_layout Description
+AS Additive Separability of error term: 
+\begin_inset Formula $u=v+\epsilon_{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Choice set depends only on observable state: 
+\begin_inset Formula $x:D\left(s\right)=D\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $u\left(s,d\right)=u\left(x,d\right)+\epsilon\left(d\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon\left(d\right)$
+\end_inset
+
+ is 
+\begin_inset Formula $d$
+\end_inset
+
+-th component of unobservable 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Description
+CI Conditional Independence 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can factor Markov transition probability
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $p\left(dx_{t+1},d\epsilon_{t+1}\left|x_{t},\epsilon_{t},d_{t}\right.\right)=q\left(d\epsilon_{t+1}\left|x_{t+1}\right.\right)\pi\left(dx_{t+1}\left|x_{t},d_{t}\right.\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Implications
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $x_{t+1}$
+\end_inset
+
+ is a sufficient statistic for 
+\begin_inset Formula $\epsilon_{t+1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Markov 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ no 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ on RHS of conditional probability!
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Valid if lagged variables lack sufficient predictive power
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $q\sim$
+\end_inset
+
+ Multivariate extreme value 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ conditional choice probabilities are MNL
+\end_layout
+
+\begin_layout Itemize
+Note: In Rust's paper, 
+\begin_inset Formula $x_{t+1}$
+\end_inset
+
+ drops out of 
+\begin_inset Formula $q\left(\epsilon_{t+1}\left|x_{t+1}\right.\right)$
+\end_inset
+
+ because the state 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ only affects the choice set 
+\begin_inset Formula $C\left(x\right)$
+\end_inset
+
+ for possible 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+:  
+\begin_inset Formula $q\left(\epsilon\left|x\right.;\theta_{2}\right)=\underset{j\in C\left(x\right)}{\Pi}\exp\left\{ -\epsilon\left(j\right)+\theta_{2}\right\} \exp\left\{ -\exp\left\{ -\epsilon\left(j\right)+\theta_{2}\right\} \right\} $
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+AS + CI 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ can integrate 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ out of decision rule 
+\begin_inset Formula $\delta$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+See McFadden (1981, 1984)
+\end_layout
+
+\begin_layout Description
+DIST Assume 
+\begin_inset Formula $\epsilon_{t}\sim TypeIExtremeValueDist$
+\end_inset
+
+ 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ multinomial logit probabilities
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v$
+\end_inset
+
+ is 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+One Period Static Model 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ one period static utility
+\end_layout
+
+\begin_layout Itemize
+Dynamic Model 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ sum of one period utility plus sum of expected discounted utility
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+MLE:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Outer loop searches for 
+\begin_inset Formula $\theta\in\Theta$
+\end_inset
+
+ to maximize 
+\begin_inset Formula $\ell$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Inner Loop solves stochastic control problem and computes choice probabilities
+ 
+\begin_inset Formula $\Pr\left(d\left|x,\theta\right.\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial\Pr\left(d\left|x,\theta\right.\right)/\partial\theta$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+`Since the optimal decision rule 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is generally quite sensitive to the specification of 
+\begin_inset Formula $p$
+\end_inset
+
+, an innaccurate or inconsistent estimate of 
+\begin_inset Formula $p$
+\end_inset
+
+ will contaminate the estimates of 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset
+
+.' p.
+ 3087
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Computation
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Rust uses discrete 
+\begin_inset Formula $s_{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $d_{t}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Bottleneck is 
+\begin_inset Formula $\left[p\left(s_{t+1}\left|s_{t},d_{t}\right.\right)\right]\times V\left(s_{t}\right)$
+\end_inset
+
+ where the transition matrix is 
+\begin_inset Formula $S\times S$
+\end_inset
+
+ and the Value function is 
+\begin_inset Formula $S\times1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+approximate policy iteration
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The error term:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+optimization error, i.e.
+ departures from rational behavior
+\end_layout
+
+\begin_layout Enumerate
+measurement error: more common in 
+\begin_inset Formula $s_{t}$
+\end_inset
+
+ than 
+\begin_inset Formula $d_{t}$
+\end_inset
+
+ because 
+\begin_inset Formula $s_{t}$
+\end_inset
+
+ is continuous
+\end_layout
+
+\begin_layout Enumerate
+approximation error: i.e.
+ caused by model misspecification
+\end_layout
+
+\begin_layout Enumerate
+unobserved state variables
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $s=\left(x,\epsilon\right)$
+\end_inset
+
+, i.e.
+ partition into observed and unobserved state variables
+\end_layout
+
+\begin_layout Itemize
+Estimate using MLE for 
+\emph on
+conditional choice probability:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P\left(d\left|x\right.\right) & = & \int\mathbb{I}\left[d=\delta\left(x,\epsilon\right)\right]q\left(d\epsilon\left|x\right.\right)\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\epsilon\left|x\right.\sim q\left(d\epsilon\left|x\right.\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Note: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $P\left(d\left|x\right.\right)$
+\end_inset
+
+ is a smooth function of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Satisfies AS and CI
+\end_layout
+
+\begin_layout Itemize
+Implies full support: 
+\begin_inset Formula $d\in D\left(x\right)\iff P\left(d\left|x\right.\right)>0$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+A model is saturated when full support holds
+\end_layout
+
+\begin_layout Itemize
+unsaturated models have choices which cannot be rationalized for any 
+\begin_inset Formula $\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Assumptions to guarantee Existence
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In addition to AS and CI
+\end_layout
+
+\begin_layout Description
+BU 
+\begin_inset Formula $u\left(x,d\right)$
+\end_inset
+
+ is an upper semicontinuous function with bounded expectation
+\end_layout
+
+\begin_layout Description
+WC 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\pi\left(dy\left\downarrow x,d\right.\right)$
+\end_inset
+
+ is weakly continuous
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\forall$
+\end_inset
+
+ bounded functions 
+\begin_inset Formula $h$
+\end_inset
+
+, 
+\begin_inset Formula $\int h\left(y\right)\pi\left(dy\left|x,d\right.\right)$
+\end_inset
+
+ is a continuous function of 
+\begin_inset Formula $x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+BE Social surplus is bounded and Borel measurable
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Theorems
+\end_layout
+
+\begin_layout Itemize
+AS, CI, + regularity conditions BU, WC, BE 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ optimal decision rule is
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\delta\left(x,\epsilon\right) & = & \underset{d\in D\left(x\right)}{\mathtt{argmax}}v\left(x,d\right)+\epsilon\left(d\right)\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $v$
+\end_inset
+
+ is the unique fixed point of 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\Psi\left(v\right)\left(x,d\right) & = & u\left(x,d\right)+\beta\int G\left[v\left(y,d^{'}\right),d^{'}\in D\left(y\right)\left|y\right.\right]\pi\left(dy\left|x,d\right.\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $G$
+\end_inset
+
+ is the social surplus function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+G\left[\left\{ u\left(x,d\right),d\in D\left(x\right)\right\} \left|x\right.\right] & = & \int\underset{d\in D\left(x\right)}{\max}\left[u\left(x,d\right)+\epsilon\left(d\right)\right]q\left(d\epsilon\left|x\right.\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Given AS, CI, BU, WC, BE, transition probabilities are Markovian with
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+P\left(x_{t+1},d_{t+1}\left|x_{t},d_{t}\right.\right)=P\left(d_{t+1}\left|x_{t+1}\right.\right)\pi\left(dx_{t+1}\left|x_{t},d_{t}\right.\right)\]
+
+\end_inset
+
+ and the conditional choice probabilities are given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P\left(x_{t+1},d_{t+1}\left|x_{t},d_{t}\right.\right) & = & \dfrac{\partial G\left[\left\{ v\left(x,d\right),d\in D\left(x\right)\right\} \left|x\right.\right]}{\partial v\left(x,d\right)}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Discussion
+\end_layout
+
+\begin_layout Itemize
+Because other alternatives enter value function, Rust argues type I extreme
+ value assumption doesn't lead to IIA problems.
+\end_layout
+
+\begin_layout Itemize
+FIML Likelihood
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+L\left(\widehat{\theta}\right) & = & \underset{a=1}{\overset{A}{\Pi}}\underset{t=1}{\overset{T_{a}}{\Pi}}P\left(d_{t}^{a}\left|x_{t}^{a},\theta\right.\right)\pi\left(x_{t}^{a}\left|x_{t-1}^{a},d_{t-1}^{a},\theta\right.\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Better to partition and estimate in stages
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\theta=\left(\theta_{1},\theta_{2}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\theta_{1}$
+\end_inset
+
+ is the parameters in 
+\begin_inset Formula $\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ is those in 
+\begin_inset Formula $u,q,\beta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\widehat{\theta_{1}}=\mathtt{argmax}\, L_{1}\left(\theta_{1}\right)\equiv\underset{a=1}{\overset{A}{\Pi}}\underset{t=1}{\overset{T_{a}}{\Pi}}\pi\left(x_{t}^{a}\left|x_{t-1}^{a},d_{t-1}^{a},\theta_{1}\right.\right)$
+\end_inset
+
+.
+ Note no NFXP is needed yet
+\end_layout
+
+\begin_layout Enumerate
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+\begin_inset Formula $\widehat{\theta_{2}}=\mathtt{argmax}\, L_{2}\left(\widehat{\theta_{1}},\theta_{2}\right)=\underset{a=1}{\overset{A}{\Pi}}\underset{t=0}{\overset{T_{a}}{\Pi}}P\left(d_{t}^{a}\left|x_{t}^{a},\widehat{\theta_{1}},\theta_{2}\right.\right)$
+\end_inset
+
+.
+ Note estimation error makes the information matrix here inconsistent
+\end_layout
+
+\begin_layout Enumerate
+Then estimate full model with a couple Newton steps to get a consistent
+ Information Matrix
+\end_layout
+
+\begin_layout Itemize
+Uses outer product approximation for Hessian.
+ :-(
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Critique of Assumptions:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assume that different agents are iid -- i.e.
+ there are no macro shocks
+\end_layout
+
+\begin_layout Itemize
+Or, 
+\begin_inset Formula $x_{t}=\left(m_{t},z_{t}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $m_{t}$
+\end_inset
+
+ is the macro shock state variable and 
+\begin_inset Formula $z_{t}$
+\end_inset
+
+ is the individual idiosyncratic component.
+\end_layout
+
+\begin_layout Description
+CI-X 
+\begin_inset Formula $\pi\left(dx_{t+1}\left|x_{t},d_{t}\right.\right)=\pi_{1}\left(dz_{t+1}\left|m_{t},z_{t},d_{t}\right.\right)\pi_{2}\left(dm_{t+1}\left|m_{t}\right.\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+SI-E distributions of 
+\begin_inset Formula $\epsilon_{t}^{a}$
+\end_inset
+
+ are conditionally independent
+\end_layout
+
+\begin_layout Description
+SI-Z idiosyncratic components of 
+\begin_inset Formula $z_{t}^{a}$
+\end_inset
+
+ are independent
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Proof of asymptotics....
+\end_layout
+
+\begin_layout Itemize
+Pakes (????)
+\end_layout
+
+\begin_layout Itemize
+Hotz-Miller Simulated Value function estimator
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset citation
+LatexCommand citealt
+key "RustBusEngine1987"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Discussion with Ken
+\end_layout
+
+\begin_layout Itemize
+Horrible notation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $V_{\theta}\left(x_{t}\right)$
+\end_inset
+
+ is not a gradient, it is 
+\begin_inset Formula $V\left(x_{t};\theta\right)$
+\end_inset
+
+.
+ In fact, the subscript 
+\begin_inset Formula $t$
+\end_inset
+
+ is also lousy because we have a recursive formulation/infinite horizon
+ problem
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $EV_{\theta}\left(x_{t},i_{t}\right)$
+\end_inset
+
+ is 
+\begin_inset Formula $\mathbb{E}\left[V\left(x_{t};\theta\right)\left|x,\epsilon\right.\right]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Better formulation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $i$
+\end_inset
+
+ should not be a variable
+\end_layout
+
+\begin_layout Itemize
+no 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ etc.
+ in Bellman equation
+\end_layout
+
+\begin_layout Itemize
+Notation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $d$
+\end_inset
+
+ is the decision
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta\left(x,\epsilon;\theta\right)$
+\end_inset
+
+ is the policy function
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $D\left(x,\epsilon\right)$
+\end_inset
+
+ is the decision set
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $V\left(x,\epsilon;\theta\right)=\underset{d\in D\left(x,\epsilon\right)}{\max}\left[u\left(x,d;\theta\right)+\epsilon_{d}+\beta\mathbb{E}\left\{ V\left(x^{+},\epsilon^{+};\theta\right)\left|x,d,\epsilon\right.\right\} \right]$
+\end_inset
+
+.
+ Note: 
+\begin_inset Formula $\epsilon_{d}$
+\end_inset
+
+ id the 
+\begin_inset Formula $d$
+\end_inset
+
+-th component of the multivariate shock which corresponds to choice 
+\begin_inset Formula $d$
+\end_inset
+
+ of the agent a.k.a.
+ Howard Zurcher.
+\end_layout
+
+\begin_layout Itemize
+Markov transition probability + Conditional Independence assumption: 
+\begin_inset Formula $p\left(x^{+},\epsilon^{+}\left|x,d\right.;\theta\right)=q\left(\epsilon^{+}\left|x^{+}\right.;\theta\right)\pi\left(x^{+}\left|x,d\right.;\theta\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Social Surplus Function 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon\sim$
+\end_inset
+
+ multivariate Type I Extreme Value distribution
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+The value function
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+depends on the information set
+\end_layout
+
+\begin_layout Itemize
+Agent knows 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ before making decision
+\end_layout
+
+\begin_layout Itemize
+Can express decision problem as a cutoff strategy
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Rust: 
+\begin_inset Formula $x\gtreqless\gamma\left(\theta\right)$
+\end_inset
+
+ in the static case without a shock
+\end_layout
+
+\begin_layout Itemize
+With a shock, 
+\begin_inset Formula $d=\delta\left(x,\epsilon;\theta\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta\left(x,\epsilon;\theta\right)=\underset{d\in D\left(x\right)}{\mathtt{argmax}\,}u\left(x,d;\theta\right)+\epsilon_{d}+\mathbb{E}\left\{ V\left(x^{+},\epsilon^{+};\theta\right)\left|x,d,\epsilon\right.;\theta\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta\left(x,\epsilon\right)=\begin{cases}
+0 & W\left(x,\epsilon,d=0\right)>W\left(x,\epsilon,d=1\right)\\
+1 & otherwise\end{cases}$
+\end_inset
+
+ where 
+\begin_inset Formula $W\left(x,\epsilon,d\right)\equiv u\left(x,d;\theta\right)+\epsilon_{d}+\mathbb{E}\left\{ V\left(x^{+},\epsilon^{+};\theta\right)\left|x,d,\epsilon\right.;\theta\right\} $
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Timing:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+No 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ in value function
+\end_layout
+
+\begin_layout Itemize
+Agent sees 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ then 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ then makes decision.
+ This is 
+\begin_inset Formula $W\left(x,\epsilon;\theta\right)$
+\end_inset
+
+ .
+ 
+\begin_inset Formula $W$
+\end_inset
+
+ is the payoff under full information.
+\end_layout
+
+\begin_layout Itemize
+How to write the DP:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+value function is expected present value of payoffs condition on information
+ set at that moment
+\end_layout
+
+\begin_layout Enumerate
+After seeing 
+\begin_inset Formula $x$
+\end_inset
+
+ but before 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+.
+ This is better because then you can integrate out 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ and sum over decisions to get the value function
+\end_layout
+
+\begin_layout Enumerate
+Or, after seeing both 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Overview
+\end_layout
+
+\begin_layout Itemize
+Regenerative optimal stopping problem
+\end_layout
+
+\begin_layout Itemize
+Regenerative random walk for mileage process
+\end_layout
+
+\begin_layout Itemize
+Cost minimization
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\beta$
+\end_inset
+
+ is unidentified
+\end_layout
+
+\begin_layout Itemize
+Zurcher may be minimizing long run average costs instead of PDV of costs
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/bss/sbox/docs/research/bib/DiscreteChoiceWithKen"
+options "authordate1"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

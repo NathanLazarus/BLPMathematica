@@ -1,0 +1,17 @@
+0000000000000000000000000000000000000000 6362c45940261bcb77947685f0d6ba1134e332b8 skrainkab <skrainkab@kenjudd-Precision-Tower-7910.(none)> 1607377312 -0800	clone: from git@github.com:KennethJudd/quad.git
+6362c45940261bcb77947685f0d6ba1134e332b8 e75f6156484c90bdac223a242d6dccc208ba9cf3 Benjamin S. Skrainka <ben@alchemydatascience.com> 1607896691 -0800	commit: Updated to use KNITRO 12.3.0 interface
+e75f6156484c90bdac223a242d6dccc208ba9cf3 e1c230e122a357107099709f6b158fad663357fc Benjamin S. Skrainka <ben@alchemydatascience.com> 1607901878 -0800	commit: Created to estimate using KNITRO 12.3.0
+e1c230e122a357107099709f6b158fad663357fc ebea467dfae934e397ed429f262239ab92d73a4b Benjamin S. Skrainka <ben@alchemydatascience.com> 1607908818 -0800	commit: Remove code to adjust number of threads
+ebea467dfae934e397ed429f262239ab92d73a4b 5aa6266ba0bc9bf1a39c528b3a723337835e0069 Benjamin S. Skrainka <ben@alchemydatascience.com> 1607908850 -0800	commit: Update path to find Numerical Recipes code
+5aa6266ba0bc9bf1a39c528b3a723337835e0069 d2d6288951be9b7585bd3361c022a36c7ee6521e Benjamin S. Skrainka <ben@alchemydatascience.com> 1607908883 -0800	commit: Use dense math instead of sparse because spzeros is unavailable
+d2d6288951be9b7585bd3361c022a36c7ee6521e 3c0613979fa36dfbb3fc994af565931a3b035d02 Benjamin S. Skrainka <ben@alchemydatascience.com> 1607911355 -0800	commit: Clean-up and partial update of constraints for KNITRO
+3c0613979fa36dfbb3fc994af565931a3b035d02 c15d1a5e634457145745c93fbc74f8bc5d2e5883 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608001798 -0800	commit: Major brain surgery to update to latest DFS code
+c15d1a5e634457145745c93fbc74f8bc5d2e5883 1f5494ef7d1fc1df62339bff0688e5f5ed9635cc Benjamin S. Skrainka <ben@alchemydatascience.com> 1608010764 -0800	commit: Bug fixes to support latest DFS code
+1f5494ef7d1fc1df62339bff0688e5f5ed9635cc 61b9bf82ad82a94145a2ac500a7129c6f0a39886 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608062701 -0800	commit: Fix confusing GHQuadInit interface
+61b9bf82ad82a94145a2ac500a7129c6f0a39886 665cd34622d98289381306b42347503c66c3e156 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608079941 -0800	commit: Clean up
+665cd34622d98289381306b42347503c66c3e156 2701c27237a42807383ba2158125d7f7d3b15ed1 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608082891 -0800	commit: Fix typo
+2701c27237a42807383ba2158125d7f7d3b15ed1 047c11b30697f73b74bac325ebb54338b5d77558 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608086675 -0800	commit: Update to use latest market-product ordering
+047c11b30697f73b74bac325ebb54338b5d77558 261ead9698602eed51d984642a759ae89588b244 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608087077 -0800	commit: Fixed number of products across all markets
+261ead9698602eed51d984642a759ae89588b244 9440896e4e0309ba3884c6b72e3b320785efa0b0 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608145417 -0800	commit: Dynamically determine best optimum to use to compare shares
+9440896e4e0309ba3884c6b72e3b320785efa0b0 d26be1a3555efc5897a768a25b2f8892d4f96b78 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608167965 -0800	commit: Update documentation in code
+d26be1a3555efc5897a768a25b2f8892d4f96b78 0f6bd9243d7ed15172ad563f9df4cb94e91dffa6 Benjamin S. Skrainka <ben@alchemydatascience.com> 1608168717 -0800	commit: Update README.md to explain configuration and operation better

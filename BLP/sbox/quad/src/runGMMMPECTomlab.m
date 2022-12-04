@@ -1,0 +1,116 @@
+function [theta1,theta2,G,INFO,CPUt,FuncEval,GradEval,MPECx] = runGMMMPECTomlab(x00,gradient)
+
+% source: Dube, Fox and Su (2009)
+% Code Revised: March 2009
+%
+% modification history
+% --------------------
+% 21aug2010 bss added box constraints to avoid bad regions
+%
+
+global iteration K T prods IV tol_outer share
+
+if nargin<2,
+    gradient=0;
+end
+
+nBeta = K + 1 ;      % number of parameters
+
+iteration = 0;
+INFO = -1;
+reps =0;
+CPUt = 0;
+differ = 1;
+while INFO == -1 && reps <= 1
+    
+    % Setup the lower and upper bounds for variables and constraints
+% %     x_L = -Inf*ones(length(x00),1);   % Lower bounds for x.
+% %     x_U =  Inf*ones(length(x00),1);   % Upper bounds for x.
+    
+    x_L = -1e8*ones(length(x00),1);   % Lower bounds for x.
+    x_U =  1e8*ones(length(x00),1);   % Upper bounds for x.
+    
+    
+    % Put box on beta and sigma (scale of random coefficients)
+    x_L( 1 : nBeta ) = -10 ;
+    x_L( (nBeta + 1) : (2 * nBeta ) ) = -5 ;     % scale of RCs must be positive
+
+    x_U( 1 : nBeta ) = 10 ;
+    x_U( (nBeta + 1) : (2 * nBeta ) ) = 5 ;     % scale of RCs must be positive
+    
+    neF    = prods*T + size(IV, 2);
+    c_L = zeros(neF,1);
+    c_U = zeros(neF,1);
+    
+    c_L(1:prods*T) = log(share);
+    c_U(1:prods*T) = log(share);
+    
+   
+    nx0 = size(x00,1);
+    HessPattern = zeros(nx0,nx0);
+    HessPattern(2*K+3+T*prods:end,2*K+3+T*prods:end) = 1;       % specify sparsity pattern for Hessian
+    
+    nIV = size(IV,2);
+    
+    c11 = zeros(T*prods, K+1);
+    c12 = ones(T*prods, K+1);
+    c13 = repmat(eye(T), prods, prods);
+    c14 = zeros(T*prods, nIV);
+    
+    c21 = ones(nIV, K+1);    
+    c22 = zeros(nIV, K+1);    
+    c23 = ones(nIV, T*prods);
+    c24 = eye(nIV);     
+    
+    ConsPattern = [ c11 c12 c13 c14; c21 c22 c23 c24 ];         % specify sparsity pattern for constraints
+    
+    Name = 'BLP MPEC Problem';
+    fLowBnd = 0;                                                % Lower bound on function.
+
+    if gradient==1,
+	    Prob = conAssign('GMMMPEC_f', 'GMMMPEC_grad', 'GMMMPEC_hess', HessPattern, x_L, x_U, Name, x00,... 
+        	[], fLowBnd, [], [], [], 'GMMMPEC_c', 'GMMMPEC_dc', [], ConsPattern, c_L, c_U);
+    else
+	    Prob = conAssign('GMMMPEC_f', [], 'GMMMPEC_hess', HessPattern, x_L, x_U, Name, x00,... 
+        	[], fLowBnd, [], [], [], 'GMMMPEC_c', [], [], ConsPattern, c_L, c_U);
+    end
+    Prob.PriLevOpt = 3; 
+    Prob.KNITRO.PrintFile = ''; 
+    Prob.KNITRO.options.ALG = 2;        % IP-CG
+    
+%     Prob.KNITRO.options.ALG = 3 ;       % Active Set
+    
+    Prob.KNITRO.options.MAXIT = 500;    % Setting maximum number of iterations     
+    Prob.KNITRO.options.HESSOPT = 4;    % to be used along with first-order derivatives    
+    
+    Prob.KNITRO.options.OPTTOL = tol_outer ;    % set outer-loop tolerance
+
+    % Enable validation of gradient, Jacobian, etc.
+    bDebug = 0 ;
+    if bDebug
+% %      Prob = probInit( ' con_prob', 10 ) ;
+      Prob.SOL.optPar( 1 )  = 111111 ;            % Major print level
+      Prob.SOL.optPar( 2 )  = 10 ;                % Minor print level
+      Prob.SOL.optPar( 13 ) = 3;                  % Verify level 
+      Prob.SOL.PrintFile = 'ValSnoptP.txt' ;      % SNOPT print file name 
+      Prob.SOL.SummFile  = 'ValSnoptS.txt' ;      % SNOPT summary file name
+      
+      PriLev = 2 ;    % Long verion of final result
+    else
+      PriLev = 1 ;    % Short version of final result
+    end
+    
+    MPEC_Result = tomRun('snopt', Prob, PriLev ) ;
+    
+    MPECx = MPEC_Result.x_k;
+    G = MPEC_Result.f_k;
+    INFO = MPEC_Result.Inform;
+    CPUt = MPEC_Result.CPUtime;
+    FuncEval = MPEC_Result.FuncEv;
+    GradEval = MPEC_Result.GradEv; 
+    theta1 = MPECx(1:K+1);
+    theta2 = MPECx(K+2:2*K+2);
+    
+    x00 = MPECx;
+    reps = reps+1;
+end

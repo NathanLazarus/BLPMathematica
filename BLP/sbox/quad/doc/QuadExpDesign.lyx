@@ -1,0 +1,1257 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage[normalem]{ulem}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+High Performance Quadrature: Experimental Design
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+Kenneth L.
+ Judd
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Overview: A Tale of Three Thetas
+\end_layout
+
+\begin_layout Standard
+Need to rerun experiments on a larger scale with data generated from a high
+ quality quadrature rule to eliminate sampling error.
+ 
+\end_layout
+
+\begin_layout Standard
+When estimating a model there are three parameter values of interest:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\theta_{truth}$
+\end_inset
+
+, the data generating process's true parameters 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+, the estimate that would be computed if there were no numerical error,
+ i.e.
+ the `true' point estimate
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+, the estimate of the parameters which is computed with numerical error,
+ i.e.
+ the approximation to the true point estimate 
+\end_layout
+
+\begin_layout Standard
+This paper is about the difference between 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+.
+ In particular, the interaction between the solver and the quadrature rule
+ can produce 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ which is quite far from 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ when the rule for approximating the integral is quite poor.
+\end_layout
+
+\begin_layout Standard
+Death Star is about 
+\begin_inset Formula $\theta_{truth}$
+\end_inset
+
+ vs.
+ 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Initial Findings
+\end_layout
+
+\begin_layout Standard
+Our initial findings from our synthetic reduced form data show that the
+ interaction between the solver and the method for numerically approximating
+ multidimensional integrals can affect estimation results in the context
+ of the BLP model:
+\end_layout
+
+\begin_layout Itemize
+Polynomial rules are:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+10-1000x faster for a given level of accuracy 
+\end_layout
+
+\begin_layout Itemize
+at least 10x more accurate for a given cost
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+pMC produces incorrect point estimates whereas polynomial-based quadrature
+ is much more likely to always produce the same point estimate
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+All evidence is that the errors for 
+\begin_inset Formula $\tilde{\theta}^{pMC}$
+\end_inset
+
+ are much much larger than 
+\begin_inset Formula $\tilde{\theta}^{poly}$
+\end_inset
+
+.
+ The evidence is:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+From different starting points and quadrature methods, polynomial rules
+ give the same answer up to many (how many? XXX) digits
+\end_layout
+
+\begin_layout Itemize
+Different pMC samples and starting give different answers at first or second
+ digit
+\end_layout
+
+\begin_layout Itemize
+If you restart on 
+\begin_inset Formula $\tilde{\theta}^{pMC}$
+\end_inset
+
+ using a polynomial rule, the solver converges to 
+\begin_inset Formula $\tilde{\theta}^{poly}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Polynomial rules reliably produce identical results from different starting
+ points
+\end_layout
+
+\begin_layout Itemize
+Sparse grids may be more accurate than monomial rule by an order of magnitude
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+All of the polynomial rules indicate that there is a unique local optimum
+ whereas the pMC rules find multiple local optima for different starts and
+ draws of nodes:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+pMC produces artificial local optima: cite Knittel
+\end_layout
+
+\begin_layout Itemize
+pMC produces artificially small standard errors because pMC produces noise
+ which results in higher curvature at the true minimum of the approximation
+ to the objective function.
+ Consequently, polynomial rules detect larger standard errors more often
+ because they have higher accuracy.
+ pMC works for approximating the objective on average but optimization searches
+ for a particular point at the bottom of the pocket of curvature.
+ (This is really an issue of approximating the integrals correctly.
+ We could do some sensitivity tests to show that the problem is inaccurate
+ quadrature not just pMC per-se.)
+\end_layout
+
+\begin_layout Itemize
+
+\color blue
+To emphasize that pMC creates ripples in the likelihood surface, we could
+ compute standard errors (i.e.
+ a measure of curvature) at a fixed point such as 
+\begin_inset Formula $\theta_{truth}$
+\end_inset
+
+ for different sets of draws and show how much these estimates change for
+ different sets of draws.
+ Or, look at the variation in the standard errors at 
+\begin_inset Formula $\tilde{\theta}^{pMC}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbb{E}\left[s_{pMC}\right]=s_{poly}$
+\end_inset
+
+ for all of the polynomial share integrals, 
+\begin_inset Formula $s_{poly}$
+\end_inset
+
+, whereas 
+\begin_inset Formula $s_{pMC}$
+\end_inset
+
+ forms a Monte Carlo cloud.
+ I.e., polynomial rules have less error and compute the objective correctly.
+\end_layout
+
+\begin_layout Standard
+
+\color red
+An important task for us is to define precisely what we mean by producing
+ correct answers versus incorrect answers.
+ Your reference to "identical results" is part of this.
+ I think we ought to have a section outlining in detail how we determine
+ "good" versus "bad".
+ The battle is between pMC and quadrature.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color red
+***Test the 
+\begin_inset Formula $H_{o}$
+\end_inset
+
+ that 
+\begin_inset Formula $s_{poly}$
+\end_inset
+
+ is correct.
+ Compute 
+\begin_inset Formula $s_{poly}$
+\end_inset
+
+ and then take many replications of 
+\begin_inset Formula $s_{pMC}^{(n)}$
+\end_inset
+
+ to test the hypothesis that 
+\begin_inset Formula $s_{poly}$
+\end_inset
+
+ is correct.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+There are three primary quantities of interest: share values/objective function
+ surface, 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+, and standard errors.
+ Most readers trust pMC and treat that as the gold standard -- this is my
+ sense based on a conversation with Whitney Newey.
+ Neweyites will treat the expectation of the pMC values as the truth.
+ Using a crazy number of pMC draws as the truth is most practical for the
+ share value and objective function computations because these computations
+ are easy to parallelize.
+ Even if we compute a gold standard using 1,000,000 draws, the rule will
+ be about 
+\begin_inset Formula $10\sqrt{10}$
+\end_inset
+
+ more accurate than a pMC rule with 1000 nodes but not the SGI rule with
+ 993 nodes.
+ In addition, we should use more dataset and pMC node replications (Currently
+ we use 5 synthetic datasets and I think only one set of pMC nodes in most
+ cases with 5-10 starts).
+ What are the best metrics for comparing share values: maximum or average
+ absolute error? What really matters is some metric for measuring the descrepanc
+y of the approximation of the surface from the true surface, especially
+ the introduction of non-convexities by different rules.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+For the comparison of share values, we should drop the product rules and
+ treat a pMC rule with some crazy number of draws as the truth.
+ It is probably a waste of resources to estimate BLP with 
+\begin_inset Formula $10^{6}$
+\end_inset
+
+ pMC nodes, but this may be necessary to convince some readers.
+\end_layout
+
+\begin_layout Itemize
+The inner loop contraction mapping is rubbish:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Often fails to converge in 1,000 iterations
+\end_layout
+
+\begin_layout Itemize
+Fails to satisfy the diagonal dominance sufficiency conditions for Berry's
+ proof about 10% of the time
+\end_layout
+
+\begin_layout Itemize
+Heuristic contraction rate is about 1, though sometimes larger!
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\color red
+Do we want this contraction issue in this paper.
+ There are two issues: 
+\end_layout
+
+\begin_layout Enumerate
+
+\color red
+Contraction fails for the map
+\end_layout
+
+\begin_layout Enumerate
+
+\color red
+The map may be a contraction, but the approximation of the map is not, perhaps
+ even with polynomial rules.
+\end_layout
+
+\begin_layout Standard
+
+\color red
+This paper should only discuss (2).
+ The other issue attacks the underlying theory, which is a topic for another
+ paper.
+ So, our examples should show that a: the map is a contraction when using
+ polynomial rules, but is not a contraction for some pMC samples.
+ We could pick one particular map, show that it is a contraction with good
+ quadrature rules, maybe not a contraction with sloppier quadrature rules,
+ and then compute the percentage of pMC samples for which it is not a contractio
+n.
+ b: even if the map is a contraction for any integration method, the pMC
+ approximation has a significantly different convergence rate.
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+I think this is a good suggestion.
+ Most researchers do not appreciate that it is superlinear at best.
+ We only need to make point 2, because that is waht matters in practice.
+ We can compute heuristic contraction rates and whether Berry's sufficiency
+ conditions hold as the mapping progresses for the different rules and also
+ show how different draws of pMC nodes affect results.
+ I am not convinced that Berry's map is a contraction even with good quadrature.
+ We can also document that it often fails to make progress and that the
+ rules affect the computed values for 
+\begin_inset Formula $\xi$
+\end_inset
+
+, which is used to form GMM moments.
+\end_layout
+
+\begin_layout Itemize
+pMC provides poorer approximations to derivatives (gradients, Hessians)
+ which complicate the solver's job
+\end_layout
+
+\begin_layout Standard
+
+\color red
+We should focus on the fact that pMC gets wrong results, not that it slows
+ down convergence of the estimator.
+ [With an analytic derivative, we get a the true derivative of the approximation
+ to the integral.] When you need the true derivative, ie..
+ for optimization, it increases the accuracy requirements for the approximation
+ for the objective because the solver needs accurate gradient information.
+ Bottom line: pMC delivers a much less accurate gradient.
+ 
+\color blue
+Agreed
+\end_layout
+
+\begin_layout Itemize
+Comparing results for moments with exact answer shows pMC is bad everywhere
+ whereas polynomial rules aren't much worse for even nodes above their order
+ of exactness.
+\end_layout
+
+\begin_layout Standard
+
+\color red
+What do you mean by "everywhere"? I think you mean that we should show how
+ bad pMC is for a large set of monomials, but that polynomial rules are
+ excellent for low order monomials and not so bad for higher order monomials.
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+By `everywhere,' I mean that pMC has large error for all monomials -- large
+ and small.
+ Our particular set of draws happened to be a very inaccurate set of pMC
+ nodes.
+ We should include some sensitivity analysis to show how much pMC values
+ for standard monomials can vary just by taking different draws.
+ We need to drive home the point that the CLT applies.
+\end_layout
+
+\begin_layout Itemize
+Need to discuss unbiasedness of individual integrals, not just at point
+ estimates.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Prior to discussing estimates
+\end_layout
+
+\begin_layout Itemize
+Add horse race, if doing statistical inference, would you reject the hypothesis
+ that the polynomial rules were correct?
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Same dataset, same truth, same model parameters:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Multiple pMC draws of nodes
+\end_layout
+
+\begin_layout Itemize
+Show how to use pMC responsibly:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Different draws for each integral
+\end_layout
+
+\begin_layout Itemize
+Error analysis
+\end_layout
+
+\begin_layout Itemize
+This is another paper (a lot of work).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Criticism of pMC literature: researchers should perform sensitivity analysis.
+ This is part of MC analysis.
+\end_layout
+
+\begin_layout Itemize
+Practitioners must follow good MC practice.
+\end_layout
+
+\begin_layout Itemize
+Good practice implies you need XXX nodes
+\end_layout
+
+\begin_layout Itemize
+If you get a variety of 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ is not small, then you should realize that standard errors are garbage
+ and you cannot do asymptotics:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+variance of 
+\begin_inset Formula $\tilde{\theta}>$
+\end_inset
+
+ variance computed using GMM
+\end_layout
+
+\begin_layout Itemize
+Then you need to do parametric bootstrap, but this is not possible with
+ BLP
+\end_layout
+
+\begin_layout Itemize
+But, it is difficult to recover 
+\begin_inset Formula $\xi$
+\end_inset
+
+ reliably 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Experimental Design
+\end_layout
+
+\begin_layout Standard
+Our experiments must deal with several issues:
+\end_layout
+
+\begin_layout Itemize
+Compare apples and apples:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Use pMC and polynomial rules with the same cost to compare accuracy
+\end_layout
+
+\begin_layout Itemize
+Use pMC and polynomial rules with the same accuracy to compare cost
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Show inference cannot reject polynomial-based point estimates
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Which standard errors should we use?
+\end_layout
+
+\begin_layout Itemize
+Is bootstrap possible?
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+What is best way to generate synthetic data?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Structural model
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Econometrically more rigorous because data has correct statistical properties
+ if the model of competition is correct
+\end_layout
+
+\begin_layout Itemize
+Computationally intensive
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Reduced form
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Easier to solve because instruments work
+\end_layout
+
+\begin_layout Itemize
+Makes bias less of an issue?
+\end_layout
+
+\begin_layout Itemize
+Glosses over the issue of the true nature of competition
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Fix parameters, market size (T), and number of products (J).
+\end_layout
+
+\begin_layout Itemize
+Compute shares using a highly accurate rule to avoid sampling issues, i.e.
+ our synthetic data is computed from the population of consumers and not
+ a sub-sample!
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\color red
+The data generation issues should be left for the bias paper.
+ This paper should cite that paper and not spend much time on it.
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+Agreed.
+ My inclination is that we should generate reduced form data because it
+ is (1) faster and (2) easier to estimate because the instruments actually
+ work.
+ Currently, we are using a five dimensional integral, but perhaps we should
+ push this to higher dimensions -- say 10 -- where the superiority of good
+ quadrature is even greater.
+ I need to figure out how many dimensions BLP researchers are now using.
+ If they are using 5,000 draws (which seems to be the current consensus
+ on best practice according to people like Petrin) and have 10 dimensions,
+ then their results are suspect.
+\end_layout
+
+\begin_layout Itemize
+Three dimensions of variation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Using different sets of pMC draws within a replication
+\end_layout
+
+\begin_layout Itemize
+Using different synthetic datasets, i.e.
+ replications
+\end_layout
+
+\begin_layout Itemize
+Using different starts when estimating BLP
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Provide error bounds on polynomial-based rules
+\end_layout
+
+\begin_layout Itemize
+Another paper: use different sets of draws for each integral and examine
+ how this affects estimates.
+ If this is necessary, then this is another reason why polynomial rules
+ are better because using different draws for each integral will increase
+ the cost of computation significantly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+sout{
+\end_layout
+
+\end_inset
+
+
+\color red
+Why not put this issue in this paper? It does not strike me as enough for
+ a separate paper.
+ It fits here because it is another example of where pMC people don't obey
+ the rules of MC simulation.
+\color inherit
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+I can add this, but it will be more computationally intensive and will require
+ a lot of memory.
+ I may be able to run this on Beagle using a modification of the matlab
+ code.
+ Otherwise, I will have to extend the C++ code.
+ This is a good point to compare best practice with current practice to
+ determine if independent draws make much of a difference.
+\end_layout
+
+\begin_layout Itemize
+Proposed Experiments
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Monomial Rule Experiments: compute market share integrals for known monomials
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Setup:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Integrate a variety of monomials 
+\end_layout
+
+\begin_layout Enumerate
+Vary rule
+\end_layout
+
+\begin_layout Enumerate
+Try several sets of draws to address Jeremy Lise's comment about how bad
+ pMC was
+\end_layout
+
+\begin_layout Enumerate
+Need to remind readers that the CLT applies!
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+BLP Share integral experiments: compute BLP market share integrals at the
+ true parameters and in their neighborhood
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Setup:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Compare polynomial-based and pMC results for share values
+\end_layout
+
+\begin_layout Enumerate
+How many different datasets are necessary? Different, T, J, and 
+\begin_inset Formula $\theta_{true}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $N=100$
+\end_inset
+
+ replications?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Does it matter how many replications we use?
+\end_layout
+
+\begin_layout Enumerate
+Do we need to try a range of BLP parameters? Higher dimensions should favor
+ polynomial-based quadrature
+\end_layout
+
+\begin_layout Enumerate
+Should compare:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Cost for a given level of accuracy
+\end_layout
+
+\begin_layout Enumerate
+Accuracy for a given level of cost
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+What is the truth?:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+To silence critics, we should use something crazy like pMC with 
+\begin_inset Formula $R=10^{6}$
+\end_inset
+
+ draws but a decent polynomial rule will be much more accurate.
+\end_layout
+
+\begin_layout Enumerate
+Can run on Beagle or parallelize share computation code for these experiments
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+BLP estimation experiments: 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Setup:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Choose setup so we can compare accuracy of rules with the same cost (number
+ of nodes) and compare cost of rules with the same accuracy.
+\end_layout
+
+\begin_layout Enumerate
+Fixed parameters, number of markets, number of products
+\end_layout
+
+\begin_layout Enumerate
+Vary rule: 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+pMC
+\end_layout
+
+\begin_layout Enumerate
+Sparse Grids
+\end_layout
+
+\begin_layout Enumerate
+Monomial
+\end_layout
+
+\begin_layout Enumerate
+GH Tensor product? 
+\color red
+[ Kill GH tensor unless we go to much higher precision.
+ Many weights are essentially zero.
+ Note: we have been using it to compute `the truth,' i.e.
+ the closest possible approximation to 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+.
+ ] 
+\color blue
+Done.
+ Only use this for computing shares during hypothesis testing example but
+ not for estimation experiments.
+ This is important because many people will accept this as the truth.
+ Perform an experiment to show that SGI is an alternative for the truth.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+What rule should we use to compute the `truth'?
+\end_layout
+
+\begin_layout Standard
+
+\color red
+We should hypothesize that rule X is the "truth" and see if any of the pMC
+ runs can reject that hypothesis.
+ "Rejection" here means using several different pMC samples and see if the
+ variance of the pMC results is sufficiently small that it can reject the
+ hypothesis.
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+Naysayers will argue that the polynomial rules all get the same answer because
+ of some commonality about how they are constructed.
+ One of the nice things about SGI, is that we can easily generate more accurate
+ rules.
+ So, we could perform a sensitivity analysis using pMC vs.
+ SGI.
+ This would also show variation in the accuracy of standard error estimates.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color blue
+Do we need to migrate to the latest version of Che-Lin's code which uses
+ an analytic Hessian and KNITRO? This version uses ktrlink() instead of
+ Tomlab.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\color blue
+Experiments:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+How different rules of the same computational cost (number of nodes) affect
+ 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ vs.
+ 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and standard errors.
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+How changing the accuracy of SGI affects estimates.
+ How much accuracy is needed to detect large standard errors? How do results
+ change as the accuracy of the rule increases?
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+How many pMC draws are needed to get comparable accuracy to polynomial rules?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\color blue
+Results:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+Document solver-quadrature interaction:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+Computational costs (CPU time)
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Number of major/minor iterations
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Accuracy of result
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Convergence/non-convergence (EXIT/Inform)
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+What fraction of starts converge or give the best approximate optimum, 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Compare point estimates:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+How large is the difference between polynomial-based point estimates, 
+\begin_inset Formula $\hat{\theta}_{poly}$
+\end_inset
+
+, and the pMC point estimates, 
+\begin_inset Formula $\hat{\theta}_{pMC}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Is it statistically significant?
+\end_layout
+
+\begin_layout Enumerate
+Can we put error bounds on this
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Compare standard errors:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+How well do different rules detect large standard errors?
+\end_layout
+
+\begin_layout Enumerate
+How does the accuracy of the (polynomial-based) rule affect this?
+\end_layout
+
+\begin_layout Enumerate
+How many pMC draws are needed to detect large standard errors
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+
+\color blue
+Berry Map Experiments: 
+\color red
+This is s different paper
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+Setup
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+Use the Berry map to recover 
+\begin_inset Formula $\xi$
+\end_inset
+
+ for some set of share values and parameters, 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\color blue
+Variation:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+pMC vs.
+ SGI
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Accuracy of Rules
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Sensitivity to pMC draws
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\color blue
+Results:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\color blue
+How does heuristic contraction rate change as mapping iterates?
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Does mapping satisfy Berry's sufficiency conditions (as it progresses)?
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Does the mapping making progress or just get stuck? If stuck, how does it
+ get stuck?
+\end_layout
+
+\begin_layout Enumerate
+
+\color blue
+Extent of error/variation in 
+\begin_inset Formula $\xi$
+\end_inset
+
+.
+ This is important because it affects GMM moments
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Section
+SGI Nodes and Weights
+\end_layout
+
+\begin_layout Standard
+We should generate nodes and weights to avoid error.
+ Because Heiss & Winschell generate nodes and weights in MATLAB, they lose
+ several decimal places of precision and have 7 or 8 decimal places, i.e.
+ they are effectively using single precision.
+ We need to regenerate these nodes and weights using higher precision arithmetic.
+\end_layout
+
+\begin_layout Section
+To Do
+\end_layout
+
+\begin_layout Itemize
+Add discussion of theory behind polynomial rules
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Focus on monomial motivation
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Regenerate SGI nodes and weights
+\end_layout
+
+\end_body
+\end_document

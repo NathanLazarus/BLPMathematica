@@ -1,0 +1,130 @@
+#LyX 1.6.4.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Entry Games of Incomplete Information
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Section
+Overview
+\end_layout
+
+\begin_layout Standard
+Rework papers by Seim (2006), Orhun (DRAFT 2005), and Zhu & Singh (2009)
+\end_layout
+
+\begin_layout Section
+Basic Issues
+\end_layout
+
+\begin_layout Itemize
+Correct fixed point -- Newton method
+\end_layout
+
+\begin_layout Itemize
+Correct integration -- multi-dimensional quadrature
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Subsection
+Fixed Point -- Root Solving
+\end_layout
+
+\begin_layout Standard
+Fixed Point is root finding.
+ Fixed point problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+p_{i} & = & \dfrac{\exp\left[x^{T}\beta-\sum\delta_{ij}p_{j}+\xi_{i}\right]}{\sum_{j}\exp\left[x^{T}\beta-\sum\delta_{jk}p_{k}+\xi_{k}\right]}\end{eqnarray*}
+
+\end_inset
+
+ Specify this as a root finding problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+0 & =p_{i}\sum_{j}\exp\left[x^{T}\beta-\sum\delta_{jk}p_{k}+\xi_{k}\right]- & \exp\left[x^{T}\beta-\sum\delta_{ij}p_{j}+\xi_{i}\right]\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Integration
+\end_layout
+
+\begin_layout Itemize
+Gauss-Turan
+\end_layout
+
+\begin_layout Itemize
+quasi-Monte Carlo
+\end_layout
+
+\begin_layout Itemize
+Must integrate over 
+\begin_inset Formula $\xi$
+\end_inset
+
+.
+ dimension is 
+\begin_inset Formula $\left(\mbox{Number of Types}\right)\times\left(\mbox{Number of Locations}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

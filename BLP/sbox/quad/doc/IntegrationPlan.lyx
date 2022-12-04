@@ -1,0 +1,494 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Plan for Integration Paper
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Section*
+Key Tasks To Completion
+\end_layout
+
+\begin_layout Itemize
+Write a solid draft:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Make language precise:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Lars's comments:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Clarify section on error
+\end_layout
+
+\begin_layout Itemize
+Add computation cost section
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Add missing information
+\end_layout
+
+\begin_layout Itemize
+Better figures and tables
+\end_layout
+
+\begin_layout Itemize
+Reformat results to a reasonable number of digits
+\end_layout
+
+\begin_layout Itemize
+Add key citations, especially key papers on numerical integration both in
+ economics and in math/OR.
+ Must show we are at cutting edge.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Genz
+\end_layout
+
+\begin_layout Itemize
+Hausman & Harding (2009)
+\end_layout
+
+\begin_layout Itemize
+Pakes
+\end_layout
+
+\begin_layout Itemize
+Non-BLP MC references on MSM, e.g.
+ Train
+\end_layout
+
+\begin_layout Itemize
+Kubler-Schmedders?
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Consistent notation, defined before used
+\end_layout
+
+\begin_layout Itemize
+Use language of numerical integration: approximation not simulation
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Clear statement of research question
+\end_layout
+
+\begin_layout Itemize
+Split optimizer convergence issues into a separate paper (if necessary)
+\end_layout
+
+\begin_layout Itemize
+Split issues with Berry's mapping into a separate paper (if necessary)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Further Research
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+McFadden-Train: does mixed logit accurately capture elasticities as well
+ as choice probabilities? Conjecture: yes, because 
+\begin_inset Formula $s_{jt}\left(x_{\cdot t},p_{\cdot t};\theta\right)=\intop_{\Omega}s_{jt}\left(x_{\cdot t},p_{\cdot t};\theta,\nu\right)f\left(\nu\right)d\nu$
+\end_inset
+
+ so the elasticities will depend on 
+\begin_inset Formula $\partial s_{jt}\left(x_{\cdot t},p_{\cdot t};\theta\right)/\partial p_{kt}=\intop_{\Omega}\partial s_{jt}\left(x_{\cdot t},p_{\cdot t};\theta,\nu\right)/\partial p_{kt}f\left(\nu\right)\nu$
+\end_inset
+
+.
+ This expression should be correct as long as the mixing distribution 
+\begin_inset Formula $f\left(\cdot\right)$
+\end_inset
+
+ is the same for all 
+\begin_inset Formula $x_{\cdot t}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{\cdot t}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+Which simulations to run?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Different MC datasets
+\end_layout
+
+\begin_layout Itemize
+Different integration cases:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Integration algorithm (MC, qMC, monomial, GH product rule)
+\end_layout
+
+\begin_layout Itemize
+Draws Per dataset:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Five small (
+\begin_inset Formula $R=100$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Five medium (
+\begin_inset Formula $R=1,000$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Five large (
+\begin_inset Formula $R=10,000$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Convergence of Berry's Mapping:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Impact of integration rule
+\end_layout
+
+\begin_layout Itemize
+Impact of number of MC or qMC points on convergence and how close to singular
+ it is.
+ What is subdominant eigenvalue?
+\end_layout
+
+\begin_layout Itemize
+Solve via homotopy?
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Convergence of GMM objective function (MPEC)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Why error/bias with monomial and Gaussian quadrature rules?
+\end_layout
+
+\begin_layout Itemize
+Compute error bounds on integrals
+\end_layout
+
+\begin_layout Itemize
+Compute elasticities
+\end_layout
+
+\begin_layout Itemize
+Check if instruments are exogneous, i.e.
+ 
+\begin_inset Formula $\mathbb{E}\left[\xi_{jt}Z_{jt}\right]=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Prove unproven claims in paper:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Role of marginal share values 
+\end_layout
+
+\begin_layout Itemize
+Are small shares insignificant?
+\end_layout
+
+\begin_layout Itemize
+Lumpiness of MC causes large market shares to shift in knife edge fashion
+ as parameter values change (4.3)
+\end_layout
+
+\begin_layout Itemize
+Berry's mapping is closer to being singular with a better integration rule
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Other Research
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Informal survey of how integration is performed in top IO papers in last
+ 10-15 years.
+ For each paper, note year, method of numerical integration, number of citations
+, if better alternatives were possible...
+\end_layout
+
+\begin_layout Itemize
+Determine state of the art papers
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Section*
+Schedule
+\end_layout
+
+\begin_layout Description
+Week
+\begin_inset space ~
+\end_inset
+
+18
+\begin_inset space ~
+\end_inset
+
+Jan: 
+\end_layout
+
+\begin_layout Enumerate
+Fix biggest problems in draft: imprecise language, missing sections, confusing
+ sections, especially part on error.
+\end_layout
+
+\begin_layout Enumerate
+Further simulations with qMC, plots
+\end_layout
+
+\begin_layout Enumerate
+Refactor code:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+So I can have Tibi run many simulations
+\end_layout
+
+\begin_layout Itemize
+To track computational cost
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Determine state of the art papers on integration
+\end_layout
+
+\begin_layout Description
+Week
+\begin_inset space ~
+\end_inset
+
+25
+\begin_inset space ~
+\end_inset
+
+Jan: 
+\end_layout
+
+\begin_layout Enumerate
+Further clean up of paper
+\end_layout
+
+\begin_layout Enumerate
+Why monomial rule fails?
+\end_layout
+
+\begin_layout Enumerate
+Refactor code:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Tibi: runs with different seeds, number of draws
+\end_layout
+
+\begin_layout Itemize
+Compute elasticities
+\end_layout
+
+\begin_layout Itemize
+Compute computational cost
+\end_layout
+
+\begin_layout Itemize
+Compute error bounds on share integrals
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Survey of integration methods
+\end_layout
+
+\begin_layout Enumerate
+Use new integration rules if available from Ken
+\end_layout
+
+\begin_layout Description
+Week
+\begin_inset space ~
+\end_inset
+
+01
+\begin_inset space ~
+\end_inset
+
+Feb:
+\end_layout
+
+\begin_layout Enumerate
+Use new integration rules if available from Ken
+\end_layout
+
+\begin_layout Enumerate
+Add another example or simple illustrative examples
+\end_layout
+
+\begin_layout Enumerate
+Improve section on theory of numerical integration
+\end_layout
+
+\begin_layout Description
+Week
+\begin_inset space ~
+\end_inset
+
+08
+\begin_inset space ~
+\end_inset
+
+Feb:
+\end_layout
+
+\begin_layout Enumerate
+Polish draft
+\end_layout
+
+\begin_layout Enumerate
+Review with Ken & Lars
+\end_layout
+
+\begin_layout Description
+Week
+\begin_inset space ~
+\end_inset
+
+15
+\begin_inset space ~
+\end_inset
+
+Feb: 
+\end_layout
+
+\begin_layout Enumerate
+Final check & submission before 19 February 2010.
+\end_layout
+
+\end_body
+\end_document

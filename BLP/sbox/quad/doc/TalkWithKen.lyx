@@ -1,0 +1,315 @@
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Talk with Ken
+\end_layout
+
+\begin_layout Itemize
+He will give talk in May
+\end_layout
+
+\begin_layout Itemize
+Convergence problem
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Surface nearly flat with good quadrature rules
+\end_layout
+
+\begin_layout Itemize
+Han Hong's student: BLP is not identified
+\end_layout
+
+\begin_layout Itemize
+Do a clean test/example
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Show non-convergence when HH's student's assumptions hold
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+qMC cloud
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+contained in pMC cloud
+\end_layout
+
+\begin_layout Itemize
+identification still comes from integration errors
+\end_layout
+
+\begin_layout Itemize
+qMC rules are good but still noisy.
+ Convergence is 
+\begin_inset Formula $O\left(N^{-1/d}\right)$
+\end_inset
+
+ vs.
+ 
+\begin_inset Formula $O\left(N^{-1/2}\right)$
+\end_inset
+
+.
+ Dimension term disappears asymptotically???
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Does convergence get worse as you increase the number of pMC draws?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can we get qMC to fail with large 
+\begin_inset Formula $R$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+tMC: theoretical Monte Carlo
+\end_layout
+
+\begin_layout Itemize
+Dataset 4:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Convergence trouble
+\end_layout
+
+\begin_layout Itemize
+Very low variance dataset
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Do some sample fishing:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Generate many datasets
+\end_layout
+
+\begin_layout Itemize
+Take the one which has most convergence trouble...
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+To Do List
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Get Tomlab license sorted out
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Section
+Identification of Discrete Choice Models
+\end_layout
+
+\begin_layout Standard
+Che-Lin sent some papers about identification of discrete choice models.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand citet
+key "ChiouWalker2007MaskingIdentification"
+
+\end_inset
+
+ makes several points which support our paper:
+\end_layout
+
+\begin_layout Enumerate
+Low numbers of draws mask singularity of Hessian 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Must verify stability of parameter estimates by taking enough draws:
+\end_layout
+
+\begin_layout Itemize
+Parameter estimates should be stable as 
+\begin_inset Formula $R\rightarrow\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Standard errors should not explode
+\end_layout
+
+\begin_layout Itemize
+Hessian not singular
+\end_layout
+
+\begin_layout Itemize
+Likelihood is effectively flat under simulation with many draws.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In limit of one draw (i.e.
+ low 
+\begin_inset Formula $R$
+\end_inset
+
+), the likelihood becomes globally concave
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Mixed logit likelihood function is not globally concave and sensitive to
+ approximation 
+\end_layout
+
+\begin_layout Enumerate
+qMC (Halton, shuffled Halton)
+\begin_inset Formula $\gg$
+\end_inset
+
+pMC
+\end_layout
+
+\begin_layout Enumerate
+Variance reduction improves qMC, i.e.
+ shuffled Halton 
+\begin_inset Formula $\gg$
+\end_inset
+
+ Halton
+\end_layout
+
+\begin_layout Standard
+Which versions of logit-based, discrete choice models are identified?
+\end_layout
+
+\begin_layout Itemize
+Large enough 
+\begin_inset Formula $N$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+What about specification?
+\end_layout
+
+\begin_layout Itemize
+Role of number of alternatives 
+\begin_inset Formula $J$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Walker states that only pMC is feasible for multi-dimensional integration.
+\end_layout
+
+\begin_layout Standard
+To do:
+\end_layout
+
+\begin_layout Enumerate
+Is the version of BLP we are using identified? 
+\end_layout
+
+\begin_layout Enumerate
+BLP uses the method of simulated moments.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Walker states that her result should apply to MSM but doesn't show/prove
+ this.
+ So far, I have only seen numerical examples but no theory -- I will check
+ the thesis.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/home/bss/sbox/docs/research/bib/DiscreteChoiceWithKen"
+options "plainnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

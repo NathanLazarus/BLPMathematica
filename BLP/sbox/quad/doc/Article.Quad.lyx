@@ -1,0 +1,6868 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{ulem}
+\usepackage{rotating}
+\usepackage[below]{placeins}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command bibtex
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "citecolor=blue,linkcolor=cyan"
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+High Performance Quadrature Rules: How Numerical Integration Affects a Popular
+ Model of Product Differentiation
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+This paper would not have been possible without the help of Che-Lin Su and
+ JP Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e who shared their knowledge of BLP and their MATLAB
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttrademark
+\end_layout
+
+\end_inset
+
+ code.
+ The authors were generously supported and hosted by Ian Foster and the
+ Computation Institute at The University of Chicago and Argonne National
+ Laboratory during Fall 2009.
+ Benjamin S.
+ Skrainka also gratefully acknowledges the financial support of the UK Economic
+ and Social Research Council through a grant (RES-589-28-0001) to the ESRC
+ Centre for Microdata Methods and Practice (CeMMAP).
+ Please address questions or comments to 
+\begin_inset CommandInset href
+LatexCommand href
+target "b.skrainka@ucl.ac.uk"
+type "mailto:"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+{
+\backslash
+em University College London }
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+{
+\backslash
+em cemmap}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+ { b.skrainka@ucl.ac.uk }
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ Kenneth L.
+ Judd 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+ {
+\backslash
+em Hoover Institution }
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+{
+\backslash
+em NBER}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+ { judd@hoover.stanford.edu }
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Abstract
+Efficient, accurate, multi-dimensional, numerical integration has become
+ an important tool for approximating the integrals which arise in modern
+ economic models built on unobserved heterogeneity, incomplete information,
+ and uncertainty.
+ This paper demonstrates that polynomial-based rules out-perform number-theoreti
+c quadrature (Monte Carlo) rules both in terms of efficiency and accuracy.
+ To show the impact a quadrature method can have on results, we examine
+ the performance of these rules in the context of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+'s model of product differentiation, where Monte Carlo methods introduce
+ considerable numerical error and instability into the computations.
+ These problems include inaccurate point estimates, excessively tight standard
+ errors, instability of the inner loop `contraction' mapping for inverting
+ market shares, and poor convergence of several state of the art solvers
+ when computing point estimates.
+ Both monomial rules and sparse grid methods lack these problems and provide
+ a more accurate, cheaper method for quadrature.
+ Finally, we demonstrate how researchers can easily utilize high quality,
+ high dimensional quadrature rules in their own work.
+\end_layout
+
+\begin_layout Description
+Keywords: Numerical Integration, Monomial Rules, Gauss-Hermite Quadrature,
+ Sparse Grid Integration, Monte Carlo Integration, pseudo-Monte Carlo, Product
+ Differentiation, Econometrics, Random Coefficients, Discrete Choice.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Efficient, accurate, multi-dimensional, numerical integration has become
+ an important tool for approximating the integrals which arise in modern
+ economic models built on unobserved heterogeneity, incomplete information,
+ and uncertainty.
+ Failure to compute these integrals quickly and accurately can prevent a
+ problem from being numerically stable or computationally tractable, especially
+ in higher dimensions.
+ In this paper, we show that the twin goals of computational efficiency
+ and accuracy can be achieved by using monomial rules instead of simulation
+ and that these rules work well even in multiple dimensions.
+ We support these claims by comparing monomial
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Monomials are the simplest possible basis for multidimensional polynomials.
+ Each basis function is simply a product of the coordinates, each raised
+ to some power.
+ E.g., 
+\begin_inset Formula $x_{1}^{3}x_{2}^{2}x_{5}^{1}$
+\end_inset
+
+.
+ A formal definition follows below 
+\begin_inset CommandInset ref
+LatexCommand vpageref
+reference "par:Monomial-Rules"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ rules to several popular methods of numerical integration – both polynomial-bas
+ed (sparse grid integration (SGI), and Gaussian product rules) and Monte
+ Carlo – and show that monomial rules are both more accurate and often an
+ order of magnitude cheaper to compute for a variety of integrands, including
+ low and high order polynomials as well as the market share integrals in
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+'s `industry standard' model of product differentiation (BLP hereafter).
+ Furthermore, we also demonstrate how the use of Monte Carlo integration
+ introduces numerical error and instability into the BLP model whereas polynomia
+l-based methods do not.
+ These numerical issues include inaccurate market share integrals, artificially
+ small standard errors, instability of the inner loop `contraction' mapping
+ for inverting market shares, and the convergence of even state of the art
+ solvers when computing point estimates.
+ 
+\end_layout
+
+\begin_layout Standard
+A good quadrature rule delivers high accuracy at low computational cost.
+ High accuracy comes from either using more points and/or choosing those
+ points more cleverly.
+ Cost depends on minimizing evaluations of the integrand – i.e.
+ minimizing the number of nodes.
+ A good numerical approximation to an integral should minimize the number
+ of nodes while sacrificing as little accuracy as possible.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We have also found that using a good quadrature rule in the computation
+ of an objective function can significantly decrease the number of iterations
+ a solver needs to converge to an optimum.
+\end_layout
+
+\end_inset
+
+ Fortunately, researchers now have access to a variety of high performance
+ quadrature
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Some authors (e.g.
+ 
+\begin_inset CommandInset citation
+LatexCommand citealp
+key "Cools2002JCAM"
+
+\end_inset
+
+) use 
+\emph on
+quadrature
+\emph default
+ to refer to one dimensional integrals and 
+\emph on
+cubature
+\emph default
+ to refer to integrals of dimension 
+\begin_inset Formula $\geq2$
+\end_inset
+
+.
+ We will always use quadrature to refer to any integration rule, regardless
+ of the dimension.
+\end_layout
+
+\end_inset
+
+ methods – many of which have been available since the 1970s 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stroud1971Integration"
+
+\end_inset
+
+ – one or more of which should suit the problem at hand.
+ Monte Carlo methods are the primary option for very high dimensional problems,
+ but for many multi-dimensional problems, the analyst can often obtain a
+ cheaper, more accurate approximation by choosing a polynomial-based quadrature
+ rule, such as monomial rules or sparse grid integration, – even for ten,
+ 
+\begin_inset Formula $15$
+\end_inset
+
+, or more dimensions.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+What actually constitutes a high dimensional problem will depend on the
+ computing resources and numerically properties of the integral.
+\end_layout
+
+\end_inset
+
+ Because most integrals in economics are analytic, polynomial-based methods
+ should provide accurate, efficient numerical approximations.
+ 
+\end_layout
+
+\begin_layout Standard
+Our paper builds on 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+ which showed that sparse grid integration outperforms simulation for likelihood
+ estimation of a mixed logit model of multiple alternatives.
+ However, we make several new contributions including that simulation introduces
+ false local optima and excessively tight standard errors; that polynomial-based
+ rules approximate both the level and derivatives of integrals better than
+ pMC; that quadrature rules affect solver convergence; that polynomial rules
+ outperform Monte Carlo for low to moderate degree monomials but both are
+ poor for higher degrees; and, that monomial rules provide a lower cost
+ alternative to SGI.
+\end_layout
+
+\begin_layout Standard
+We illustrate how to use modern quadrature rules in the context of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+'s `industry standard' model of product differentiation (BLP hereafter).
+ Their paper develops an innovative method for studying both vertical and
+ horizontal aspects of product differentiation by using a random coefficients
+ multinomial logit with unobserved product-market characteristics.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Another contribution of their paper is a GMM-based, nested fixed point algorithm
+ to estimate the model.
+\end_layout
+
+\end_inset
+
+ But, the results of their model depend heavily on the numerical techniques
+ used to approximate the market share integrals: any errors in computing
+ these integrals – and, more importantly, the gradient of the the GMM objective
+ function – have far reaching consequences, rippling through the model,
+ affecting the point estimates, the standard errors, the convergence of
+ the inner loop mapping, and even the convergence of the solver used to
+ compute the GMM parameter estimates.
+ To substantiate these claims, we generate multiple synthetic
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We will clarify exactly what `pseudo-Monte Carlo' means below.
+\end_layout
+
+\end_inset
+
+ data sets and then compute the product-market share integrals, 
+\begin_inset Formula $s_{jt}\hat{\left(\theta\right)}$
+\end_inset
+
+, at a variety of parameter values, 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+, for several popular integration rules (Gaussian-Hermite product rule,
+ monomial rule, sparse grids and pseudo-Monte Carlo).
+ Although, the original BLP papers use importance sampling 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "BLP1995auto,BLP2004withMicroData"
+
+\end_inset
+
+, an informal survey of the BLP literature shows, with few exceptions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Conlon2010DynamicDurable"
+
+\end_inset
+
+, most BLP practitioners 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nevo2000practitioner,nevo2000mergers,nevo2001measuring"
+
+\end_inset
+
+ use pseudo-Monte Carlo integration without any variance reduction methods.
+ Thus, errors from inaccurate (pMC
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We often refer to Monte Carlo rules as 
+\emph on
+pseudo-Monte Carlo
+\emph default
+ or 
+\emph on
+pMC
+\emph default
+ because of the 
+\emph on
+pseudo
+\emph default
+ random numbers used to generate these nodes.
+ Quasi-Monte Carlo is an alternative, number-theoretic method.
+ See 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Monte-Carlo-Integration"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "judd1998NumericalMethods"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+) quadrature rules could potentially affect much of the BLP literature.
+\end_layout
+
+\begin_layout Standard
+In our integration experiments, monomial rules are superior to Monte Carlo
+ integration.
+ Sparse grid integration is also much more accurate and efficient than pMC.
+ These rules are easy to implement and apply to a wide range of problems
+ of moderate size.
+ The benefits are obvious: more accurate computation at a lower computational
+ burden, both crucial for obtaining convincing point estimates and standard
+ errors.
+\end_layout
+
+\begin_layout Standard
+In addition, the failure of a state-of-the-art solver such as KNITRO 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "KNITRO2006"
+
+\end_inset
+
+ or SNOPT 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "SNOPT2002"
+
+\end_inset
+
+ often means that the Hessian is ill-conditioned or that a problem is numericall
+y unstable.
+ The former usually indicates that a model is not well identified (numerically)
+ because the mapping from data to parameters is nearly singular.
+ Using an inferior quadrature rule, such as Monte-Carlo, can mask these
+ problems because the noisiness of pMC creates false local basins of attraction
+ where the solver converges, creating incorrect point estimates and excessively
+ small standard errors.
+ By combining a high-quality solver and quadrature rule a researcher can
+ get early feedback that identification problems may be present.
+\end_layout
+
+\begin_layout Standard
+Furthermore, the logit-class of models is prone to numerical instability
+ because the exponential function quickly becomes large.
+ Consequently, poorly implemented code will suffer from a variety of floating
+ point exceptions, including overflow, underflow, and NaNs
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+
+\size normal
+\emph on
+\color none
+NaN
+\size default
+\emph default
+\color inherit
+ is computer-speak for `not a number' and indicates that a floating point
+ computation produced an undefined or unrepresented value such as 
+\begin_inset Formula $\infty/\infty$
+\end_inset
+
+, 
+\begin_inset Formula $\infty\cdot0$
+\end_inset
+
+, and 
+\begin_inset Formula $\infty-\infty$
+\end_inset
+
+.
+ NaNs are part of the IEEE-754 floating point standard.
+ What happens when a program generates a NaN depends on the platform, typically
+ either the process receives a signal to abort or the operating system silently
+ handles the floating point exception and the computation produces the special
+ floating point value NaN.
+\end_layout
+
+\end_inset
+
+.
+ Typically, these problems will cause a good solver to abort.
+ However, these problems will tempt some researchers to try different draws
+ until they find a good set which avoids the problem regions of parameter
+ space instead of addressing the underlying problem.
+ Better to identify the source of the problem and correct it with robust
+ code and proper box constraints for the solver.
+\end_layout
+
+\begin_layout Standard
+We begin the paper by surveying current best practice for numerical integration,
+ explaining the strengths and weaknesses of several popular methods for
+ computing multi-dimensional integrals.
+ In addition, we compute several metrics to illustrate the superiority of
+ polynomial-based quadrature rules to simulation.
+ Next, we briefly review the BLP model of product differentiation to establish
+ a basis to understand how it performs under different quadrature rules.
+ Then, we estimate the BLP model using monomial, sparse grid integration,
+ and Monte Carlo methods.
+ We examine the point estimates, standard errors, and convergence properties
+ of the under these different rules to demonstrate that monomial rules provide
+ correct point estimates and standard errors while simulation methods introduce
+ false local optima into the GMM objective function, leading to incorrect
+ point estimates and standard errors.
+ Finally, we conclude.
+\end_layout
+
+\begin_layout Section
+Multi-Dimensional Numerical Integration
+\end_layout
+
+\begin_layout Standard
+For more than four decades, researchers have had access to well-understood
+ rules to compute multi-dimensional integrals on a variety of domains accurately
+ and efficiently 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stroud1971Integration"
+
+\end_inset
+
+.
+ All quadrature methods approximate an integral as a weighted sum of the
+ integrand evaluated at a finite set of well-specified points called 
+\emph on
+nodes
+\emph default
+.
+ I.e., a quadrature method approximates the integral 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I\left[f\right]:=\int_{\Omega}w\left(x\right)f\left(x\right)dx,\ \Omega\subset\mathbb{R}^{d},\ w\left(x\right)\geq0\,\forall x\in\Omega
+\]
+
+\end_inset
+
+ as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q\left[f\right]:=\underset{k=1}{\overset{R}{\sum}}w_{k}f\left(y_{k}\right),\ y_{k}\in\Omega,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $w\left(x\right)$
+\end_inset
+
+ is the weight function such as 
+\begin_inset Formula $1$
+\end_inset
+
+, 
+\begin_inset Formula $\exp\left(-x\right)$
+\end_inset
+
+, or 
+\begin_inset Formula $\exp\left(-x^{'}x\right)$
+\end_inset
+
+ depending on the problem.
+ The region of integration, 
+\begin_inset Formula $\Omega$
+\end_inset
+
+, is also problem dependent.
+ And, 
+\begin_inset Formula $\left\{ w_{k}\right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $\left\{ y_{k}\right\} $
+\end_inset
+
+ are the quadrature 
+\emph on
+weights
+\emph default
+ and 
+\emph on
+nodes
+\emph default
+, respectively.
+ 
+\begin_inset Formula $R$
+\end_inset
+
+ refers to the number of nodes (or draws) and 
+\begin_inset Formula $N$
+\end_inset
+
+ to the number of replications.
+ Thus, 
+\begin_inset Formula $N=100$
+\end_inset
+
+ and 
+\begin_inset Formula $R=1,500$
+\end_inset
+
+ means that we computed the integral 
+\begin_inset Formula $100$
+\end_inset
+
+ times using 
+\begin_inset Formula $1,500$
+\end_inset
+
+ different draws each time.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This notation is based on 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Cools2002JCAM"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For example, a simple Monte Carlo rule would set 
+\begin_inset Formula $w_{k}=1/R,\forall k,$
+\end_inset
+
+ and draw 
+\begin_inset Formula $y_{k}$
+\end_inset
+
+ from a suitable probability distribution, namely 
+\begin_inset Formula $w\left(x\right)$
+\end_inset
+
+.
+ Another common example is the mixed, or random-coefficients, logit with
+ 
+\begin_inset Formula $\Omega=\mathbb{R}^{d}$
+\end_inset
+
+, 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ the multinomial logit for some taste coefficient, and 
+\begin_inset Formula $w\left(x\right)=\exp\left(-x^{'}x\right)$
+\end_inset
+
+.
+ Then, assuming a pMC rule, 
+\begin_inset Formula $y_{k}$
+\end_inset
+
+ is drawn from the (Normal) distribution for the coefficients.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+If you are integrating over a normal density 
+\begin_inset Formula $\tilde{w}\left(u\right)=\left(2\pi\left|\Omega\right|\right)^{-\dfrac{d}{2}}\exp\left(-\dfrac{1}{2}\left(u-\overline{u}\right)^{T}\Omega^{-1}\left(u-\overline{u}\right)\right)$
+\end_inset
+
+, you must perform a change of variables using the Cholesky decomposition
+ 
+\begin_inset Formula $CC^{'}=2\Omega$
+\end_inset
+
+ so 
+\begin_inset Formula $x=C^{-1}\left(u-\overline{u}\right)$
+\end_inset
+
+  yields the Gaussian weighting function 
+\begin_inset Formula $w\left(x\right)=\exp\left(-x'x\right)$
+\end_inset
+
+.
+ The convenience of this form becomes clear once you have a set of quadrature
+ nodes 
+\begin_inset Formula $\left\{ y_{j}\right\} $
+\end_inset
+
+ and need to transform them for a specific problem.
+ See 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:1-d-Mixed-Logit-Example"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The art of numerical integration lies in choosing these nodes and weights
+ strategically so that the approximation achieves the desired accuracy with
+ few points and, thus, minimal computational expense.
+ A solution is said to be 
+\emph on
+exact
+\emph default
+ when 
+\begin_inset Formula $I\left[f\right]=Q\left[f\right]$
+\end_inset
+
+: i.e., the approximation has no error.
+ Many rules give an exact result for all polynomials below a certain degree.
+ Because polynomials span the vector space of `well-behaved' functions,
+ any integral of a function which is smooth and differentiable – or better
+ yet analytic – should have a good numerical approximation.
+ More often, though, the approximation will not be exact.
+ The quality of the approximation also depends on other properties of the
+ integrand such as the presence of sharp peaks, kinks, high frequency oscillatio
+ns, high curvature, symmetry, and the thickness of the tails all of which
+ often lead to non-vanishing, high order terms in a Taylor series expansion.
+ A good approximation, as well as minimizing error and the number of (expensive)
+ function evaluations, should converge to the true value of the integral
+ as the number of nodes goes to infinity 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Stroud1971Integration"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The two primary methods for choosing the quadrature nodes and weights are
+ number theoretic and polynomial-based methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Cools2002JCAM"
+
+\end_inset
+
+.
+ The former refers to Monte Carlo (or simulation) methods whereas the later
+ includes product rules based on the Gaussian quadrature family of methods
+ as well as monomial rules and sparse grid integration.
+ In general, polynomial-based methods are both more efficient and more accurate.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+ warn that polynomial-based methods poorly approximate functions with large
+ flat regions or sharp peaks, and, by extension, regions with high frequency
+ oscillations.
+ The later two problems are also likely to affect MC methods as we show
+ in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Precision-and-Accuracy"
+
+\end_inset
+
+.
+ In the BLP example below, monomial rules have no trouble in the tails because
+ of the Gaussian kernel.
+ However, for very high dimensional integration MC rules may be the only
+ option because the `curse of dimensionality' makes even the most efficient
+ polynomial rule intractable.
+ MC methods can also be superior when integrating over irregularly shaped
+ regions, unless there is a clever variable transform.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Genz1993Comparison"
+
+\end_inset
+
+ uses a clever transformation to converted a bounded probit into integration
+ over a hypercube.
+\end_layout
+
+\end_inset
+
+ If the integrand has kinks, jumps, or other singularities more work is
+ usually required, such as performing separate integrations on the different
+ sides of the kink or using an adaptive rule.
+ But, many economic applications have ten or fewer dimensions and well-behaved
+ integrands (analytic, smooth, and bounded), making these problems well-suited
+ for monomial rules.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:1-d-Mixed-Logit-Example"
+
+\end_inset
+
+A One-Dimensional Example
+\end_layout
+
+\begin_layout Standard
+To illustrate these issues, consider a one-dimensional random coefficients
+ multinomial logit (MNL) model.
+ An agent 
+\begin_inset Formula $i$
+\end_inset
+
+ chooses the alternative 
+\begin_inset Formula $j\in J$
+\end_inset
+
+ which yields the highest utility 
+\begin_inset Formula $U_{ij}=\alpha_{i}\left(\log y_{i}-\log p_{j}\right)+z_{j}^{T}\beta+\epsilon_{ij}$
+\end_inset
+
+, where 
+\begin_inset Formula $\epsilon_{ij}$
+\end_inset
+
+ follows a Type 1 Extreme Value distribution and the taste shock is a one
+ dimensional random coefficient on price, 
+\begin_inset Formula $\alpha_{i}\sim N\left(\alpha,\sigma^{2}\right)$
+\end_inset
+
+.
+ Because of the distributional assumption on 
+\begin_inset Formula $\epsilon_{ij}$
+\end_inset
+
+, the market shares conditional on type 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ are
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Note that the 
+\begin_inset Formula $\log\left(y_{i}\right)$
+\end_inset
+
+ term cancels out of the market share expression, because of the well-known
+ property of logit distributions that individual-specific characteristics
+ drop out unless they are interacted with choice-specific attributes.
+ 
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s_{ij}\left(\alpha_{i}\right)=\dfrac{\exp\left[-\alpha_{i}\log p_{j}+z_{j}^{T}\beta\right]}{\underset{k}{\sum}\exp\left[-\alpha_{i}\log p_{k}+z_{k}^{T}\beta\right]}
+\]
+
+\end_inset
+
+(See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Train2009DiscreteChoiceMethodsBook"
+
+\end_inset
+
+ for details.).
+ Consequently, the total market share of good 
+\begin_inset Formula $j$
+\end_inset
+
+ is the just the expectation of the conditional market share integral for
+ 
+\begin_inset Formula $j$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{j} & = & \intop_{\Omega}s_{ij}\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i}\\
+ & = & \intop_{-\infty}^{\infty}s_{ij}\left(\alpha_{i}\right)\dfrac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\dfrac{1}{2\sigma^{2}}\left[\alpha_{i}-\bar{\alpha}\right]^{2}\right)d\alpha_{i}\\
+ & = & \dfrac{1}{\sqrt{\pi}}\intop_{-\infty}^{\infty}s_{ij}\left(\sqrt{2}\sigma u\right)\exp\left(-u^{2}\right)du\\
+ & \approx & \dfrac{1}{\sqrt{\pi}}\underset{k=1}{\overset{R}{\sum}}w_{k}s_{ij}\left(\sqrt{2}\sigma y_{k}\right).
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula $\left\{ w_{k}\right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $\left\{ y_{k}\right\} $
+\end_inset
+
+ are the 
+\begin_inset Formula $R$
+\end_inset
+
+ weights and nodes for a Gauss-Hermite quadrature rule.
+ I performed a one-dimensional `Cholesky' transformation to convert from
+ the economic problem to the mathematical formula.
+ We chose the Gauss-Hermite rule because it has the appropriate weighting
+ function, 
+\begin_inset Formula $\exp\left(-x^{2}\right)$
+\end_inset
+
+, and integration region, 
+\begin_inset Formula $\mathbb{R}$
+\end_inset
+
+.
+ This choice causes the Normal density to disappear from the sum used to
+ approximate the integral.
+ 
+\end_layout
+
+\begin_layout Standard
+In the following two sections, we survey the two main types of rules: Monte
+ Carlo and polynomial-based.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Monte-Carlo-Integration"
+
+\end_inset
+
+Monte Carlo Integration
+\end_layout
+
+\begin_layout Standard
+Monte Carlo integration is one of the most popular choices for numerical
+ integration because it is easy to compute and conceptually simple.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Certainly, it appears simple until faced with the implementation of a good
+ source of `random' numbers.
+\end_layout
+
+\end_inset
+
+ This method computes the integral by taking draws from an appropriate distribut
+ion and may includes other techniques to increase accuracy and speed, such
+ as importance sampling, Halton draws, and antithetic draws 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Train2009DiscreteChoiceMethodsBook"
+
+\end_inset
+
+.
+ In its simplest form, simulation weights all nodes equally by setting the
+ weights 
+\begin_inset Formula $\omega_{k}=\nicefrac{1}{R}$
+\end_inset
+
+, where 
+\begin_inset Formula $R=\left|\left\{ y_{k}\right\} \right|$
+\end_inset
+
+, and the nodes are drawn from a suitable distribution.
+ The weight function is set to 
+\begin_inset Formula $\nicefrac{1}{R}$
+\end_inset
+
+ because the draws come from the corresponding distribution.
+ Consequently, simulation is easy to implement and also works over irregular-sha
+ped regions or with functions which are not smooth, even if MC methods do
+ not always produce the most accurate approximations.
+ 
+\end_layout
+
+\begin_layout Standard
+The Law of Large Numbers is used to justify MC rules: draw enough points
+ and the result must converge to the `truth' without bias.
+ Unfortunately, accuracy only improves as 
+\begin_inset Formula $\sqrt{R}$
+\end_inset
+
+ – so the number of nodes must be increased by a factor of 
+\begin_inset Formula $100$
+\end_inset
+
+ for each additional digit of accuracy.
+ Consequently, a more sophisticated quadrature rule will usually outperform
+ Monte Carlo for moderate-sized problems because adding well-chosen nodes
+ improves the integral approximation more quickly than the same number of
+ randomly-chosen points.
+ In practice, Monte Carlo draws are generated using an algorithm for generating
+ apparently random numbers, such as Mersenne twister 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MatsumotoNishimura1998MersenneTwister"
+
+\end_inset
+
+, which can pass the statistical tests associated with random numbers.
+ These numbers are known as 
+\emph on
+pseudo random
+\emph default
+ and the corresponding Monte Carlo method is know as 
+\emph on
+pseudo-Monte Carlo
+\emph default
+ (pMC) integration.
+ Because pseudo-random numbers are not truly random, the Law of Large Numbers
+ only applies to theoretical discussions of MC methods based on true random
+ numbers, not the pseudo-random implementations commonly used for numerical
+ integration.
+ Thus, researchers should be wary of using proofs which only hold for true
+ random numbers and not for pseudo random numbers.
+ A poor random number generator can compromise results.
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "judd1998NumericalMethods"
+
+\end_inset
+
+ for further discussion of the potential pitfalls.
+\end_layout
+
+\begin_layout Standard
+More sophisticated methods of taking draws – quasi-Monte Carlo methods,
+ importance sampling, and antithetic draws – remedy some of the deficiencies
+ of simple pMC.
+ 
+\emph on
+quasi-Monte Carlo
+\emph default
+ (qMC) rules use a non-random algorithm which will not pass all of the statistic
+al tests of randomness but instead provides better coverage of parameter
+ space by constructing equidistributed nodes, resulting convergence which
+ is often much faster than pMC methods.
+ The weights, as in the case of pMC, are 
+\begin_inset Formula $w_{j}=\nicefrac{1}{R}$
+\end_inset
+
+.
+ In an earlier draft, we used a qMC quadrature rule with Niederreiter sequences
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The current industry standard is to use Halton draws and Kenneth Train's
+ code, which is available on his website
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Train1999Halton"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ to estimate the BLP model.
+ In theory, it should considerably out-performed a pMC rule.
+ We chose a Niederreiter rule which produces good results for a variety
+ of problems while retaining the simplicity of pMC rules 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "judd1998NumericalMethods"
+
+\end_inset
+
+.
+ In practice, we found that using even 
+\begin_inset Formula $5,000$
+\end_inset
+
+ nodes for the 
+\begin_inset Formula $5$
+\end_inset
+
+ dimensional integrals we consider below, qMC was not a significant improvement
+ on pMC.
+ Consequently, we do not discuss qMC further.
+ Nevertheless, qMC is easy to implement and performs at least as well as
+ pMC.
+\end_layout
+
+\begin_layout Standard
+Another common mistake is to use the same set of draws for each integral.
+ For example, in BLP, there are 
+\begin_inset Formula $J\times T$
+\end_inset
+
+ market share integrals, where 
+\begin_inset Formula $J$
+\end_inset
+
+ is the number of products per market and 
+\begin_inset Formula $T$
+\end_inset
+
+ is the number of markets.
+ Instead of taking 
+\begin_inset Formula $J\times T$
+\end_inset
+
+ sets of draws (
+\begin_inset Formula $J\times T\times R$
+\end_inset
+
+ total draws), most researchers take only 
+\begin_inset Formula $R$
+\end_inset
+
+ draws and use the same 
+\begin_inset Formula $R$
+\end_inset
+
+ draws for each of the 
+\begin_inset Formula $J\times T$
+\end_inset
+
+ integrals.
+ By taking a new set of draws for each integral simulation errors will cancel
+ to some extent and can considerably improve the quality of the point estimates
+ because the individual integrals are no longer correlated 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "McFadden1989MethodSimMoments"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In summary, the basic problems of simulation remain regardless of the simulation
+ rule: it is dirty and can produce inaccurate results, as 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+ point out: 
+\end_layout
+
+\begin_layout Quotation
+...
+ we are concerned about the variance due to simulation error.
+ Section 6 develops variance reduction techniques that enable us to use
+ relatively efficient simulation techniques for our problem.
+ Even so, we found that with a reasonable number of simulation draws the
+ contribution of the simulation error to the variance in our estimates (V3)
+ is not negligible.
+ 
+\end_layout
+
+\begin_layout Subsection
+Polynomial-based Methods
+\end_layout
+
+\begin_layout Standard
+We compare simulation to three multi-dimensional polynomial-based rules:
+ Gaussian product rules, sparse grid integration, and monomial rules.
+ Often these rules are said to be 
+\emph on
+exact for degree 
+\begin_inset Formula $d$
+\end_inset
+
+
+\emph default
+ because they integrate any polynomial of degree 
+\begin_inset Formula $d$
+\end_inset
+
+ or less without error.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+At least, theoretically.
+ With finite precision of arithmetic there may be extremely small errors
+ from truncation and round off.
+\end_layout
+
+\end_inset
+
+ A common example in one-dimension is the Gaussian-family of rules: with
+ 
+\begin_inset Formula $R$
+\end_inset
+
+ nodes they exactly integrate any polynomial of degree 
+\begin_inset Formula $2R-1$
+\end_inset
+
+ or less.
+ Consequently, polynomial rules require many fewer nodes than pMC, making
+ them both parsimonious and highly accurate for most integrands.
+ The higher the degree, the more accurate the approximation of the integral
+ but the higher the cost because the integrand must be evaluated at more
+ nodes.
+ The actual choice of nodes and weights depends on the the rule and the
+ weighting function in the integral.
+ For smooth functions which are well approximated by polynomials – such
+ as analytic functions – a good quadrature rule should always outperform
+ simulation, except perhaps in extremely high dimensions where MC methods
+ may be the only option.
+ Like MC rules, polynomial approximations of integrals converge to the true
+ value of the integral as the number of nodes approaches infinity, i.e.
+ 
+\begin_inset Formula $\underset{R\rightarrow\infty}{\lim}Q\left[f\right]=I\left[f\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To use a Gaussian rule, simply determine which rule corresponds to the weighting
+ function and parameter space of the integral in question.
+ Then look up the nodes and weights in a table or use the appropriate algorithm
+ to calculate them.
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "judd1998NumericalMethods"
+
+\end_inset
+
+ for a description of all the common rules.
+ Note: it is often necessary to use a change of variables, such as a Cholesky
+ decomposition of a variance matrix.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Gaussian Product Rule
+\end_layout
+
+\begin_layout Standard
+The Gaussian product rule uses a straight-forward method to construct nodes
+ and weights: compute nodes by forming all possible tensor products of the
+ nodes and weights which are associated one dimensional rule which is appropriat
+e for the integral's domain and weighting function.
+ I.e., each of the 
+\begin_inset Formula $d$
+\end_inset
+
+-dimensional node 
+\begin_inset Formula $z_{k}$
+\end_inset
+
+'s individual coordinates are one of the one-dimensional nodes.
+ The set of nodes, then, is all possible 
+\begin_inset Formula $z$
+\end_inset
+
+s which are on the lattice formed from the Kronecker product of the one-dimensio
+nal nodes.
+ See Figure 1 in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+.
+ The weights are the product of the weights which correspond to the one-dimensio
+nal nodes.
+ For example, consider a two-dimensional rule with one dimensional nodes
+ and weights 
+\begin_inset Formula $\left\{ y_{1},y_{2},y_{3}\right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $\left\{ w_{1},w_{2},w_{3}\right\} $
+\end_inset
+
+, respectively.
+ Then the product rule has nodes 
+\begin_inset Formula $\mathcal{Y}=\left\{ \left(y_{1},y_{1}\right),\left(y_{1},y_{2}\right),\left(y_{1},y_{3}\right),\ldots,\left(y_{3},y_{3}\right)\right\} $
+\end_inset
+
+.
+ The corresponding weights are 
+\begin_inset Formula $\mathcal{W}=\left\{ w_{1}\cdot w_{1},w_{1}\cdot w_{2},w_{1}\cdot w_{3},\ldots,w_{3}\cdot w_{3}\right\} $
+\end_inset
+
+.
+ And the approximation for the integral is 
+\begin_inset Formula $Q\left[f\right]=\underset{k\in\mathcal{I}}{\sum}\tilde{w}_{k}f\left(\tilde{y}_{k}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\mathcal{I}$
+\end_inset
+
+ indexes 
+\begin_inset Formula $\mathcal{W}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{Y}$
+\end_inset
+
+, and 
+\begin_inset Formula $\tilde{y}_{k}\in\mathcal{Y}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{w}_{k}\in\mathcal{W}$
+\end_inset
+
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+To be more formal, consider a set of one-dimensional nodes and weights,
+ 
+\begin_inset Formula $\left\{ y_{k},w_{k}\right\} _{k=1}^{R}$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $d$
+\end_inset
+
+-dimensional product rule is the set of nodes 
+\begin_inset Formula $z_{k}\in$
+\end_inset
+
+ 
+\begin_inset Formula $\left\{ \times_{m=1}^{d}y_{i_{m}}\right\} $
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\mathcal{C}\left(z_{k}\right)$
+\end_inset
+
+ be a function which returns an ordered list of the indexes 
+\begin_inset Formula $\left(i_{1},i_{2},\ldots,i_{d}\right)$
+\end_inset
+
+ of the one-dimensional nodes forming the coordinates of the 
+\begin_inset Formula $d$
+\end_inset
+
+-dimensional vector 
+\begin_inset Formula $z_{k}$
+\end_inset
+
+.
+ Then each node 
+\begin_inset Formula $z_{k}=\left(y_{i_{1}},y_{i_{2}},\ldots,y_{i_{d}}\right)$
+\end_inset
+
+ and has weight 
+\begin_inset Formula $w_{i_{1}}\cdot w_{i_{2}}\cdot\ldots\cdot w_{i_{d}}$
+\end_inset
+
+, the product of the one-dimensional weights corresponding to the one dimensiona
+l nodes of 
+\begin_inset Formula $z_{k}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ See the example code in  
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Simulation-vs.-Quadrature"
+
+\end_inset
+
+ for the actual algorithm.
+\end_layout
+
+\begin_layout Standard
+Consequently, we must evaluate the function at 
+\begin_inset Formula $R^{d}$
+\end_inset
+
+ points to approximate a 
+\begin_inset Formula $d$
+\end_inset
+
+-dimensional integral, which quickly becomes much larger than 
+\begin_inset Formula $10,000$
+\end_inset
+
+, often a practical upper limit on the number of nodes which are feasible
+ with current computer technology.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Disclaimer: future readers should be mindful of the level of technology
+ which was available at the time this paper was written.
+\end_layout
+
+\end_inset
+
+ We use product of formulas which have the same number of nodes in each
+ dimension – i.e.
+ are exact for the same degree – so that we know roughly what degree polynomial
+ can be integrated exactly 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Cools1997ConstructingCubature"
+
+\end_inset
+
+.
+ If the formulas are not exact to the same degree, then we know only upper
+ and lower bounds on what polynomial will integrate exactly.
+ One problem with product rules is that many extra terms will be integrated
+ exactly because of the product between the one-dimensional bases.
+ For example, consider a problem with three dimensions and five nodes per
+ dimension.
+ The one-dimensional Gaussian formula will be exact for all polynomials
+ of degree 
+\begin_inset Formula $2*5-1=9$
+\end_inset
+
+ but the corresponding product rule will also exactly compute higher-order
+ terms such as 
+\begin_inset Formula $x_{1}^{9}x_{2}^{3}x_{3}^{1}$
+\end_inset
+
+, where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is the variable for the 
+\begin_inset Formula $i$
+\end_inset
+
+-th dimension.
+ Thus, there is some indeterminacy about what will be exactly integrated
+ by a product rule: this extra accuracy may be unnecessary and result in
+ extra computational burden.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Sparse-Grid-Integration"
+
+\end_inset
+
+Sparse Grid Integration
+\end_layout
+
+\begin_layout Standard
+We also consider sparse grid integration (SGI) which is closely related
+ to the Gaussian product rules.
+ SGI uses a subset of the nodes from the product rule and rescales the weights
+ appropriately.
+ The advantage of SGI is that it exploits symmetry so that it requires many
+ fewer points, making it more efficient to compute with little or no loss
+ in accuracy.
+ In addition, the nodes and weights for higher levels of exactness are easier
+ to compute for SGI than for monomial rules.
+ We use a Konrad-Patterson rule for choosing nodes as explained in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+.
+ Our experiments show that SGI is very competitive with monomial rules in
+ many cases.
+ However, when the lowest possible computational costs matter, the monomial
+ rule is the best option because it delivers the highest accuracy with fewest
+ nodes.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Monomial-Rules"
+
+\end_inset
+
+Monomial Rules
+\end_layout
+
+\begin_layout Standard
+Monomial rules exploit symmetries even more effectively than SGI and provide
+ very accurate approximations with surprisingly few nodes, even for moderate
+ dimensions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stroud1971Integration,Cools2003Encyclopaedia"
+
+\end_inset
+
+.
+ Formally, a 
+\emph on
+monomial
+\emph default
+ in 
+\begin_inset Formula $x\in\mathbb{R}^{d}$
+\end_inset
+
+ is the product 
+\begin_inset Formula $\underset{i=1}{\overset{d}{\Pi}}x_{i}^{\alpha_{i}}$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha_{i}\in\mathbb{W}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbb{W}\equiv\left\{ 0,1,2,\ldots\right\} $
+\end_inset
+
+ .
+ Thus, monomials are the simplest possible basis for the set of multi-dimensiona
+l polynomials.
+ The 
+\emph on
+total order
+\emph default
+ is just the sum of the exponents 
+\begin_inset Formula $\underset{i}{\sum}\alpha_{i}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\mathbf{x^{\alpha}}$
+\end_inset
+
+ is a compact notation which refers to the monomial 
+\begin_inset Formula $\underset{i=1}{\overset{d}{\Pi}}x_{i}^{\alpha_{i}}$
+\end_inset
+
+.
+ Like the Gaussian rules, monomial rules are constructed so that they will
+ exactly integrate all monomials less than or equal to some total order.
+ Monomial rules are more efficient than Gaussian product rule in part because
+ they do not exactly integrate any unnecessary higher order terms.
+\end_layout
+
+\begin_layout Standard
+The performance gains from monomial rules are clear, but the cost comes
+ in computing the rule's nodes and weights.
+ Fortunately for researchers many efficient, accurate rules have already
+ been computed for standard kernels and parameter spaces 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Cools2003Encyclopaedia,Stroud1971Integration"
+
+\end_inset
+
+.
+ Thus, a practitioner only needs to look up the appropriate monomial rule
+ in a table 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Typically, a small amount of computation is required because the table will
+ only provide each unique set of nodes and weights.
+ A researcher must then calculate the appropriate (symmetric) permutations
+ of the unique nodes to generate all possible nodes.
+ 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^{,}$
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+A monomial rule may have several equivalent sets of nodes and weights because
+ the system of equations used to compute the monomial rule may have multiple
+ solutions.
+ For example, Stroud rule 11-1 has two solutions, which we refer to as 'Left'
+ and `Right' after the two columns in the table which list the different
+ solutions.
+ The performance of these solutions will vary slightly based on the shape
+ of the problem.
+\end_layout
+
+\end_inset
+
+ and can then compute the integral as the weighted sum of the integrand
+ at the nodes.
+ Unfortunately, if you need a rule which doesn't exist you will need the
+ help of a specialist 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Cools1997ConstructingCubature"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+See Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Simulation-vs.-Quadrature"
+
+\end_inset
+
+ explains how to use the 983 node Stroud monomial rule 11-1 – which is exact
+ for degree 11 polynomials in five dimensions – to compute the BLP market
+ share integrals.
+ For the BLP integrals, the Gaussian product rule required about ten times
+ more nodes for insignificant gains in accuracy.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Precision-and-Accuracy"
+
+\end_inset
+
+Precision and Accuracy 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/Cmp.Rule.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now provide a quick comparison between all of these rules using the code
+ we developed to validate that our implementation produced the `same' answer
+ as required by theory.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The results should be the `same' up to the limits of standard numerical
+ errors such as truncation and round-off error.
+\end_layout
+
+\end_inset
+
+ The polynomial rules correctly integrate all monomials less than or equal
+ to their respective degrees and produce poor results for monomials of higher
+ degree.
+ However, we also performed these tests using 
+\begin_inset Formula $100$
+\end_inset
+
+ replications of a pMC rule with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws which lead to a surprising result: pMC performed poorly for the low
+ order monomials, with error increasing with the degree of the monomial,
+ yet it also produced poor results for high order monomials where we expected
+ it would outperform the polynomial rules.
+ We conjecture that pMC works well only when the high-order terms in a Taylor
+ series expansion are very small, something which is explicit in the constructio
+n of monomial rules.
+ These results are summarized in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.Cmp.Rule"
+
+\end_inset
+
+ which shows the difference between the theoretical value and the value
+ computed with each rule.
+ The first three columns are the results for the Gaussian-Hermite Product
+ rule with 
+\begin_inset Formula $3^{5}$
+\end_inset
+
+, 
+\begin_inset Formula $5^{5}$
+\end_inset
+
+, and 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes – i.e., 
+\begin_inset Formula $3$
+\end_inset
+
+, 
+\begin_inset Formula $5$
+\end_inset
+
+, and 
+\begin_inset Formula $7$
+\end_inset
+
+ nodes in each of the 
+\begin_inset Formula $5$
+\end_inset
+
+ dimensions; next the Konrad-Patterson sparse grid rule which is exact for
+ degree 11; then, the left and right versions
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Often multiple monomial rules exist for a given domain, degree, and weight
+ function because there multiple solutions to the systems of equations which
+ is used to generate the rules.
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Cools1997ConstructingCubature"
+
+\end_inset
+
+ for an introduction.
+\end_layout
+
+\end_inset
+
+ of rule 11-1 in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Stroud1971Integration"
+
+\end_inset
+
+, also exact for degree 11; and, finally, the two right most columns show
+ the mean absolute error and the standard error for the pMC rule with 
+\begin_inset Formula $100$
+\end_inset
+
+ replications.
+ The monomials are listed by increasing degree.
+ Note that the Gauss-Hermite product rules will exactly integrate any monomial
+ rule as long as the coordinates in each dimension are raised to some power
+ less than or equal to 
+\begin_inset Formula $2R-1$
+\end_inset
+
+ where 
+\begin_inset Formula $R$
+\end_inset
+
+ is the number of one dimensional nodes used in the tensor product.
+ Sparse grid and the monomial rules are exact for any monomial whose degree
+ is less than or equal to 
+\begin_inset Formula $11$
+\end_inset
+
+.
+ For odd monomials, the difference in performance is even more stark: the
+ polynomial rules are 
+\begin_inset Formula $0$
+\end_inset
+
+ to the limits of numerical precision whereas pMC has significant error,
+ especially as the degree of the monomial increases.
+ These results, in our opinion, considerably strengthen the case for using
+ sparse grid or monomial rules because pMC is never better.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We also computed these tests for Halton draws generated by MATLAB R2010b's
+ 
+\family typewriter
+qrandstream
+\family default
+ facility which did not perform significantly better than pMC.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Bias and Noise
+\end_layout
+
+\begin_layout Standard
+When choosing which quadrature rule to use, a researcher should consider
+ how it will affect their results.
+ Simulation methods have become extremely popular because of their ease
+ of use, especially for applied econometrics.
+ However simulation, as discussed at length in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Train2009DiscreteChoiceMethodsBook"
+
+\end_inset
+
+, can suffer from both bias as well as noise.
+ The nature of the bias depends on the type of estimator: for Method of
+ Simulated Moments (MSM) the bias is zero unlike Maximum Simulated Likelihood
+ (MSL) and Maximum Simulated Score (MSS).
+ The bias occurs because the bias term is linear only for MSM: consequently,
+ Jensen's inequality shows that MSL and MSS must be biased.
+ The noise term will approach zero asymptotically if 
+\begin_inset Formula $R$
+\end_inset
+
+, the number of draws, approaches infinity faster than 
+\begin_inset Formula $\sqrt{N}$
+\end_inset
+
+, the number of observations.
+ Consequently, researchers who use MSL or MSS should remember to correct
+ for this bias.
+\end_layout
+
+\begin_layout Standard
+Polynomial-rules, on the other hand, only suffer from approximation error
+ and that to a much lesser degree than Monte Carlo methods.
+ Thus, the error is much smaller for these methods, making them much better
+ suited for empirical and other problems than simulation.
+ With polynomial rules, researchers can also consider more efficient econometric
+ methods such as MLE instead of GMM.
+\end_layout
+
+\begin_layout Subsubsection
+Approximation of the Tails of the Normal
+\end_layout
+
+\begin_layout Standard
+Polynomial-based rules approximate the entire distribution more accurately
+ than pMC rules, especially the tails.
+ These extremal values in the tails often cause numeric problems such as
+ overflow from larger nodes, despite their small quadrature weights.
+ These problems are less common with Monte Carlo methods because draws in
+ the tails are infrequent by definition.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Unscrupulous researchers face the temptation to take a different set of
+ draws if some of their current set of draws produce numerical difficulties
+ because they are in the tails of the Normal distribution.
+\end_layout
+
+\end_inset
+
+ The source of the problem is not the correct weighting of the tails, but
+ the modeling decision to use the Normal distribution for convenience.
+ Most real-world distributions have bounded support: consequently, the problem
+ should be solved by using a more representative distribution for the random
+ coefficients.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+FloatBarrier
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:The-Basics-of-BLP"
+
+\end_inset
+
+The Basics of BLP
+\end_layout
+
+\begin_layout Standard
+We now quickly review the features and notation of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+'s model in order to examine how different quadrature rules affect estimation
+ results.
+ BLP has become one of the most popular structural models of product differentia
+tion because it fits empirical data well by using a flexible form which
+ combines both random coefficients and unobserved product-market characteristics
+, 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+, enabling the model to explain consumers' tastes for both horizontal and
+ vertical product differentiation.
+ The model produces realistic substitution patterns:
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The substitution patterns will be incorrect if congestion in product space
+ matters.
+ See
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BerryPakes2007PureCharacteristics"
+
+\end_inset
+
+ and, for an application where congestion matters, 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Nosko2010CPUMarket"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ the random coefficients can handle correlations between different choices,
+ overcoming the Independence from Irrelevant Alternatives (IIA) problem
+ that is a feature of logit models, and 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ captures unobserved heterogeneity in product quality, preventing bias in
+ parameter estimates from product traits which the econometrician cannot
+ observe.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "nevo2000practitioner"
+
+\end_inset
+
+ provides a detailed and accessible explanation of the model.
+ BLP is now sufficiently established that the several recent textbooks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Train2009DiscreteChoiceMethodsBook,Davis2009Quantitative"
+
+\end_inset
+
+ also cover it.
+\end_layout
+
+\begin_layout Standard
+Throughout this paper, we base our notation on a simplified version of the
+  notation in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "DubeFoxSu2009NumBLP"
+
+\end_inset
+
+.
+ Thus, we consider 
+\begin_inset Formula $T$
+\end_inset
+
+ markets which each have 
+\begin_inset Formula $J$
+\end_inset
+
+ products plus an outside good.
+ Each product 
+\begin_inset Formula $j\in J$
+\end_inset
+
+ in market 
+\begin_inset Formula $t\in T$
+\end_inset
+
+ has 
+\begin_inset Formula $K$
+\end_inset
+
+ characteristics 
+\begin_inset Formula $x_{jt}$
+\end_inset
+
+ and price 
+\begin_inset Formula $p_{jt}$
+\end_inset
+
+ as well as an unobserved, product-market shock, 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+.
+ The market could be a time period, as in the original BLP papers on automobiles
+, or a city, as in Nevo's papers on ready-to-eat breakfast cereal.
+ The shock 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is observed by consumers and firms but not by the econometrician.
+ This shock captures vertical aspects of product differentiation whereas
+ the random coefficients model horizontal differentiation: all consumers
+ value a larger 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ but rank product characteristics differently according to their type.
+ Lastly, 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ is consumer 
+\begin_inset Formula $i$
+\end_inset
+
+'s expenditure and drops out of the model because it is not interacted with
+ any product-specific characteristics.
+\end_layout
+
+\begin_layout Standard
+BLP assume consumers are rational, utility maximizers who choose the good
+ which maximizes their utility.
+ Let consumer 
+\begin_inset Formula $i$
+\end_inset
+
+'s utility from purchasing product 
+\begin_inset Formula $j$
+\end_inset
+
+ in market 
+\begin_inset Formula $t$
+\end_inset
+
+ be
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Some researchers specify 
+\begin_inset Formula $\log\left(y_{i}-p_{jt}\right)$
+\end_inset
+
+ instead of 
+\begin_inset Formula $\left(y_{i}-p_{jt}\right)$
+\end_inset
+
+ to capture income effects 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "petrin2002quantifying"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+U_{ijt} & = & V_{ijt}+\epsilon_{ijt}
+\end{eqnarray*}
+
+\end_inset
+
+with 
+\begin_inset Formula 
+\begin{eqnarray*}
+V_{ijt} & = & \alpha_{i}\left(y_{i}-p_{jt}\right)+x_{jt}'\beta_{i}+\xi_{jt}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula $\epsilon_{ijt}$
+\end_inset
+
+ is an IID, Type I Extreme value shock, which leads to a simple closed form
+ solution for market shares, conditional on consumer types, 
+\begin_inset Formula $\left(\alpha_{i},\beta_{i}\right)$
+\end_inset
+
+.
+ In practice, 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{jt}$
+\end_inset
+
+ are often the logarithm of the respective quantities, which ensures that
+ the utility is homogeneous of degree zero.
+ Similarly, the utility of choosing the outside, `no purchase' option (
+\begin_inset Formula $j=0$
+\end_inset
+
+ by convention) is
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+ specify 
+\begin_inset Formula $U_{i0t}=\alpha_{i}y_{i}+\xi_{0t}+\sigma_{0t}\nu_{i0t}+\epsilon_{i0t}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+U_{i0t} & =\alpha_{i}y_{i}+ & \epsilon_{i0t}.
+\end{eqnarray*}
+
+\end_inset
+
+The coefficients 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{i}$
+\end_inset
+
+ are type-specific `random coefficients' – i.e., they depend on a consumer's
+ type and are drawn from some distribution in order to capture unobserved
+ differences in consumers' tastes:
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Some researchers also include demographic information in the random coefficients.
+ We ignore demographics in order to focus on the numerical properties of
+ the model.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(\begin{array}{c}
+\alpha_{i}\\
+\beta_{i}
+\end{array}\right) & = & \left(\begin{array}{c}
+\bar{\alpha}\\
+\bar{\beta}
+\end{array}\right)+\Sigma\nu_{i}
+\end{eqnarray*}
+
+\end_inset
+
+where all consumers have the same mean taste preferences 
+\begin_inset Formula $\bar{\alpha}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{\beta}$
+\end_inset
+
+.
+ The unobserved taste shock 
+\begin_inset Formula $\nu_{i}$
+\end_inset
+
+ is a 
+\begin_inset Formula $K+1$
+\end_inset
+
+ column vector (because there are 
+\begin_inset Formula $K$
+\end_inset
+
+ product characteristics plus price) and has distribution 
+\begin_inset Formula $\nu_{i}\sim P_{\nu}$
+\end_inset
+
+.
+ The variance of the taste shock is 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+, a 
+\begin_inset Formula $\left(K+1\right)\times\left(K+1\right)$
+\end_inset
+
+ matrix .
+ 
+\begin_inset Formula $P_{\nu}$
+\end_inset
+
+ is usually assumed to be multivariate normal.
+ Following convention, we refer to the model's parameters as 
+\begin_inset Formula $\theta$
+\end_inset
+
+ where 
+\begin_inset Formula $\theta=\left(\theta_{1},\theta_{2}\right)$
+\end_inset
+
+, 
+\begin_inset Formula $\theta_{1}=\left(\bar{\alpha},\bar{\beta}\right)$
+\end_inset
+
+, the parameters for mean utility, and 
+\begin_inset Formula $\theta_{2}=\left(\mathtt{vec}\left(\Sigma\right)\right)$
+\end_inset
+
+, the parameters for the standard error of the random coefficients.
+ Thus, 
+\begin_inset Formula $\theta$
+\end_inset
+
+ refers to all of the parameters to be estimated.
+\end_layout
+
+\begin_layout Standard
+It is convenient to partition the utility into the mean utility
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\delta_{jt}\left(\xi_{jt};\theta_{1}\right) & = & x_{jt}^{'}\bar{\beta}-\bar{\alpha}p_{jt}+\xi_{jt},
+\end{eqnarray*}
+
+\end_inset
+
+which is the constant utility that any consumer type gains from choosing
+ product 
+\begin_inset Formula $j$
+\end_inset
+
+ in market 
+\begin_inset Formula $t$
+\end_inset
+
+, regardless of type, and a type-specific preference shock
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mu_{ijt} & = & \left[-p_{jt}\ x_{jt}^{'}\right]\left(\Sigma\nu_{i}\right).
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+ has mean zero and captures individual heterogeneity.
+ 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+ is a scalar because 
+\begin_inset Formula $\left[-p_{jt}\ x_{jt}^{'}\right]$
+\end_inset
+
+ is a 
+\begin_inset Formula $K+1$
+\end_inset
+
+ row vector and 
+\begin_inset Formula $\Sigma\nu_{i}$
+\end_inset
+
+ is a 
+\begin_inset Formula $K+1$
+\end_inset
+
+ column vector.
+ Some researchers permit 
+\begin_inset Formula $\alpha_{i}<0$
+\end_inset
+
+ which can produce a positive price coefficient for some consumer types.
+ A possible solution is to assume that 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ is log-normally distributed.
+ In other applications 
+\begin_inset Formula $\alpha_{i}<0$
+\end_inset
+
+ may make sense if price is a signal of quality.
+\end_layout
+
+\begin_layout Standard
+Researchers typically assume that 
+\begin_inset Formula $\epsilon_{ijt}\sim$
+\end_inset
+
+ Type I Extreme Value so the market shares, conditional on consumer type
+ 
+\begin_inset Formula $\nu$
+\end_inset
+
+,
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Note: the consumer type, 
+\begin_inset Formula $\nu$
+\end_inset
+
+, is scaled by 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+, the Cholesky decomposition of the variance matrix of the random coefficients.
+\end_layout
+
+\end_inset
+
+ have a closed-form analytic solution, the multinomial logit.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi;\theta_{1}\right)\left|\theta_{1},\theta_{2}\right.\right) & = & \dfrac{\exp\left[\delta_{jt}+\mu_{ijt}\left(\nu\right)\right]}{\underset{k}{\sum}\exp\left[\delta_{kt}+\mu_{ikt}\left(\nu\right)\right]}.
+\end{eqnarray*}
+
+\end_inset
+
+Then the unconditional share integrals are the just the expectation of the
+ regular MNL choice probabilities with respect to 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\nu$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi\right)\left|\theta_{1}\right.\right) & = & \intop_{\mathbb{R}^{K+1}}\dfrac{\exp\left[\delta_{jt}+\mu_{ijt}\left(\nu\right)\right]}{\sum\exp\left[\delta_{kt}+\mu_{ikt}\left(\nu\right)\right]}\phi\left(\nu\right)d\nu.
+\end{eqnarray*}
+
+\end_inset
+
+Here 
+\begin_inset Formula $\phi\left(\nu\right)$
+\end_inset
+
+ is the standard Normal probability density function.
+ We restrict 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ to be diagonal as in the original BLP papers.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "nevo2001measuring"
+
+\end_inset
+
+ estimates the off-diagonal elements.
+ We expect that the advantages of monomial rules would be even more apparent
+ when estimating a model with off-diagonal elements.
+\end_layout
+
+\end_inset
+
+ The random coefficients logit can in theory model any choice probabilities
+ given a suitable mixing distribution 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "McFaddenTrain2000MixedMNL,Train2009DiscreteChoiceMethodsBook"
+
+\end_inset
+
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "McFaddenTrain2000MixedMNL"
+
+\end_inset
+
+ is a very general result and applies to elasticities and moments as well
+ as choice probabilities.
+ Consequently, the mixed logit can approximate general substitution patterns
+ to arbitrary accuracy.
+\end_layout
+
+\end_inset
+
+,
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+It is worth emphasizing that you must use the correct mixing distribution
+ for 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "McFaddenTrain2000MixedMNL"
+
+\end_inset
+
+'s result to hold.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "KeaneWasi2009ComparingGeneralizedLogitModels"
+
+\end_inset
+
+ provide evidence from several empirical datasets that this is almost never
+ the case.
+ 
+\end_layout
+
+\end_inset
+
+ In practice, researchers choose a Normal distribution for the random coefficien
+ts because it is tractable.
+ But, we don't know of any papers which actually test this assumption.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HausmanHarding"
+
+\end_inset
+
+ specify a more flexible mixing distribution; it may be possible to apply
+ their method to test the performance of the assumption of logit + Normal.
+ Nevertheless, logit + Normal should work well as long as the real-world
+ mixing distribution is smooth and single-peaked because the tails will
+ not contribute much to the integral.
+\end_layout
+
+\begin_layout Standard
+Historically, a nested fixed point (NFP) algorithm based on 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "RustBusEngine1987"
+
+\end_inset
+
+ is used to estimate the model: : the outer loop computes the point estimates
+ of 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ by minimizing a GMM objective function whose moments are constructed from
+ 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+; the inner loop solves the nonlinear system of equations equating predicted
+ and observed shares for the mean utilities, 
+\begin_inset Formula $\delta_{jt}\left(\theta\right)$
+\end_inset
+
+, and, hence, 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+.
+ The original implementation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "BLP1995auto,nevo2000practitioner"
+
+\end_inset
+
+ uses a contraction mapping to perform this inversion.
+ Thus, the researcher codes an outer loop to solve the program
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\hat{\theta} & = & \underset{\theta}{\mbox{arg max}}\left(Z^{'}\xi\right)^{'}W\left(Z^{'}\xi\right)
+\end{eqnarray*}
+
+\end_inset
+
+and an inner loop to recover 
+\begin_inset Formula $\delta$
+\end_inset
+
+ via a contraction mapping
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\exp\left(\delta_{jt}^{n+1}\right) & = & \exp\left(\delta_{jt}^{n}\right)\times S_{jt}/s_{jt}\left(\delta_{jt}^{n};\theta_{2}\right),
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $S_{jt}$
+\end_inset
+
+ are the observed market shares, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+ the predicted market shares, and 
+\begin_inset Formula $\delta_{jt}^{n}$
+\end_inset
+
+ the 
+\begin_inset Formula $n$
+\end_inset
+
+-th iterate in a sequence which hopefully converges to the true mean utilities.
+ Given the mean utilities, the product market shock is simply
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\xi_{jt} & = & \delta_{jt}-\left[-p_{jt}\ x_{jt}\right]\theta_{1}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+ proves that this mapping is a contraction and 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "nevo2000practitioner"
+
+\end_inset
+
+ advocates using this exponential form to improve numerical performance
+ by avoiding computing logarithms which are more costly than exponentiation.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+In simple heuristic tests, we find that the contraction mapping has poor
+ convergence properties, fails to satisfy the sufficiency conditions of
+ the 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+'s theorem 
+\begin_inset Formula $10\%$
+\end_inset
+
+ of the time, and often has a contraction rate close to or exceeding 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+ In addition, 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Gandhi2010InvertingBLP"
+
+\end_inset
+
+ shows that the market share equations are invertible.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Reynaerts2010BerryMap"
+
+\end_inset
+
+ develop other methods for numerically inverting the market share equations
+ which are faster and more robust as well as discussing some of the convergence
+ problems of the contraction mapping.
+ 
+\end_layout
+
+\begin_layout Standard
+Numerical integration affects both choice probabilities and the inversion
+ of the market share equation.
+ Consequently, numerical errors in computing integrals can propagate through
+ both of these channels.
+ With the above GMM specification, the gradient of the GMM objective function
+ depends on the gradient of 
+\begin_inset Formula $\delta$
+\end_inset
+
+, which in turn depends on the gradient of the inverse of the market share
+ equation, 
+\begin_inset Formula $s^{-1}\left(S;\theta\right)$
+\end_inset
+
+.
+ This provides a channel for numerical errors in computing not just the
+ share integrals but also the gradient of the market share integrals to
+ propagate, affecting both the point estimates and the standard errors.
+ As discussed below, one big advantage of monomial rules over pMC is that
+ they provide a more accurate approximation for both an integral and its
+ gradient.
+\end_layout
+
+\begin_layout Standard
+When estimating the BLP model below, we use the same moment conditions as
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "DubeFoxSu2009NumBLP"
+
+\end_inset
+
+.
+ These moment conditions depend on the product of the unobserved product-market
+ shock, 
+\begin_inset Formula $\xi$
+\end_inset
+
+, and a matrix of instruments.
+ The matrix of instruments consists of various products of product attributes
+ and a set of synthetic instrumental variables which correlated with price
+ but not 
+\begin_inset Formula $\xi$
+\end_inset
+
+.
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "DubeFoxSu2009NumBLP"
+
+\end_inset
+
+'s code for details.
+\end_layout
+
+\begin_layout Standard
+In this paper, we use Mathematical Programming with Equilibrium Constraints
+ (MPEC) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "SuJudd2009MPEC"
+
+\end_inset
+
+ to estimate the BLP model because it is faster and more robust than NFP.
+ MPEC relies on a modern, state of the art solver such as KNITRO or SNOPT,
+ to solve the model in one optimization step using constraints:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\underset{\theta,\delta,\eta}{\max} &  & \eta^{'}W\eta\\
+\mbox{s.t.} &  & s\left(\delta\left(\xi\right);\theta\right)=S\\
+ &  & \eta=Z^{'}\xi.
+\end{eqnarray*}
+
+\end_inset
+
+By adding the extra variable 
+\begin_inset Formula $\eta$
+\end_inset
+
+, we improve the sparseness pattern which makes the problem easier to solve
+ and more stable numerically.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+With modern solvers, the sparseness pattern and type of non-linearities
+ are more important than the number of variables.
+\end_layout
+
+\end_inset
+
+ Furthermore, MPEC solves for the mean utilities implicitly via the constraint
+ that observed market shares equal predicted market shares, increasing both
+ speed and stability.
+\end_layout
+
+\begin_layout Standard
+Besides nested fixed point and MPEC, there are several other estimation
+ approaches including control functions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "PetrinTrain2006ControlFunctionBLP"
+
+\end_inset
+
+, a two step procedure with maximum likelihood and instrumental variables
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Train2009DiscreteChoiceMethodsBook"
+
+\end_inset
+
+, and Bayesian 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Rossi2009BayesianBLP"
+
+\end_inset
+
+.
+ Most of these methods exploit the fact that if you can estimate the mean
+ utilities 
+\begin_inset Formula $\delta_{jt}$
+\end_inset
+
+ then you can then recover the product-market shock 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The asymptotic and finite sample properties of BLP are still not well understood.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "berry2004LimitTheorems"
+
+\end_inset
+
+ prove asymptotic normality assuming 
+\begin_inset Formula $J\rightarrow\infty$
+\end_inset
+
+.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BerryHaile2010IdentificationBLP"
+
+\end_inset
+
+ show the model is identified under the `Large Support' assumption.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Skrainka2011FiniteBLP"
+
+\end_inset
+
+ uses large scale simulations to characterize finite sample performance.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Subsection
+Example: Computing BLP Product-Market Shares
+\end_layout
+
+\begin_layout Standard
+Given the above assumptions, the monomial (or Gauss-Hermite or sparse grid)
+ approximation for the integral is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{jt} & \approx & \dfrac{1}{\pi^{\left(K+1\right)/2}}\underset{k}{\sum}\left\{ \dfrac{\exp\left[\delta_{jt}+\mu_{ijt}\left(\psi_{k}\right)\right]}{\underset{m}{\sum}\exp\left[\delta_{mt}+\mu_{imt}\left(\psi_{k}\right)\right]}\omega_{k}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+ where 
+\begin_inset Formula $\left(\psi_{k},\omega_{k}\right)$
+\end_inset
+
+ are the nodes and weights for an suitable quadrature rule with Gaussian
+ kernel and 
+\begin_inset Formula $K+1$
+\end_inset
+
+ is the dimension of 
+\begin_inset Formula $\nu_{k}$
+\end_inset
+
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Formula $K+1$
+\end_inset
+
+ for the 
+\begin_inset Formula $K$
+\end_inset
+
+ product characteristics plus price.
+\end_layout
+
+\end_inset
+
+ The factor 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\pi^{-\left(K+1\right)/2}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ comes from the normalization of the Normal density.
+ The choice of monomial rule depends on the number of dimensions of the
+ integral, desired level of exactness (accuracy), the domain of integration,
+ and the mixing distribution a.k.a.
+ weighting function.
+ 
+\end_layout
+
+\begin_layout Standard
+For a Monte Carlo method, the approximation is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{jt} & \approx & \dfrac{1}{R}\underset{k}{\sum}\dfrac{\exp\left[\delta_{jt}+\mu_{ijt}\left(\psi_{k}\right)\right]}{\underset{m}{\sum}\exp\left[\delta_{mt}+\mu_{imt}\left(\psi_{k}\right)\right]}
+\end{eqnarray*}
+
+\end_inset
+
+for 
+\begin_inset Formula $R$
+\end_inset
+
+ nodes 
+\begin_inset Formula $\psi_{k}$
+\end_inset
+
+ drawn from the Normal distribution.
+ Note that these two formula have the same structure: a weighted sum of
+ the integrand evaluated at a set of nodes.
+ For a Monte Carlo method, the weight 
+\begin_inset Formula $\omega_{k}\rightarrow\nicefrac{1}{R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Simulation-vs.-Quadrature"
+
+\end_inset
+
+The Experiments: Simulation vs.
+ Quadrature
+\end_layout
+
+\begin_layout Standard
+We compare how pMC, monomial, Gaussian product, and sparse grid quadrature
+ rules affect the computation of several key quantities in the BLP model.
+ We compare how these rules perform when computing the market share integrals,
+ point estimates, standard errors, and the unobserved heterogeneity 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+, all of which are critical components of the model.
+ Of course, we use a state of the art solver (KNITRO or SNOPT) and algorithm
+ (MPEC) for these experiments.
+\end_layout
+
+\begin_layout Subsection
+Experimental Setup
+\end_layout
+
+\begin_layout Standard
+Our experiments use five different Monte Carlo data sets which we generated
+ from unique seeds and the parameters shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab:ParamsToGenerateMonteCarloDataset"
+
+\end_inset
+
+ using MATLAB
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttrademark
+\end_layout
+
+\end_inset
+
+'s 
+\family typewriter
+rand
+\family default
+ and 
+\family typewriter
+randn
+\family default
+ functions.
+ We use the same values as 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "DubeFoxSu2009NumBLP"
+
+\end_inset
+
+ (DFS hereafter), except that we use fewer products and markets and chose
+ different seeds.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Their code provided the starting point for the code which we developed to
+ explore the impact of quadrature rules on BLP.
+ We downloaded the code from JP Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e's website (
+\begin_inset CommandInset href
+LatexCommand href
+target "http://faculty.chicagobooth.edu/jean-pierre.dube/vita/MPEC%20code.htm"
+
+\end_inset
+
+), Fall 2009.
+ 
+\end_layout
+
+\end_inset
+
+ We refer to these data sets via their seeds, which we label 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $5$
+\end_inset
+
+.
+ To ensure that there is some noise in each data set, as in real-world data,
+ we compute the `observed' market share integrals using a pMC rule with
+ 
+\begin_inset Formula $R=100$
+\end_inset
+
+ nodes.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+For the rest of the paper, we use 
+\begin_inset Formula $R$
+\end_inset
+
+ to refer to the number of draws in a Monte Carlo simulation and 
+\begin_inset Formula $N$
+\end_inset
+
+ as the number of replications.
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\series default
+Currently, these parameter values result in a market share of about 
+\begin_inset Formula $90\%$
+\end_inset
+
+ for the outside good, which seems reasonable for a differentiated, durable
+ good such as an automobile.
+ That many of the observed market shares are exceedingly small could lead
+ to inaccuracies in the corresponding computed market shares because both
+ types of quadrature rules can be unreliable in large regions of flatness.
+ We only consider diagonal 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ to facilitate validation and to maintain consistency with the most BLP
+ papers and DFS.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+J
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $25$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+T
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $50$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{1\cdot}\equiv\left(\bar{\beta}^{'},\bar{\alpha}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\left(\begin{array}{cccc}
+2 & 1.5 & 1.5 & 0.5\end{array}-3\right)^{'}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{2\cdot}\equiv\mathtt{diag}\left(\Sigma\right)^{\nicefrac{1}{2}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\left(\begin{array}{ccccc}
+\sqrt{0.5} & \sqrt{0.5} & \sqrt{0.5} & \sqrt{0.5} & \sqrt{0.2}\end{array}\right)^{'}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "Tab:ParamsToGenerateMonteCarloDataset"
+
+\end_inset
+
+Parameters Used to Generate Monte Carlo Data sets.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We focus on how each quadrature rule affects the point estimates – i.e.
+ whether a state of the art solver and algorithm (MPEC) could consistently
+ and efficiently find a unique global optimum.
+ For each data set and quadrature rule, we compute the optimum for the following
+ setups: (1) five randomly choose starts near the two-stage least squares
+ (2SLS) logit estimate; (2) multiple starts taken about the average of the
+ best point estimates for 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ for the 
+\begin_inset Formula $5^{5}$
+\end_inset
+
+ Gauss-Hermite product rule; and, (3) for pMC only, multiple Monte Carlo
+ draws of nodes for the same starting value.
+ In all cases, we compute standard errors using the standard GMM sandwich
+ formula 
+\begin_inset Formula $\mbox{Var}\left(\hat{\theta}\right)=\left(\hat{G}^{'}W\hat{G}\right)^{-1}\hat{G}^{'}W\hat{\Lambda}W\hat{G}\left(\hat{G}^{'}W\hat{G}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\hat{G}$
+\end_inset
+
+ is the gradient of the moment conditions, 
+\begin_inset Formula $W$
+\end_inset
+
+ the weighting matrix formed from the instruments, 
+\begin_inset Formula $\left(Z^{'}Z\right)^{-1}$
+\end_inset
+
+, and 
+\begin_inset Formula $\hat{\Lambda}$
+\end_inset
+
+ the covariance of the moment conditions, 
+\begin_inset Formula $\underset{j\in J}{\sum}\underset{t\in T}{\sum}z_{jt}z_{jt}^{'}\xi_{jt}^{2}$
+\end_inset
+
+.
+ In addition, we compare the level of the market share integrals calculated
+ by the different rules.
+ Future research should also examine how quadrature rules affect the approximati
+on of the gradient and Hessian of the objective function, which are more
+ important than the level of market shares in determining the point estimates
+ and standard errors.
+\end_layout
+
+\begin_layout Standard
+In our computations, we use the following numerical integration techniques:
+ pseudo-Monte Carlo (pMC), Gaussian Hermite product rule, sparse grid integratio
+n (SGI) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+, and Stroud monomial rule 11-1 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stroud1971Integration"
+
+\end_inset
+
+.
+ Because we have assumed that the mixing distribution of the random coefficients
+ is Normal, we compute the pMC nodes by drawing between 
+\begin_inset Formula $1,000$
+\end_inset
+
+ and 
+\begin_inset Formula $10,000$
+\end_inset
+
+ nodes from a standard Normal distribution using MATLAB
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttrademark
+\end_layout
+
+\end_inset
+
+'s 
+\family typewriter
+randn
+\family default
+ function.
+ We use the same draws for each market share integral, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+, as in DFS.
+ Current `best practice' seems to be 
+\begin_inset Formula $5,000$
+\end_inset
+
+ points so 
+\begin_inset Formula $10,000$
+\end_inset
+
+ nodes will enable us to put reasonable bounds on the accuracy of simulation-bas
+ed BLP results.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BLP1995auto"
+
+\end_inset
+
+ use pMC with importance sampling in an attempt to reduce variance, but
+ importance sampling is just a non-linear change of variables and should
+ not significantly improve the performance of pMC.
+ Lastly, using different draws for each market share integral would improve
+ the point estimates because the simulation errors tend to cancel out and
+ improve the GMM estimates because the share equations are no longer correlated
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "McFadden1989MethodSimMoments"
+
+\end_inset
+
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Quantifying the actual benefit of separate draws is an open research question
+ and merits further investigation.
+\end_layout
+
+\end_inset
+
+ However, taking separate draws for each integral requires more memory and
+ could considerably increase computational burden through increase I/O costs.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Swapping occurs when a process's memory demands are greater than the physical
+ RAM available, causing operating system's virtual memory facility to keep
+ transferring memory between RAM and disk.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+For polynomial-based rules, we use quadrature rules which are designed for
+ a Gaussian kernel, 
+\begin_inset Formula $\exp^{-x^{2}}$
+\end_inset
+
+, because the mixing distribution is Normal.
+ Consequently, the correct one-dimensional rule to generate the nodes and
+ weights for the multi-dimensional product rule is Gaussian-Hermite.
+ The product rule consists of all Kronecker products of the one-dimensional
+ nodes and the weights are the products of the corresponding one dimensional
+ weights.
+ The algorithm is:
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+
+\family typewriter
+gauher
+\family default
+ uses the algorithm in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Press2007NumericalRecipes"
+
+\end_inset
+
+ to compute the Gaussian-Hermite nodes and weights.
+ Many researchers mistrust 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Press2007NumericalRecipes"
+
+\end_inset
+
+, however we tested the nodes and weights on the relevant moments to verify
+ that they were indeed correct.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+function [ Q_NODES, Q_WEIGHTS ] = GHQuadInit( nDim_, nNodes_ )
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  % Get one-dimensional Gauss-Hermite nodes and weights
+\end_layout
+
+\begin_layout LyX-Code
+  tmp = gauher( nDim_ ) ;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  % extract quadrature information for one dimension 
+\end_layout
+
+\begin_layout LyX-Code
+  vNodes = tmp( :, 1 ) ; 
+\end_layout
+
+\begin_layout LyX-Code
+  vWeights = tmp( :, 2 ) ;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  % calculate three dimensional nodes and weights 
+\end_layout
+
+\begin_layout LyX-Code
+  % Q_WEIGHTS = kron( vWeights, kron( vWeights, vWeights ) ) ;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  Q_WEIGHTS = vWeights ; 
+\end_layout
+
+\begin_layout LyX-Code
+  for ix = 2 : nDim_
+\end_layout
+
+\begin_layout LyX-Code
+    Q_WEIGHTS = kron( vWeights, Q_WEIGHTS ) ; 
+\end_layout
+
+\begin_layout LyX-Code
+  end
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  % Make sure that the right-most dimension (ixDim = nDim_) varies
+\end_layout
+
+\begin_layout LyX-Code
+  % most quickly and the left-most (ixDim = 1) most slowly 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  Q_NODES = zeros( nDim_, nNodes_^nDim_ ) ; 
+\end_layout
+
+\begin_layout LyX-Code
+  for ixDim = 1 : nDim_ 
+\end_layout
+
+\begin_layout LyX-Code
+    Q_NODES( ixDim, : ) = kron( ones( nNodes_^(ixDim - 1), 1 ), ...
+\end_layout
+
+\begin_layout LyX-Code
+       kron( vNodes, ones( nNodes_^(nDim_ - ixDim), 1 ) ) ) ; 
+\end_layout
+
+\begin_layout LyX-Code
+  end
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  % Correct for Gaussian kernel versus normal density 
+\end_layout
+
+\begin_layout LyX-Code
+  Q_WEIGHTS = Q_WEIGHTS / ( pi ^ ( nDim_ / 2 ) ) ;
+\end_layout
+
+\begin_layout LyX-Code
+  Q_NODES = Q_NODES * sqrt( 2 ) ; 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Note that the Normal density requires renormalization of the nodes and weights
+ because the Gaussian kernel, unlike the Normal density, lacks a factor
+ of 
+\begin_inset Formula $\nicefrac{1}{2}$
+\end_inset
+
+ in the exponent as well as the factors of 
+\begin_inset Formula $\pi^{-\nicefrac{1}{2}}$
+\end_inset
+
+ used for normalization.
+ We experimented with product rules for five dimensions
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The dimension is five because the synthetic data has four product characteristic
+s plus price.
+\end_layout
+
+\end_inset
+
+ which used 
+\begin_inset Formula $3$
+\end_inset
+
+, 
+\begin_inset Formula $4$
+\end_inset
+
+, 
+\begin_inset Formula $5$
+\end_inset
+
+, 
+\begin_inset Formula $7$
+\end_inset
+
+, or 
+\begin_inset Formula $9$
+\end_inset
+
+ nodes in each dimension.
+ We found that using more nodes than 
+\begin_inset Formula $7$
+\end_inset
+
+ in each dimension did not improve accuracy but greatly increased computational
+ cost because of the curse of dimensionality: for a five dimensional shock
+ the product rule with 
+\begin_inset Formula $7$
+\end_inset
+
+ nodes per dimension requires 
+\begin_inset Formula $7^{5}=16,807$
+\end_inset
+
+ nodes to compute a share integral (whereas 
+\begin_inset Formula $9$
+\end_inset
+
+ nodes per dimension would require 
+\begin_inset Formula $9^{5}=59,049$
+\end_inset
+
+.).
+\end_layout
+
+\begin_layout Standard
+Sparse grid integration rules function similarly to product rules but exploit
+ symmetry so that fewer points are required.
+ We use the Konrad-Patterson algorithm for a Gaussian kernel, as described
+ in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "HeissWinschel2008likelihoodSparseGrids"
+
+\end_inset
+
+, and compute nodes and weights for a five-dimensional problem which is
+ exact for polynomials of total order 
+\begin_inset Formula $11$
+\end_inset
+
+ or less using their MATLAB
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttrademark
+\end_layout
+
+\end_inset
+
+ code.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The code can be downloaded from 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.sparse-grids.de/"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ We chose this configuration so that SGI is exact for the same total order
+ as the monomial rule.
+ For this level of accuracy, 
+\begin_inset Formula $993$
+\end_inset
+
+ nodes are required, a substantial improvement on the product rule and only
+ ten more than the monomial rule.
+ However even a small increase in accuracy requires a rapid increase in
+ the number of nodes, e.g.
+ exactness for total order 13 requires 
+\begin_inset Formula $2,033$
+\end_inset
+
+ nodes.
+ See their paper for the details.
+
+\series bold
+ 
+\end_layout
+
+\begin_layout Standard
+Lastly, we use 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Stroud1971Integration"
+
+\end_inset
+
+'s monomial rule 11-1 for a Gaussian kernel.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Stroud1971Integration"
+
+\end_inset
+
+ provides two solutions,
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We label the two versions of rule 11-1 as `Left' or `Right', according to
+ whether we use the set of nodes and weights in the left or right column
+ of his Table 
+\begin_inset Formula $E_{n}^{r^{2}}$
+\end_inset
+
+: 11-1 on pp.
+ 322-323.
+\end_layout
+
+\end_inset
+
+ both of which provide comparable performance and integrate exactly all
+ five-dimensional monomials of total order 
+\begin_inset Formula $11$
+\end_inset
+
+ or less using only 983 nodes.
+ To implement the rule, we wrote a function which computed the nodes and
+ weights from the data in Stroud's text.
+ 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Our monomial code is available at 
+\begin_inset CommandInset href
+LatexCommand href
+target "www.ucl.ac.uk/~uctpbss/public/code/HighPerfQuad"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ This simply involves a lot of book-keeping to compute the correct permutations
+ of the node elements using Stroud's data.
+\end_layout
+
+\begin_layout Standard
+Now we briefly discuss our choice of the SNOPT solver, how we configured
+ it, and numerical stability.
+\end_layout
+
+\begin_layout Subsubsection
+Solver Choice and Configuration
+\end_layout
+
+\begin_layout Standard
+Because different solvers work better on different problems, we tried both
+ the KNITRO and SNOPT solvers on BLP.
+ Both solvers use efficient, modern algorithms: KNITRO supports active set
+ and interior point algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "KNITRO2006"
+
+\end_inset
+
+ whereas SNOPT uses a sequential quadratic programming (SQP) method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "SNOPT2002"
+
+\end_inset
+
+.
+ For details about these algorithms see 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Nocedal2000NumericalOptimization"
+
+\end_inset
+
+.
+ Although KNITRO out performs MATLAB's 
+\family typewriter
+fmincon
+\family default
+ non-linear solver, it converged to an optimum much less frequently and
+ quickly than SNOPT.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Che-Lin Su reports that KNITRO is faster when you supply an analytic Hessian
+ for the constraints.
+\end_layout
+
+\end_inset
+
+ We suspect SNOPT outperforms KNITRO because the latest version has better
+ support for rank deficient problems.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Skrainka2011FiniteBLP"
+
+\end_inset
+
+ develops a C++ implementation of BLP which further improves the robustness
+ of SNOPT when solving the BLP model by enabling SNOPT's LU rook pivoting
+ option.
+ This result is another indication of (near) rank deficiency and ill-conditionin
+g.
+ Consequently, if the objective function is nearly flat – i.e., poorly identified
+ numerically – SNOPT should be more stable.
+ In addition, interior point methods, such as those used by KNITRO, do not
+ work well on nonconvex problems.
+ SNOPT uses an SQP method which can handle the local nonconvexities caused
+ by simulation for almost all of the datasets which we generated.
+\end_layout
+
+\begin_layout Standard
+To get the most out of the solver, we fine-tuned the solver's options.
+ In addition, for both solvers we specified the sparseness pattern and supplied
+ hand-coded derivatives (gradient and Hessian of the objective function;
+ Jacobian of the constraints) in order to increase numerical stability and
+ performance.
+ We also set box constraints to prevent the solver from searching bad regions
+ of parameter space, as discussed below in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Numerical-Stability-Considerations:"
+
+\end_inset
+
+.
+ Lastly, we set the tolerance to 
+\begin_inset Formula $1e-6$
+\end_inset
+
+, which is a typical outer loop tolerance for BLP.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Numerical-Stability-Considerations:"
+
+\end_inset
+
+Numerical Stability Considerations: Overflow and Underflow
+\end_layout
+
+\begin_layout Standard
+During our initial experiments we soon became concerned that the BLP model,
+ despite some support for identification 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "berry2004LimitTheorems,BerryHaile2010IdentificationBLP"
+
+\end_inset
+
+, was not identified – or at least not numerically identified given the
+ limits of current computers.
+ We found that SNOPT's error code EXIT=10 with INFORM=72 did not mean that
+ the solver had failed to converge.
+ Instead, SNOPT sets these flags when it encountered market shares which
+ were indeterminate, i.e.
+ the computations produced a NaN.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+NaNs result from trying to compute quantities which are undefined such as
+ dividing by zero, 
+\begin_inset Formula $\infty\cdot0$
+\end_inset
+
+, 
+\begin_inset Formula $\dfrac{\infty}{\infty}$
+\end_inset
+
+, and 
+\begin_inset Formula $\infty-\infty$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^{\text{}}$
+\end_inset
+
+
+\begin_inset Formula $^{,}$
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Many higher-level languages such as MATLAB treat these error conditions
+ by setting a variable's value to 
+\emph on
+Inf
+\emph default
+ or 
+\emph on
+NaN
+\emph default
+.
+ However, the researcher must explicitly check for these conditions using
+ 
+\family typewriter
+isinf()
+\family default
+ and 
+\family typewriter
+isnan()
+\family default
+.
+ In general, the CPU generates a floating point exception when these conditions
+ occur.
+ The operating system will then raise the signal 
+\family typewriter
+SIGFPE
+\family default
+ to the process and the process can either catch the signal by installing
+ a signal handler or ignore it, which is often the default.
+\end_layout
+
+\end_inset
+
+ In some cases, the constraint that 
+\begin_inset Formula $\log S_{jt}=\log s_{jt}$
+\end_inset
+
+, i.e.
+ that the logs of the observed and calculated market shares are equal, diverged
+ to 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ when the shares were nearly zero.
+ This problem occurred because the market share calculation is numerically
+ unstable when the utility from the chosen alternative is extremely large.
+\end_layout
+
+\begin_layout Standard
+These problem frequently occurs with logit-based models because the exponential
+ function diverges quickly to infinity for even moderately-sized arguments.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+In some senses, the literature suffers from selection bias in that researchers
+ who failed to write numerically stable code never publish so we never see
+ these papers.
+\end_layout
+
+\end_inset
+
+ Consider the typical straight-forward implementation of the logit where
+ 
+\begin_inset Formula $f\left(V;j\right)=\dfrac{\exp\left(V_{j}\right)}{\underset{k}{\sum}\exp\left(V_{k}\right)}$
+\end_inset
+
+, for some vector of utilities, 
+\begin_inset Formula $V$
+\end_inset
+
+, and choice 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ This implementation is unstable because if 
+\begin_inset Formula $V_{j}\rightarrow\infty$
+\end_inset
+
+ then 
+\begin_inset Formula $f\left(V;j\right)\rightarrow\dfrac{\infty}{\infty}\equiv\mbox{NaN}$
+\end_inset
+
+.
+ This situation usually occurs when evaluating quadrature nodes which are
+ in the tail of the distribution and contribute little to the market share/choic
+e probability.
+ However, this formulation does allow one to compute a vector 
+\begin_inset Formula $w_{k}=\exp\left(V_{k}\right)$
+\end_inset
+
+ and then compute choice probabilities from 
+\begin_inset Formula $w$
+\end_inset
+
+, which greatly speeds up computation because it decreases the number of
+ evaluations of 
+\begin_inset Formula $\exp\left(\cdot\right)$
+\end_inset
+
+, which is an expensive function to compute.
+ We found that the code was more than 
+\begin_inset Formula $10\times$
+\end_inset
+
+ slower without this optimization on a 2.53 GHz dual-core MacBook Pro with
+ 4 GB of 1067 MHz DDR3 RAM.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Test runs on an 8 core Mac Pro with 32 GB of RAM were considerably faster
+ although MATLAB used only two of the cores.
+ Consequently, the bottleneck appears to be swapping and not CPU cycles.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+By re-expressing the logit as the difference in utilities, 
+\begin_inset Formula $\tilde{f}\left(V;j\right)=\dfrac{1}{\underset{k}{\sum}\exp\left(V_{k}-V_{j}\right)}$
+\end_inset
+
+, we can solve the stability problem.
+ This specification is equivalent to 
+\begin_inset Formula $f\left(V;j\right)$
+\end_inset
+
+ but much more stable: the difference in utilities are typically small whereas
+ utility itself can be large and lead to overflow.
+ The cost is that we are no longer able to work in terms of 
+\begin_inset Formula $w=\exp\left(V\right)$
+\end_inset
+
+ and must perform more operations.
+ See the code for details.
+ This is a common example of the engineering need to trade-off speed versus
+ robustness.
+\end_layout
+
+\begin_layout Standard
+However, the BLP model uses an outside good with 
+\begin_inset Formula $V_{0}=0$
+\end_inset
+
+ so the logit is now 
+\begin_inset Formula $f\left(V;j\right)=\dfrac{\exp\left(V_{j}\right)}{\underset{k}{1+\sum}\exp\left(V_{k}\right)}$
+\end_inset
+
+ and, consequently, our trick no longer works.
+ Instead, we use box constraints which are tight enough to prevent the solver
+ from examining regions of parameter space which lead to overflow yet loose
+ enough that we are unlikely to exclude the global optimum.
+ Typically, the box constraints are 
+\begin_inset Formula $\pm15\times\left\Vert \hat{\theta}\right\Vert $
+\end_inset
+
+ for 
+\begin_inset Formula $\theta_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\pm10^{8}$
+\end_inset
+
+ for the other variables, 
+\begin_inset Formula $\delta$
+\end_inset
+
+ and 
+\begin_inset Formula $g=Z^{'}\xi$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Nevertheless, this does not fully address the underlying problem of exceeding
+ the limits of MATLAB's numerical precision.
+ Recently, we developed a state of the art implementation of BLP in C++
+ which solves these issues 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Skrainka2011FiniteBLP"
+
+\end_inset
+
+.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+This code is available upon request.
+\end_layout
+
+\end_inset
+
+ This implementation uses MPEC, high performance quadrature rules, and a
+ high quality solver (SNOPT).
+ In addition the code uses the Eigen template library 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Eigen"
+
+\end_inset
+
+ to perform linear algebra efficiently and work in higher precision arithmetic
+ which has twice the precision of MATLAB.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Namely, in C++ we code all floating point quantities as `long double', which
+ is a 16-byte floating point type whereas the default type, `double', is
+ 8 bytes.
+ Double precision is also what MATLAB uses internally.
+ Because Eigen is a template library, it defines `generic' operations, making
+ it easy to instantiate the necessary code for whatever data type is appropriate.
+ In our code, we use long double.
+ However, it is possible to use higher or lower precision according to the
+ demands of the problem.
+\end_layout
+
+\end_inset
+
+ Initial investigations show that higher precision completely solves these
+ overflow and underflow problems.
+ Skrainka's implementation also computes the same huge standard errors consisten
+tly for all polynomial rules, resolving the difficulty in reliably calculating
+ standard errors which we report in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Standard-Errors"
+
+\end_inset
+
+: this problem is an artifact of the double precision arithmetic used by
+ MATLAB.
+\end_layout
+
+\begin_layout Standard
+Lastly, we start the solver at multiple different points which are randomly
+ chosen about the average of the initial point estimates.
+ If the solver converges to the same point for all starts, then it is likely
+ to be the global optimum.
+ On the other hand, if the solver converges to many different points, there
+ are multiple local optima.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+The polynomial rules out-perform simulation in all respects: they produce
+ more accurate results at much lower computational cost.
+ Of all the rules, the Gauss-Hermite product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes should be considered the `gold standard' and serves as our benchmark
+ for the other rules because it is exact for degree 13 monomials as well
+ as many higher moments.
+ We obtained broadly similar results for all five Monte Carlo data sets.
+ However, all rules performed consistently well on data set 3.
+ Estimates using data sets 4 and 5 varied considerably based on the quadrature
+ choice, especially the standard errors.
+ Data sets 1 and 2 performed between these two extremes.
+\end_layout
+
+\begin_layout Standard
+We now discuss how the different rules affect computed market shares, point
+ estimates, standard errors, and numerical identification.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Computation-of-Market-Shares"
+
+\end_inset
+
+Computation of Predicted Market Shares
+\end_layout
+
+\begin_layout Standard
+One of the first computations we performed was to compute the predicted
+ BLP market share integrals for 
+\begin_inset Formula $T=50$
+\end_inset
+
+ markets and 
+\begin_inset Formula $J=25$
+\end_inset
+
+ products with each quadrature rule.
+ These results provided both a quick check that our code was performing
+ correctly and a visual comparison of the rules.
+ We computed the market share integrals for each data set at ten different
+ parameter values near the MPEC point estimates, 
+\begin_inset Formula $\hat{\theta}^{MPEC}$
+\end_inset
+
+.
+ We selected these parameter values by first computing the GMM estimates
+ using MPEC
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Historically, point estimates were computed with BLP's nested, fixed point
+ algorithm (NFP).
+ However, we use MPEC to compute our point estimates because it is much
+ more robust and, in theory, both algorithms produce equivalent values at
+ the global optimum 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "SuJudd2009MPEC,DubeFoxSu2009NumBLP"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ and then computing an additional nine parameter values where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is drawn from a Normal distribution with 
+\begin_inset Formula $\theta\sim N\left(\hat{\theta}_{MPEC},\mathtt{diag}\left[(0.25)^{2}\left\Vert \hat{\theta}_{MPEC}\right\Vert \right]\right)$
+\end_inset
+
+, i.e.
+ the standard errors are 
+\begin_inset Formula $25\%$
+\end_inset
+
+ of the magnitude of the point estimates.
+ These computations show a cloud of points for the 
+\begin_inset Formula $N=100$
+\end_inset
+
+ different pMC calculations of each integral (
+\begin_inset Formula $R=1,000$
+\end_inset
+
+ draws) with the polynomial rules centered in the middle, as we would expect:
+ pMC is unbiased so the polynomial results should be near the average of
+ the Monte Carlo values.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Rel.Share.Error.by.Rule"
+
+\end_inset
+
+ plots relative error of the market share integrals at 
+\begin_inset Formula $\hat{\theta}^{MPEC}$
+\end_inset
+
+ versus mean market share.
+ The relative error is with respect to the mean pMC market share, 
+\begin_inset Formula $\overline{s}_{jt}^{pMC}=\underset{n=1}{\overset{N}{\sum}}s_{jt}^{pMC(n)}$
+\end_inset
+
+, where 
+\begin_inset Formula $s_{jt}^{pMC(n)}$
+\end_inset
+
+ is the n-th replication of 
+\begin_inset Formula $\left(j,t\right)$
+\end_inset
+
+ market share integral computed using pMC.
+ The green circles represent the pMC cloud of values calculated for different
+ replications of a specific 
+\begin_inset Formula $\left(j,t\right)$
+\end_inset
+
+ product-market pair; the magenta pentagon the 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ node Gaussian-Hermite product rule; the red and blue triangles the `Left'
+ and `Right' Stroud rules; and the yellow diamond the sparse grid integration
+ rule.
+ We only show this figure for data set 1 at 
+\begin_inset Formula $\hat{\theta}^{MPEC}$
+\end_inset
+
+ because the story is essentially the same for other data sets
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+One exception is data set 3 which had one share integral whose value was
+ well outside the Monte Carlo cloud when computed with Stroud rule 11-1
+ Right.
+ The other is data set 5 which has extremely low variance for the integrals
+ computed with pMC.
+\end_layout
+
+\end_inset
+
+.
+ These plots clearly show the simulation noise in the computation of market
+ shares 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+: the different MC share values form a green `pMC cloud' in which the polynomial
+ based rules are located in the center of the cloud.
+ This is exactly where you would expect the true share value to be located
+ because MC is unbiased as 
+\begin_inset Formula $N\rightarrow\infty$
+\end_inset
+
+.
+ Often, it was necessary to magnify the figures many times in order to detect
+ any difference between the polynomial-based rules.
+ This figure demonstrates the much higher accuracy of the monomial and sparse
+ grid rules.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/bss/sbox/quad/data/Fig-RelSharesErrorN01000.cutoff.jpg
+	scale 20
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Rel.Share.Error.by.Rule"
+
+\end_inset
+
+Relative Share Error for Different Quadrature Rules
+\end_layout
+
+\end_inset
+
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Rel.Share.Error.by.Rule"
+
+\end_inset
+
+ shows the relative error of the product-market share integrals, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+, computed using different quadrature rules versus market share, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+.
+ The relative error is calculated with respect to the mean pMC share value
+ for each integral.
+ The pMC rule is computed with 
+\begin_inset Formula $R=1,000$
+\end_inset
+
+ nodes and 
+\begin_inset Formula $N=100$
+\end_inset
+
+ replications.
+ Because of simulation noise, these replications form a `Monte Carlo' cloud
+ about the values computed using the polynomial rules, which are located
+ at the center of these clouds.
+ Also, we omit share integrals which are smaller than 
+\begin_inset Formula $10^{-3}$
+\end_inset
+
+ because they are extremely noisy.
+ Note: the error is greatest for shares with small standard errors because
+ these integrals are the most difficult to compute correctly.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To quantify the performance of the different rules, we computed the maximum
+ and average absolute deviation for the predicted share values from the
+ product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes at 
+\begin_inset Formula $\hat{\theta}^{MPEC}$
+\end_inset
+
+ over all shares.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+I.e., the maximum absolute error is 
+\begin_inset Formula $\underset{j,t}{\max}\left[\left|s_{jt}\left(\hat{\theta}^{MPEC}\right)-s_{jt}^{Product\,Rule}\left(\hat{\theta}^{MPEC}\right)\right|\right]$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ Although, it may not be the best representation of the `truth', the Gaussian
+ product rule is the most precise rule which we compute because of the additiona
+l, higher order terms.
+ Consequently, we use it as our benchmark.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "Tab:ComparisonQuadRulesN=1"
+
+\end_inset
+
+ shows that pMC tends to have higher maximum absolute errors even for a
+ large number of draws and that these errors are several orders of magnitude
+ larger than the monomial and sparse grid rules.
+ Note that even for large numbers of nodes such as 
+\begin_inset Formula $10,000$
+\end_inset
+
+, which is a large number of draws by contemporary standards, pMC produces
+ much less accurate results, despite using ten times more points.
+ In addition, SGI should perform more like the product rule than the monomial
+ rule because SGI uses a subset of the nodes in the Gaussian product rule,
+ whereas the monomial rule uses entirely different nodes and weights.
+ Furthermore, sparse grids set of nodes drops product rule nodes which are
+ in the tail of the weight function and have little weight on them.
+ Dropping them, if anything, should improve numerical stability because
+ the extremal nodes can cause numerically indeterminate results in the logit.
+\end_layout
+
+\begin_layout Standard
+The results in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab:ComparisonQuadRulesN=1"
+
+\end_inset
+
+ only tell part of the story.
+ The biggest differences between the Gauss-Hermite product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes and the other quadrature rules occur for the largest share values.
+ For larger shares an error of 
+\begin_inset Formula $10\%$
+\end_inset
+
+ or so appears as a huge maximum absolute error whereas the maximum absolute
+ error for smaller shares may appear small even if a rule differs from the
+ benchmark by several orders of magnitude because the share value is essentially
+ zero .
+ In these cases, relative error is a better measure of performance.
+ Examining the histograms for the maximum absolute error shows that for
+ the polynomial rules there are only a few integrals with significant difference
+s from the benchmark 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ node product rule whereas for pMC there is a fat tail of shares which differ
+ considerably.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="5">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="15col%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top" width="15col%">
+<column alignment="left" valignment="top" width="15col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $N_{nodes}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Max Abs Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Ave Abs Error
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Pseudo- 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Simple Random Draws
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.28782e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.73236e-04
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Monte
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1,000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.59546e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.19284e-04
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Carlo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10,000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.05101e-03
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.82600e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Product 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gauss-Hermite
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $3^{5}=243$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.20663e-03
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.60235e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $4^{5}=1,024$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.51442e-04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.51356e-06
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $5^{5}=3,125$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.94445e-05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.42722e-07
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $7^{5}=16,807$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Monomial 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Left Column
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+983
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.35871e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.80393e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Rule 11-1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Right Column
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+983
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.14304e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.01983e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Sparse Grid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Konrad-Patterson (
+\begin_inset Formula $K=6$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+993
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.98042e-04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.09252e-06
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "Tab:ComparisonQuadRulesN=1"
+
+\end_inset
+
+Comparison of Integration Rules
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+The columns titled 
+\series bold
+Max Abs Error
+\series default
+ and 
+\series bold
+Ave Abs Error
+\series default
+ refer to the maximum and average absolute error observed for the market
+ shares computed for each rule with respect to the benchmark Gaussian-Hermite
+ product rule with 
+\begin_inset Formula $7$
+\end_inset
+
+ nodes in each of the 
+\begin_inset Formula $5$
+\end_inset
+
+ dimensions.
+ The Monte Carlo rules use 
+\begin_inset Formula $N=1$
+\end_inset
+
+ replication.
+ All values are computed at 
+\begin_inset Formula $\hat{\theta}_{MPEC}$
+\end_inset
+
+ based on 
+\begin_inset Formula $R=1,000$
+\end_inset
+
+ draws.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultspMC5Good-R01000"
+
+\end_inset
+
+ through 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultsMono5Good"
+
+\end_inset
+
+ show the computational costs (seconds) of computing the point estimates
+ for the different rules.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Quoted CPU times are for a 2.53 GHz Intel Core 2 Duo MacBook Pro running
+ OS/X 10.6.4 in 64-bit mode with 4 GB of 1067 MHz DDR3 RAM, 6MB L2 cache,
+ and 1.07 GHz bus.
+ 
+\end_layout
+
+\end_inset
+
+ The CPU Time column refers to the total time the solver took to compute
+ an optimum and hence depends on both the speed of the quadrature rule and
+ how quickly the solver converged.
+ We see that the most efficient polynomial rules – SGI and monomial rule
+ 11-1 – are more than a factor of ten faster than the pMC rule with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws as well as being more accurate.
+ pMC with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws and the Gauss-Hermite product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes are both much slower then the monomial and sparse grid rules because
+ they use many more nodes, which primarily determines the increase in computatio
+nal costs.
+ We discuss the other columns below in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Robustness-of-Point"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Increasing the number of simulation draws from 
+\begin_inset Formula $100$
+\end_inset
+
+ to 
+\begin_inset Formula $10,000$
+\end_inset
+
+ does little to improve the accuracy of the integral because pMC convergence
+ improves as 
+\begin_inset Formula $\sqrt{R}$
+\end_inset
+
+.
+ Because most of the products have very small market share – for the five
+ synthetic data sets, about 
+\begin_inset Formula $90\%$
+\end_inset
+
+ of predicted shares are less than 
+\begin_inset Formula $0.01$
+\end_inset
+
+ – we conjecture that only a few products in each market determine the parameter
+ values and that estimating these market shares correctly is necessary in
+ order to obtain accurate point estimates for 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+.
+ The larger predicted market shares also have larger standard error, where
+ standard error is computed over the 
+\begin_inset Formula $N$
+\end_inset
+
+ different pMC share replications .
+ The small market shares have smaller errors not because they are calculated
+ more accurately but because they are essentially zero.
+ This effect becomes starker with more simulation draws.
+ Another issue is that the parameter value used to compute the shares will
+ affect which combinations of product and market produce the largest shares.
+ Simple experiments show that 
+\begin_inset Formula $10\%$
+\end_inset
+
+ or more of shares can move into or out of the top decile of predicted share
+ values.
+ 
+\end_layout
+
+\begin_layout Standard
+When comparing the own-price elasticities computed with pMC (
+\begin_inset Formula $R=1,000$
+\end_inset
+
+) and SGI, the values appear very similar (See Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Fig:ShareResidual"
+
+\end_inset
+
+), with most of the difference in elasticities clumped at zero.
+ But, most market share integrals are extremely close to zero.
+ Consequently, we expect elasticties of small shares to be nearly same for
+ both rules, based on the following argument.
+ With linear utility and a simple logit, the own price elasticity is 
+\begin_inset Formula $e_{jt}=-\alpha p_{jt}\left(1-s_{jt}\right)$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $s_{jt}\approx0$
+\end_inset
+
+ then 
+\begin_inset Formula $e_{jt}\approx-\alpha p_{jt}$
+\end_inset
+
+ and the residual should be close to zero.
+ Using this intuition for the mixed logit, even with random coefficients,
+ if the market shares are small then the elasticities are likely to agree.
+ For the larger product-market shares, the deviations in elasticity can
+ be 
+\begin_inset Formula $10\%$
+\end_inset
+
+ or more, showing that pMC does not approximate the derivatives of the integrals
+ as well as SGI.
+ Results for the monomial rule are identical.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename /Users/bss/sbox/quad/data/DataJ25T50/Seed0001/Fig-DevOwnPriceElasticityN01000.jpg
+	scale 20
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "Fig:ShareResidual"
+
+\end_inset
+
+Comparison of Computed Own-Price Elasticities for Sparse Grid and pMC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Fig:ShareResidual"
+
+\end_inset
+
+ shows the distribution of  residuals which are the difference between the
+ elasticities calculated with polynomial rules and the mean of the pMC share
+ computations for 
+\begin_inset Formula $N=100$
+\end_inset
+
+ replications with 
+\begin_inset Formula $R=1,000$
+\end_inset
+
+ draws.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Clearly, the polynomial rules provide a much more accurate approximation
+ of the level and gradient of the market share integrals than pMC.
+ In addition, SGI and monomial rules are much more efficient for a given
+ level of accuracy because they require far fewer nodes than pMC.
+ Furthermore, computing the level of the market share integrals is less
+ important than accurately computing the gradient and Hessian of the objective
+ function and the Jacobian of the constraints because these derivatives
+ determine the optimum – i.e.
+ point estimates and standard errors.
+ As we discuss in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Impact-of-Quadrature"
+
+\end_inset
+
+, the polynomial-based rules also outperform pMC when approximating higher
+ order derivatives.
+\end_layout
+
+\begin_layout Subsubsection
+Simulation Error and Bias
+\end_layout
+
+\begin_layout Standard
+Numerical integration is an approximation and like all approximations has
+ error.
+ The quality of the a quadrature rule depends on how quickly the rule converges
+ as 
+\begin_inset Formula $R\rightarrow\infty$
+\end_inset
+
+ and the bounds on its error.
+  pMC rules converge as
+\series bold
+ 
+\series default
+
+\begin_inset Formula $R^{-1/2}$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "judd1998NumericalMethods"
+
+\end_inset
+
+.
+ Consequently, you must increase the number of nodes 
+\begin_inset Formula $R$
+\end_inset
+
+ by a factor of 
+\begin_inset Formula $100$
+\end_inset
+
+ to gain an extra decimal place with pMC.
+ For polynomial-based rules, if the Riemann–Stieltjes integral exists, the
+ product rule will converge 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stroud1971Integration"
+
+\end_inset
+
+.
+ Multi-dimensional error bounds formulas do exist but they are sufficiently
+ complicated that 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Stroud1971Integration"
+
+\end_inset
+
+ only states very simplified versions of the theorems.
+ The key point is that the polynomial rules should converge and have much
+ tighter error bounds than MC methods because their error depends on higher
+ order terms in a Taylor series expansion.
+ Initially, we thought that pMC could out perform polynomial rules when
+ high order terms of the Taylor series of the integrand did not vanish quickly.
+ As we discussed in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Precision-and-Accuracy"
+
+\end_inset
+
+, simulation does not preform significantly better than polynomial rules
+ for when these high order terms are significant.
+ Consequently, polynomial rules should have less error for most problems.
+\end_layout
+
+\begin_layout Standard
+Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:The-Basics-of-BLP"
+
+\end_inset
+
+ explained how integration errors can propagate through the model either
+ via the choice probabilities or the gradient of 
+\begin_inset Formula $\delta$
+\end_inset
+
+ (i.e.
+ the inverse of the market shares, 
+\begin_inset Formula $s^{-1}\left(S;\theta\right)$
+\end_inset
+
+.
+ Error enters the share integrals from integrating over the distribution
+ of the random coefficients which affect the BLP model via the mean zero,
+ type-specific preference shock 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+.
+ Errors in computing this shock propagate through the model and are further
+ distorted by the multinomial logit transformation which can be flat, concave,
+ or convex depending on parameter values.
+ From Jensen's inequality we know that the expectation of a concave (convex)
+ function is more (less) than the function of the expectation.
+ Consequently, simulation error percolates through the multinomial logit
+ form to produce either positive or negative error.
+ Two facts suggest that pMC causes much more error and bias than the monomial
+ rule: (1) the expectation of 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+ with a pMC rule is on the order of 
+\begin_inset Formula $10^{-3}$
+\end_inset
+
+ even with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws about 
+\begin_inset Formula $10^{-17}$
+\end_inset
+
+ for the monomial rule; and (2) the correlation coefficient of 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+ and the simulation error, 
+\begin_inset Formula $e_{jt}=s_{jt}^{MC}-s_{jt}^{Monomial}$
+\end_inset
+
+, is about 
+\begin_inset Formula $-0.2$
+\end_inset
+
+ conditional on 
+\begin_inset Formula $\left|e_{jt}\right|>10^{-4}$
+\end_inset
+
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Here, 
+\begin_inset Formula $\mbox{mean}\left(\mu_{ijt}\right)\equiv\dfrac{1}{R}\underset{i}{\sum}\mu_{ijt}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Negative-Market-Shares"
+
+\end_inset
+
+Negative Market Shares
+\end_layout
+
+\begin_layout Standard
+Because some weights for monomial and sparse grid rules are negative, the
+ approximation for a market share integral could be negative.
+ However, this is only likely for extremely small shares where the polynomial
+ approximation is poor in a region of parameter space where the integral
+ is essential zero everywhere, i.e.
+ flat.
+ We only observed one negative value out of the 
+\begin_inset Formula $625,000$
+\end_inset
+
+ integrals calculated.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Five Monte Carlo data sets, each with 
+\begin_inset Formula $R=100$
+\end_inset
+
+ replications of the 
+\begin_inset Formula $J\times T=1250$
+\end_inset
+
+ share integrals results in 
+\begin_inset Formula $5\times100\times1,250=625,000$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ This value was approximately 
+\begin_inset Formula $-10^{-9}$
+\end_inset
+
+ (i.e.
+ effectively zero) and was occurred with the `Right' version of the monomial
+ rule.
+\end_layout
+
+\begin_layout Subsubsection
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Robustness-of-Point"
+
+\end_inset
+
+Robustness of Point Estimates and Standard Errors
+\end_layout
+
+\begin_layout Standard
+We computed the point estimates and standard errors for each synthetic data
+ set at five starting values.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Initially, we simply computed these optima for the same five starting values
+ for each rule and data set.
+ However, the solver often aborted with numerical problems.
+ Imposing box constraints which were sufficiently loose to include a large
+ region of parameter space yet rule out extremal regions of parameter space
+ solved this problem for most quadrature rules and data sets.
+ Many of these numerical problems are caused by floating point underflow/overflo
+w.
+ Ultimately, we resolved the problem by rewriting our code in C++ and using
+ higher precision arithmetic.
+ See 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Numerical-Stability-Considerations:"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultspMC5Good-R01000"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultsMono5Good"
+
+\end_inset
+
+  show 
+\begin_inset Formula $f\_k$
+\end_inset
+
+, the value of the GMM objective function at the optimum, as well as the
+ CPU time in seconds required for SNOPT to converge to the point estimate.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Quoted CPU times are for a 2.53 GHz Intel Core 2 Duo MacBook Pro running
+ OS/X 10.6.4 in 64-bit mode with 4 GB of 1067 MHz DDR3 RAM, 6MB L2 cache,
+ and 1.07 GHz bus.
+ 
+\end_layout
+
+\end_inset
+
+ If the value of 
+\begin_inset Formula $f\_k$
+\end_inset
+
+ is the same for all starts, then the solver has likely found a unique global
+ optimum.
+ For the most accurate rule, the Gauss-Hermite product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes, the solver always finds the same 
+\begin_inset Formula $f\_k$
+\end_inset
+
+ for each start.
+ For SGI and the monomial rule, the solver always found the same optimum
+ for every starting value and data set except for one start for data set
+ 
+\begin_inset Formula $5$
+\end_inset
+
+.
+ Furthermore, both SGI and the monomial rule had the same problematic starting
+ value.
+ pMC, however, typically finds two or three different optima for each data
+ set, even when 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws, because Monte Carlo noise creates ripples in the surface of the
+ objective function which generate spurious local maxima.
+ In addition these tables show that sparse grid (
+\begin_inset Formula $993$
+\end_inset
+
+ nodes) and monomial rule (
+\begin_inset Formula $983$
+\end_inset
+
+ nodes) require the same amount of CPU time as pMC with 
+\begin_inset Formula $R=1,000$
+\end_inset
+
+ despite being more accurate than pMC with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+.
+ Both of these polynomial rules are also a factor of ten faster than pMC
+ with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-pMC5Good-R01000.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-pMC-R10000.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-GH7-5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-SGI5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-Mono5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Point estimates
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Note: sometimes the solver finds negative values for 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+, which is the square root of the diagonal elements of the variance matrix,
+ 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+, for the random coefficients.
+ In our code 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ acts as the scale on the quadrature nodes because we have assumed that
+ 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is diagonal.
+ The symmetry of the Gaussian kernel means that only the magnitude of 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ matters, not the sign.
+ To avoid this confusion, we report 
+\begin_inset Formula $\left|\hat{\theta}_{2}\right|$
+\end_inset
+
+ for the point estimates of 
+\begin_inset Formula $\hat{\theta}_{2}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+ (Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEpMC5Good-R01000"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEMono5Good"
+
+\end_inset
+
+) also indicate that pMC rules cause false local maxima: by comparing 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ for different starts for a given data set, the estimates which have the
+ same value for 
+\begin_inset Formula $f\_k$
+\end_inset
+
+ agree to three or more digits while those with different 
+\begin_inset Formula $f\_k$
+\end_inset
+
+ do not agree at all.
+ On the other hand, the polynomial rules – with the exception of the data
+ set 
+\begin_inset Formula $5$
+\end_inset
+
+'s fifth start – agree to many decimal places.
+ pMC point estimates also suffer from increased variation in 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+, excessively tight standard errors (See 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Standard-Errors"
+
+\end_inset
+
+), and confidence intervals which do not contain the point estimates from
+ the polynomial rules.
+ In general, the point estimates for 
+\begin_inset Formula $\hat{\theta}_{1}$
+\end_inset
+
+ are more often significant than those for 
+\begin_inset Formula $\hat{\theta}_{2}$
+\end_inset
+
+, the square root of the diagonal elements of the variance of the random
+ coefficients.
+ That 
+\begin_inset Formula $\hat{\theta}_{2}$
+\end_inset
+
+ is not sharply identified could be because the number of markets, 
+\begin_inset Formula $T$
+\end_inset
+
+, is 50.
+ With more markets, we would observe more situations where there were similar
+ characteristics but different choices because of variation in the taste
+ shocks.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC5Good-R01000.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC-R10000.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-GH7-5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-SGI5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-Mono5Good.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, for each rule there are several data sets where the true data
+ generating process (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab:ParamsToGenerateMonteCarloDataset"
+
+\end_inset
+
+.) is not within the confidence interval formed from the point estimates
+ and standard errors.
+ For example, the true value of 
+\begin_inset Formula $\theta_{11}$
+\end_inset
+
+ is 
+\begin_inset Formula $2$
+\end_inset
+
+, but the point estimates for data sets 2, 3, and 5 are never close for
+ any of the rules.
+ The point estimates for 
+\begin_inset Formula $\hat{\theta}_{2}$
+\end_inset
+
+ are further from the `truth' more often than those for 
+\begin_inset Formula $\hat{\theta}_{1}$
+\end_inset
+
+.
+ Consequently, the BLP model appears to suffer from finite sample bias.
+ This problem could also be exacerbated because we estimate the model without
+ a pricing equation.
+ Increasing the number of markets, 
+\begin_inset Formula $T$
+\end_inset
+
+, should improve the identification of 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ in particular because then we will observe more situations where agents
+ with similar attributes make different decisions.
+ It would also be useful to compare the GMM standard errors to bootstrap
+ standard errors.
+ 
+\end_layout
+
+\begin_layout Standard
+We now look at these issues in more detail in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Impact-of-Quadrature"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Standard-Errors"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Impact-of-Quadrature"
+
+\end_inset
+
+Impact of Quadrature on Optimization
+\end_layout
+
+\begin_layout Standard
+One of encouraging result of our experiments is that the point estimates
+ computed via MPEC + SNOPT for the polynomial-based rules are always the
+ same for all starting values when the solver found a valid solution, unlike
+ the pMC rules whose point estimates varied widely depending on the starting
+ value.
+ In general, SNOPT and KNITRO encountered numerical difficulties – typically
+ an undefined computation for a conditional logit share of the form 
+\begin_inset Formula $\infty/\infty$
+\end_inset
+
+ – more often with the polynomial-based rules than pMC because the polynomial
+ rules have better coverage of extreme areas of the parameter space, even
+ though the weights are quite small.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "DubeFoxSu2009NumBLP"
+
+\end_inset
+
+ side-step these issues to some extent by using the MC draws which were
+ used to generated their synthetic data to compute the market share integrals.
+ Clearly, in a real world problem these shocks would not be observed by
+ the econometrician.
+ When I redraw these shocks, their code produces NaNs for some starting
+ values.
+ In addition, they use the same set of draws for each market share integral,
+ 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ That the pMC point estimates vary widely depending on starting values indicates
+ that the solver is finding false local maxima because of the inaccuracies
+ of the pseudo-Monte Carlo approximation to the integral.
+ 
+\end_layout
+
+\begin_layout Standard
+Another important issue is that approximating the share integrals is less
+ important than accurately computing the gradient and Hessian of the GMM
+ objective function and the Jacobian of the constraints which the solver
+ uses to find a local optimum.
+ The product rule and SGI affect solver convergence similarly, which is
+ unsurprising because the SGI nodes, as mentioned in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "par:Sparse-Grid-Integration"
+
+\end_inset
+
+, are a subset of the product rule nodes.
+ By omitting the nodes in the corners of the product rule lattice, SGI is
+ less likely to evaluate the objective function, constraints, or the gradients
+ at extremal points which produce NaNs and cause the solver to abort.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+If SNOPT encounters a NaN it will abort with EXIT=10 and INFO=72.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that increasing the number of draws to 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ does not significantly improve the optimum found by SNOPT with a pMC rule
+ (Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEpMC5Good-R01000"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEpMC-R10000"
+
+\end_inset
+
+).
+ Many of the point estimates and values of the optimum at the solution still
+ vary considerably depending on the starting value even when the solver
+ reports that it has found a local optimum.
+ Clearly, even with 
+\begin_inset Formula $10,000$
+\end_inset
+
+ draws, pMC still introduces spurious local optima.
+\end_layout
+
+\begin_layout Standard
+In the MPEC formulation of BLP, quadrature only affects the problem via
+ the constraint equating observed and predicted market shares.
+ With simulation, this constraint will be noisier and have local areas where
+ simulation errors make it possible to find a local optima.
+ A key assumption of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Gandhi2010InvertingBLP"
+
+\end_inset
+
+'s proof that the market share equation is invertible is monotonicity which
+ fails in this case.
+ Furthermore, the optimizer adjusts parameters so that the spectrum of the
+ mapping is less singular and has local basins of attraction.
+ The different sizes of these basins affect how often solver finds them
+ when searching for a local minimum of the GMM objective function.
+ We found that SNOPT could often find an optimum when KNITRO would not converge
+ because SNOPT uses a sequential quadratic programming method which is more
+ robust than KNITRO's interior point method when the objective function
+ or constraints are non-convex.
+ In addition, SNOPT 7 was recently upgraded to handle rank deficient systems:
+ we found that enabling LU rook pivoting in SNOPT, although a factor of
+ two slower than the default algorithm, enabled the solver to find a valid
+ solution more often.
+ 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We also found some evidence that a pMC rule may make the objective function
+ more sensitive to variations in the parameters 
+\begin_inset Formula $\theta$
+\end_inset
+
+, but more research is required to resolve this issue definitively.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Differences in Objective Function Values
+\end_layout
+
+\begin_layout Standard
+We were initially surprised to discover in Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultspMC5Good-R01000"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "TabSolverResultsMono5Good"
+
+\end_inset
+
+ that the objective function values, 
+\begin_inset Formula $f\_k$
+\end_inset
+
+, do not agree at the optimal point estimates.
+ This occurs because the value of the objective function in the MPEC formulation
+ is 
+\begin_inset Formula $g^{'}Wg$
+\end_inset
+
+ where 
+\begin_inset Formula $g=Z^{'}\xi$
+\end_inset
+
+ are the moment conditions.
+ Using MPEC, we solve for 
+\begin_inset Formula $g$
+\end_inset
+
+ as part of the optimization program: consequently, differences in 
+\begin_inset Formula $g$
+\end_inset
+
+ across quadrature rules at the local optimum found by the solver produce
+ different values of the objective function.
+ Errors in computing 
+\begin_inset Formula $\xi$
+\end_inset
+
+ – whether numerical or due to model misspecification – accumulate and affect
+ the optimal value of the moment conditions which in turn produce different
+ values of the objective function.
+ Initial investigations with a new C++ implementation using quad precision
+ arithmetic and LU rook pivoting to increase solver stability appear to
+ eliminate these differences so that only about 10 out 1302 values of the
+ solver solution 
+\begin_inset Formula $\left(\theta_{1},\theta_{2},\delta,g\right)$
+\end_inset
+
+ differ by more than 2%.
+ However when using MATLAB, 
+\begin_inset Formula $\hat{\xi}$
+\end_inset
+
+ varies considerably at the optima found by SNOPT even when 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ does not.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Standard-Errors"
+
+\end_inset
+
+Simulation, Identification, and Standard Errors
+\end_layout
+
+\begin_layout Standard
+When computing standard errors, we found that simulation – unlike the polynomial
+ rules – produces excessively tight values and will lead researchers to
+ think that some parameters are well identified when they are not.
+ Examining the standard errors (Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEpMC5Good-R01000"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Tab.PointEst.SEMono5Good"
+
+\end_inset
+
+) shows that, in general, the pMC standard errors are much smaller than
+ those computed with polynomial rules.
+ For some data sets, such as data sets 
+\begin_inset Formula $4$
+\end_inset
+
+ and 
+\begin_inset Formula $5$
+\end_inset
+
+, the polynomial rules produce standard errors on the order of 
+\begin_inset Formula $10^{4}$
+\end_inset
+
+ or larger vs.
+ pMC errors of 
+\begin_inset Formula $10^{-1}$
+\end_inset
+
+ even with using 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws.
+ For example, compare the results for 
+\begin_inset Formula $\hat{\theta}_{21}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\theta}_{24}$
+\end_inset
+
+ for data set 
+\begin_inset Formula $4$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\theta}_{21}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\theta}_{23}$
+\end_inset
+
+ for data set 
+\begin_inset Formula $5$
+\end_inset
+
+.
+ Standard errors computed using pMC show apparently tight identification
+ when in fact the Hessian is ill-conditioned.
+ Because pMC introduces spurious local optima and, concomitantly, pockets
+ of higher curvature it produces standard errors which are too tight.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Just examine the formula for GMM standard errors which depends on the inverse
+ of the Hessian.
+\end_layout
+
+\end_inset
+
+ Consequently, pMC can mask poor identification and practitioners will miss
+ an important diagnostic that the objective function is nearly flat because
+ pMC does not approximate the gradient and Hessian well.
+ In fact, as the order of differentiation increases, pMC performs increasingly
+ poorly.
+ Polynomial-based rules do not suffer from this problem because they approximate
+ the level, gradient, and Hessian correctly: if a parameter had huge standard
+ errors for one data set and rule, then it had huge the standard errors
+ for all rules and starts.
+ Nevertheless, the quadrature rules did not reliably detect large standard
+ errors: the Gauss-Hermite product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes detected 
+\begin_inset Formula $4$
+\end_inset
+
+ cases out of 
+\begin_inset Formula $10\times5=50$
+\end_inset
+
+ parameters estimated;
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+I.e., we estimated ten parameters, 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+, for five starts for each rule and data set
+\end_layout
+
+\end_inset
+
+ SGI and the monomial rule found 
+\begin_inset Formula $3$
+\end_inset
+
+ of the 
+\begin_inset Formula $4$
+\end_inset
+
+ found by the product rule; and, pMC, even with 
+\begin_inset Formula $R=10,000$
+\end_inset
+
+ draws, failed to find any.
+ Recently, we began replicated these results using the higher precision
+ BLP implementation in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Skrainka2011FiniteBLP"
+
+\end_inset
+
+.
+ Our initial results show that when using higher precision arithmetic, all
+ of the polynomial rules reliably compute the same large standard errors
+ for the same data sets and parameters, 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ Even with this BLP implementation, the pMC rules still produce anomalously
+ tight standard errors.
+ Consequently, pMC quadrature rules will cause a downward bias in standard
+ errors and mask (numerical) identification problems.
+ Note, too, that because pMC produces standard errors which are too tight,
+ pMC will not produce reliable standard errors with the bootstrap.
+ Instead, polynomial-based rules are a better choice because of their increased
+ accuracy and efficiency.
+\end_layout
+
+\begin_layout Standard
+In BLP, the substitution patterns are `diffuse' and all goods are substitutes
+ for each other as opposed to the `local' substitution patterns in pure
+ characteristics models, where cross-price elasticities are non-zero for
+ only a finite set of products (E.g., 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BerryPakes2007PureCharacteristics,ShakedSutton1982RelaxingPriceComp"
+
+\end_inset
+
+).
+ Consequently, the model is very sensitive to both sampling error in the
+ observed market shares, 
+\begin_inset Formula $S_{jt}$
+\end_inset
+
+, and simulation error in the computation of predicted market shares, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "berry2004LimitTheorems"
+
+\end_inset
+
+.
+ Particularly as 
+\begin_inset Formula $J$
+\end_inset
+
+ increases (And, 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "berry2004LimitTheorems"
+
+\end_inset
+
+ require 
+\begin_inset Formula $J\rightarrow\infty$
+\end_inset
+
+ to prove that BLP is consistent and asymptotically normal) small simulation
+ or sampling errors considerably affect the value of 
+\begin_inset Formula $\xi$
+\end_inset
+
+ which is computed in the traditional NFP BLP implementations.
+\end_layout
+
+\begin_layout Standard
+The small sample properties of GMM is another potential source of difficulty
+ in estimating 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ parameters well.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "AltonjiSegal1996SmallGMMBias"
+
+\end_inset
+
+ show that optimal minimum distance (OMD) estimators – i.e.
+ GMM with the optimal weighting matrix – perform poorly in small sample
+ estimates of the variance because the shocks which make the variance large
+ also tend to increase the variance of the variance.
+ Consequently, because 
+\begin_inset Formula $\theta_{2}$
+\end_inset
+
+ measures the standard error of the random coefficients it is probably estimated
+ with downward bias.
+ This correlation could also explain why 
+\begin_inset Formula $\mbox{Var}\left(\theta_{2}\right)$
+\end_inset
+
+ is often surprisingly large: when estimation uses more accurate, polynomial
+ rules is not masked by false correlation from simulation.
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+A head-to-head comparison of Monte Carlo and polynomial-based quadrature
+ rules for approximating multi-dimensional integrals of moderate size shows
+ that monomial rules provide superior accuracy at a computation cost which
+ is at least an order of magnitude smaller.
+ Monomial rules are marginally more difficult to implement than pMC, requiring
+ a few well-defined permutations of the nodes and weights found in a table
+ look-up.
+ An even easier option is to use sparse grid integration which can generate
+ a set of nodes and weights that provide comparable accuracy, often with
+ only a few more nodes.
+ An important area for future research is to develop monomial rules which
+ explicit some of the common structure of economic problems such using functions
+ which are smooth, bounded, and analytic.
+\end_layout
+
+\begin_layout Standard
+When we applied these quadrature methods to BLP, it became clear that the
+ choice of quadrature rule affects the model's results, including the computed
+ value of product-market share integrals, the values of the point estimates,
+ and the standard errors.
+ In particular, pseudo-Monte Carlo rules produce very different point estimates
+ for different starting values – even with very large numbers of draws –
+ unlike the polynomial rules which always produce the same optimum.
+ pMC rules also generate excessively tight standard errors potentially hiding
+ an identification problem in the local basins of attraction created by
+ the noisiness of Monte Carlo integration.
+\end_layout
+
+\begin_layout Standard
+Using a high-quality quadrature rule, then, provides an easy way to improve
+ the accuracy and efficiency of many numerical projects.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/bss/sbox/docs/research/bib/NumericalMethods,/Users/bss/sbox/docs/research/bib/DiscreteChoiceWithKen,/Users/bss/sbox/docs/research/bib/Integration,/Users/bss/sbox/docs/research/bib/IndustrialOrganization,/Users/bss/sbox/docs/research/bib/Econometrics,/Users/bss/sbox/docs/research/bib/Skrainka"
+options "econometrica"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

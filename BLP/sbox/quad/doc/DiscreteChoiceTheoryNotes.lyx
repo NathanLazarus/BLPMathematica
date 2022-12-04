@@ -1,0 +1,1794 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+theorems-ams-extended
+\end_modules
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Discrete Choice Theory Notes
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset citation
+LatexCommand citet
+key "mcfadden1981econometric"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This chapter discusses mathematical framework behind discrete choice.
+ When aggregating up, it is assumed that there is:
+\end_layout
+
+\begin_layout Itemize
+A cost 
+\begin_inset Formula $q_{k}$
+\end_inset
+
+ for choosing alternative 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ 
+\begin_inset Formula $q_{k}$
+\end_inset
+
+ acts like a price.
+\end_layout
+
+\begin_layout Itemize
+Consumer also optimizes over a set of continuously divisible commodities
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ with prices 
+\begin_inset Formula $r$
+\end_inset
+
+ and characteristics 
+\begin_inset Formula $w$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Income is 
+\begin_inset Formula $y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta\in\Delta$
+\end_inset
+
+ is fractional demand for discrete alternatives
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\xi$
+\end_inset
+
+ maps choices 
+\begin_inset Formula $i$
+\end_inset
+
+ to attributes
+\end_layout
+
+\begin_layout Itemize
+Consumer has characteristics 
+\begin_inset Formula $s$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $i\in B$
+\end_inset
+
+ is a choice and 
+\begin_inset Formula $B$
+\end_inset
+
+ is the budget or choice set
+\end_layout
+
+\begin_layout Itemize
+Thus Roy's Identity gives conditional choice probability or `demand':
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\Pr\left(i\left|B,s\right.\right) & = & -\dfrac{\dfrac{\partial\overline{V}}{\partial q_{i}}}{\dfrac{\partial\overline{V}}{\partial y}}\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\overline{V}$
+\end_inset
+
+ is the social indirect utility
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\overline{V}\left(y-q_{B},r,w_{B},B,s\right) & = & \underset{x,\delta}{\max}\left\{ \overline{U}\left(x,\delta,s\right)\left|x\in X,\delta\in\Delta_{B},r\times x+q_{B}\times\delta_{B}\leq y\right.\right\} \end{eqnarray*}
+
+\end_inset
+
+ This social indirect utility yields the Probability Choice System (PCS).
+\end_layout
+
+\begin_layout Subsection
+Additively Separable
+\end_layout
+
+\begin_layout Standard
+Individual indirect utility:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $V\left(y-q,r,w,i;\tilde{U}\right)=\dfrac{y-q-\alpha\left(r,w,i;\tilde{U}\right)}{\beta\left(r\right)}$
+\end_inset
+
+ then social indirect utility is just 
+\begin_inset Formula $\overline{V}=\mathbb{E}_{U\left|s\right.}V$
+\end_inset
+
+.
+ Here 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ could be a shock.
+\end_layout
+
+\begin_layout Itemize
+Choice probabilities are the gradient of the surplus function of this utility
+ if additional conditions hold
+\end_layout
+
+\begin_layout Itemize
+AIRUM: Additive Income Random Utility Maximizing
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $u\left(i\right)=\dfrac{\left(y-q_{i}+\epsilon_{i}\right)}{\beta\left(r\right)}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon_{i}\sim F\left(\epsilon_{B},r,w_{B},B,s\right)$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+TPCS: Translation-invariant Probability Choice System
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If TPCS holds, 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ PCS is consistent with RUM
+\end_layout
+
+\begin_layout Itemize
+Some PCS are consistent with RUM and do not satisfy TPCS
+\end_layout
+
+\begin_layout Itemize
+Social Surplus function is a good way to generate RUM
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+AIRUM holds with 
+\begin_inset Formula $u\left(i\right)=\dfrac{\left(y-q_{i}+\epsilon_{i}\right)}{\beta\left(r\right)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon_{i}\sim F\left(\epsilon_{B},r,w_{B},B,s\right)$
+\end_inset
+
+ then 
+\begin_inset Formula \begin{eqnarray*}
+G\left(q_{B},r,w_{B},B,s\right) & = & \intop_{-\infty}^{\infty}\left[F\left(0_{B}+t,r,w_{B},B,s\right)-F\left(q_{B}+t,r,w_{B},B,s\right)\right]dt\end{eqnarray*}
+
+\end_inset
+
+exists and is the social surplus function satisfying SS.
+ Furthermore, 
+\begin_inset Formula \begin{eqnarray*}
+\overline{V}\left(y-q_{B},r,w_{B},B,s\right) & = & \left[y+G\left(q_{B},r,w_{B},B,s\right)\right]/\beta\left(r\right)\end{eqnarray*}
+
+\end_inset
+
+is the social indirect utility function.
+ Thus, 
+\begin_inset Formula $\Pr\left(i\left|B,s\right.\right)\equiv\pi_{i}\left(q_{B},r,w_{B},S\right)=-\dfrac{\partial G\left(q_{B},r,w_{B},B,s\right)}{\partial q_{i}}$
+\end_inset
+
+ and satisfies TPCS.
+\end_layout
+
+\begin_layout Standard
+Comment: the social surplus function is the area under the aggregated discrete
+ choice demand curve at `price' 
+\begin_inset Formula $q_{B}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+AIRUM + 
+\begin_inset Formula $F\left(\epsilon_{B},r,w_{B},B,s\right)$
+\end_inset
+
+ has finite first moments, then 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+G\left(q_{B},r,w_{B},B,s\right) & = & \intop_{-\infty}^{\infty}\left\{ \underset{i\in B}{\max}\left(\epsilon_{i}-q_{i}\right)-\max\epsilon_{i}\right\} f\left(\epsilon_{B}\right)d\epsilon_{B}\end{eqnarray*}
+
+\end_inset
+
+ This result can be used to calculate the indirect utility and then the
+ welfare implications of changes in choice attributes 
+\begin_inset Formula $w_{B}$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Subsubsection
+Criteria for Parametric PCS
+\end_layout
+
+\begin_layout Standard
+McFadden suggests several assumptions for parametric PCS for applied work:
+\end_layout
+
+\begin_layout Itemize
+Consistency with RUM
+\end_layout
+
+\begin_layout Itemize
+Flexible functional form to capture substitution patterns
+\end_layout
+
+\begin_layout Itemize
+Functional form which facilitates computation and estimation
+\end_layout
+
+\begin_layout Subsubsection
+Specification
+\end_layout
+
+\begin_layout Standard
+Heterogeneity:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega_{i}$
+\end_inset
+
+ unmeasured nonprice attributes
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\sigma$
+\end_inset
+
+ unobserved individual characteristics
+\end_layout
+
+\begin_layout Standard
+`Practical experience suggests that functional forms that allow similar
+ patterns of interalternative substitution will give comparable fits to
+ existing economic data sets.'
+\end_layout
+
+\begin_layout Standard
+Three families of functional forms:
+\end_layout
+
+\begin_layout Description
+Thurstonian
+\begin_inset space ~
+\end_inset
+
+forms
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Binomial probit
+\end_layout
+
+\begin_layout Itemize
+Multinomial probit (MNP)
+\end_layout
+
+\begin_layout Itemize
+etc.
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Lucean
+\begin_inset space ~
+\end_inset
+
+forms
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Binomial logit
+\end_layout
+
+\begin_layout Itemize
+Multinomial logit (MNL)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ Cardell 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ Generalized Extreme Value (GEV)
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Tverskian
+\begin_inset space ~
+\end_inset
+
+forms
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Elimination by Aspects (EBA)
+\end_layout
+
+\begin_layout Itemize
+Elimination by Strategy (EBS)
+\end_layout
+
+\begin_layout Itemize
+Preference tree 
+\end_layout
+
+\begin_layout Itemize
+Tree Extreme Value
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Note: 
+\end_layout
+
+\begin_layout Itemize
+Linear utility, 
+\begin_inset Formula $u=\alpha'z$
+\end_inset
+
+, is fits well to any level if you include the neccessary higher order terms
+\end_layout
+
+\begin_layout Itemize
+homogeneity is obtained by ensuring that 
+\begin_inset Formula $z$
+\end_inset
+
+ is homogeneous of degree 
+\begin_inset Formula $0$
+\end_inset
+
+ in 
+\begin_inset Formula $\left(q,r\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is invariant to changes in the price level.
+\end_layout
+
+\begin_layout Itemize
+See footnote 26 about ability to approximate any utility function arbitrarily
+ close with the utility 
+\begin_inset Formula $\alpha'z_{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Type I Extreme Value 
+\begin_inset Formula $==$
+\end_inset
+
+ Weibull
+\end_layout
+
+\begin_layout Subsubsection
+Multinomial Logit
+\end_layout
+
+\begin_layout Itemize
+IIA
+\end_layout
+
+\begin_layout Itemize
+Derived from Type I Extreme Value
+\end_layout
+
+\begin_layout Itemize
+All cross elasticities are the same: 
+\begin_inset Formula $\dfrac{\partial\log\Pr\left(i\left|z_{B},\theta\right.\right)}{\partial\log z_{jk}}=\beta_{k}z_{jk}\Pr\left(j\left|z_{B},\theta\right.\right)$
+\end_inset
+
+ and independent of 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+These problems are caused by `order independence'
+\end_layout
+
+\begin_layout Itemize
+Most variants fail RUM or can't accomodate red bus/blue bus substitution
+ patterns
+\end_layout
+
+\begin_layout Subsubsection
+Multinomial Probit
+\end_layout
+
+\begin_layout Itemize
+Difficult to estimate for more than 
+\begin_inset Formula $m\geq5$
+\end_inset
+
+ dimensions because of difficulty in numerical integration
+\end_layout
+
+\begin_layout Itemize
+Need to calculate orthant probabilities
+\end_layout
+
+\begin_layout Subsubsection
+GEV
+\end_layout
+
+\begin_layout Itemize
+MNL except with many levels of nesting.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $F\left(\epsilon_{B},z_{B},s\right)=\exp\left\{ -H\left(\exp^{-\epsilon_{1}},\ldots,\exp^{-\epsilon_{n}},z_{B},s\right)\right\} $
+\end_inset
+
+ is a multivariate extreme value distribution
+\end_layout
+
+\begin_layout Itemize
+Social surplus function is
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+G\left(q_{B},z_{B},s\right) & = & \mathbb{E}\underset{i\in B}{\max}u_{i}-\gamma\\
+ & = & \log H\left(q_{B},z_{B},s\right)\end{eqnarray*}
+
+\end_inset
+
+ and the choice probabilities are
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\pi_{i}\left(q_{B},z_{B},s\right) & = & \dfrac{\partial}{\partial q_{i}}\log H\left(q_{B},z_{B},s\right)\end{eqnarray*}
+
+\end_inset
+
+ Some GEV examples:
+\end_layout
+
+\begin_layout Itemize
+Luce subcase: 
+\begin_inset Formula $H\left(y_{B},z_{B},s\right)=\left[\underset{i\in B}{\sum}y_{i}^{1/\left(1-\sigma\right)}\right]^{1-\sigma}$
+\end_inset
+
+ where 
+\begin_inset Formula $\sigma\in\left[0,1\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Nested MNL: 
+\begin_inset Formula $H\left(y_{B},z_{B},s\right)=\underset{C\in\mathcal{F}_{B}^{*}}{\sum}a\left(z_{C}\right)\left[\underset{i\in C}{\sum}y_{i}^{1/\left(1-\sigma\left(z_{C}\right)\right)}\right]^{1-\sigma\left(z_{C}\right)}$
+\end_inset
+
+ which yields conditional probabilities for choosing a nest and for choosing
+ an alternative conditional on choice of nest.
+\end_layout
+
+\begin_layout Itemize
+Deeper nests are possible...
+ E.g., 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Goldberg1995"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Logit Problems
+\end_layout
+
+\begin_layout Itemize
+Unrealistic substitution
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{j}\left(p\right) & = & \dfrac{\exp\left(-\alpha p_{j}\right)}{\underset{k\in K}{\sum}\exp\left(-\alpha p_{k}\right)}\\
+\partial s_{j}/\partial p_{j} & = & -\alpha\left(1-s_{j}\right)s_{j}\\
+\partial s_{j}/\partial p_{i} & = & \alpha s_{j}s_{i}\end{eqnarray*}
+
+\end_inset
+
+ Consequently, the elasticities are
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\eta_{jkt} & = & \begin{cases}
+-\alpha p_{jt}\left(1-s_{jt}\right) & \mbox{if }j=k\\
+\alpha p_{kt}s_{kt} & \mbox{otherwise}\end{cases}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Which implies, for small market shares, that own-price elasticity is proportiona
+l to price.
+ Thus, lower price 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ lower elasticity 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ higher markup which is only possible if the marginal cost is lower for
+ cheaper products.
+ However, this is not always true.
+ Functional form will also affect own-price elasticity
+\end_layout
+
+\begin_layout Itemize
+Market share determines cross price elasticities, i.e.
+ patterns of substitution to rival goods instead of closeness in product
+ characteristic space
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Only iid shock 
+\begin_inset Formula $\epsilon_{itj}$
+\end_inset
+
+ changes consumers' choices
+\end_layout
+
+\begin_layout Itemize
+Otherwise, consumers rank products in the same proportion as the average,
+ i.e.
+ their second choice just equals population average
+\end_layout
+
+\begin_layout Itemize
+To break this, need correlation across brands
+\end_layout
+
+\begin_layout Itemize
+Add correlation to 
+\begin_inset Formula $\epsilon_{ijt}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+e.g.
+ McFadden's (1978) GEV/nested logit model
+\end_layout
+
+\begin_layout Itemize
+Within-group, market shares still drive substitution
+\end_layout
+
+\begin_layout Itemize
+Easy to compute via closed form
+\end_layout
+
+\begin_layout Itemize
+Still require choice of segments/nests
+\end_layout
+
+\begin_layout Itemize
+Order of nests important in multi-layer models
+\end_layout
+
+\begin_layout Itemize
+Still require i.i.d.
+ shocks within a nest
+\end_layout
+
+\begin_layout Itemize
+Own-price elasticities still determined by functional form assumption
+\end_layout
+
+\begin_layout Itemize
+Still would like to get rid of i.i.d.
+ 
+\begin_inset Formula $\epsilon_{ijt}$
+\end_inset
+
+ but this is intractable 
+\begin_inset Formula $N\mbox{x}N$
+\end_inset
+
+ problem we are trying to avoid
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Add correlation to preference parameters (random coefficients) via 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Correlation between similar products
+\end_layout
+
+\begin_layout Itemize
+Similar consumers rank products similarly 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ similar substitution patterns
+\end_layout
+
+\begin_layout Itemize
+Only need to estimate smaller number of correlations
+\end_layout
+
+\begin_layout Itemize
+Substitution patterns driven by differences in price sensitivity or marginal
+ utility of income 
+\end_layout
+
+\begin_layout Itemize
+Cost: Need demographic information
+\end_layout
+
+\begin_layout Itemize
+Cost: computational complexity -- no closed form
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+IIA:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Withdrawal of a product 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ market share is split among other products proportionally
+\end_layout
+
+\begin_layout Itemize
+Red Bus - Blue Bus: alternatives of other choices don't impact odds ratio
+ of two choices because
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\dfrac{\Pr\left[i\right]}{\Pr\left[j\right]} & = & \dfrac{\exp^{V_{i}}}{\exp^{V_{j}}}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+BLP
+\end_layout
+
+\begin_layout Standard
+My discussion follows 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "nevo2000practitioner"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Goals:
+\end_layout
+
+\begin_layout Itemize
+Handle a large number of products
+\end_layout
+
+\begin_layout Itemize
+Uses market-level data
+\end_layout
+
+\begin_layout Itemize
+Based on economic theory
+\end_layout
+
+\begin_layout Standard
+The model:
+\end_layout
+
+\begin_layout Itemize
+Focuses on individual behavior
+\end_layout
+
+\begin_layout Itemize
+But, only observe aggregate market shares
+\end_layout
+
+\begin_layout Itemize
+Compute predicted individual choices
+\end_layout
+
+\begin_layout Itemize
+Aggregate them to predict market shares
+\end_layout
+
+\begin_layout Subsection
+Demand Side
+\end_layout
+
+\begin_layout Standard
+Nevo and BLP use a random coefficients discrete choice specification to
+ model product differentiation.
+ This specification has several notable features:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $u_{ijt}=\alpha_{i}\left(y_{i}-p_{i}\right)+x_{jt}'\beta_{i}+\xi_{jt}+\epsilon_{ijt}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can derive from quasi-linear utility
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $t=1,\ldots,T$
+\end_inset
+
+ markets
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $j=1,\ldots,J$
+\end_inset
+
+ products
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $i=1,\ldots,I_{t}$
+\end_inset
+
+ agents
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\left(\begin{array}{c}
+\alpha_{i}\\
+\beta_{i}\end{array}\right)=\left(\begin{array}{c}
+\alpha\\
+\beta\end{array}\right)+\Pi D_{i}+\Sigma\nu_{i}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+distribution of preferences because different people have different tastes
+\end_layout
+
+\begin_layout Itemize
+Needed to produce elasticities of substitution which:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+don't depend just on market shares like MNL
+\end_layout
+
+\begin_layout Itemize
+reflect how close products are in characteristic space
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Can decompose utility into 
+\begin_inset Formula $u_{itj}=\alpha_{i}y_{i}+\delta_{jt}+\mu_{ijt}+\epsilon_{ijt}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\alpha_{i}y_{i}$
+\end_inset
+
+ will drop out when differencing utilities
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\delta_{jt}=x_{jt}^{'}\beta-\alpha p_{jt}+\xi_{jt}$
+\end_inset
+
+ is the mean effect
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mu_{ijt}=\left[-p_{jt}\ x_{jt}^{'}\right]\left(\Pi D_{i}+\Sigma\nu_{i}\right)$
+\end_inset
+
+ is the effect of random coefficients
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mu_{ijt}+\epsilon_{ijt}$
+\end_inset
+
+ is the deviation from mean utility because of heterogeneity
+\end_layout
+
+\begin_layout Itemize
+This specification captures vertical product differentiation
+\end_layout
+
+\begin_layout Itemize
+Consumer will choose a product if:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\delta_{jt}$
+\end_inset
+
+ is large
+\end_layout
+
+\begin_layout Itemize
+the shock 
+\begin_inset Formula $\mu_{ijt}+\epsilon_{ijt}$
+\end_inset
+
+ is large
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Outside good: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $u_{i0t}=\alpha_{i}y_{i}+\xi_{0t}+\pi_{0}D_{i}+\sigma_{0}\nu_{i0}+\epsilon_{i0t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Assume 
+\begin_inset Formula $\xi_{0t}$
+\end_inset
+
+, 
+\begin_inset Formula $\pi_{0}$
+\end_inset
+
+, and 
+\begin_inset Formula $\sigma_{0}$
+\end_inset
+
+ are 
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Need an outside good.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Otherwise, a homogeneous (rescaling) increase of the price level would not
+ affect consumers' choices
+\end_layout
+
+\begin_layout Itemize
+Otherwise, only differences in prices matter
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is product-market effect of unobserved characteristics
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can decompose as 
+\begin_inset Formula $\xi_{jt}=\xi_{j}+\xi_{t}+\Delta\xi_{jt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Can capture 
+\begin_inset Formula $\xi_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $\xi_{t}$
+\end_inset
+
+ with brand- and market-specific dummy variables
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Assumptions:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Agents purchase only one good
+\end_layout
+
+\begin_layout Itemize
+Distributions
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is Type I Extreme Value and additively separable
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\nu\sim\mbox{Normal}\left(???,\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\xi\sim???$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\left(\alpha_{i}\ \beta_{i}\right)^{'}\sim\mbox{Normal}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+IID
+\end_layout
+
+\begin_layout Itemize
+Independence of 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $D$
+\end_inset
+
+, and 
+\begin_inset Formula $\nu$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Choice set 
+\begin_inset Formula $A_{jt}\left(x_{\cdot t},p_{\cdot t},\delta_{\cdot t};\theta\right)\equiv\left\{ \left(D_{i},\nu_{i},\epsilon_{i\cdot t}\right)\left|u_{ijt}\geq u_{ikt}\forall k=0,\ldots,J\right.\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Market Share
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{jt}\left(x_{\cdot t},p_{\cdot t},\delta_{\cdot t};\theta\right) & = & \intop_{A_{jt}}dP^{*}\left(D,\nu,\epsilon\right)\\
+ & = & \intop_{A_{jt}}dP_{\epsilon}^{*}\left(\epsilon\left|D,\nu\right.\right)dP_{\nu}^{*}\left(\nu\left|D\right.\right)dP_{D}^{*}\left(D\right)\\
+ & = & \intop_{A_{jt}}dP_{\epsilon}^{*}\left(\epsilon\right)dP_{\nu}^{*}\left(\nu\right)dP_{D}^{*}\left(D\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Supply Side
+\end_layout
+
+\begin_layout Standard
+Multiproduct firms differentiated-product Bertrand oligopoly
+\end_layout
+
+\begin_layout Itemize
+Can estimate jointly with demand side via GMM by adding a moment condition
+ (see BLP)
+\end_layout
+
+\begin_layout Itemize
+Requires more structure but
+\end_layout
+
+\begin_layout Itemize
+Increases efficiency 
+\end_layout
+
+\begin_layout Subsection
+Identification
+\end_layout
+
+\begin_layout Standard
+The goal is to estimate elasticities.
+\end_layout
+
+\begin_layout Itemize
+In an ideal world, run an experiment with different prices
+\end_layout
+
+\begin_layout Itemize
+Real world:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+prices set by profit-maximizing firms
+\end_layout
+
+\begin_layout Itemize
+data on a market, i.e.
+ market shares, is not one observation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Aggregates many decisions
+\end_layout
+
+\begin_layout Itemize
+Based on consumer preferences for bundles of attributes, a.k.a.
+ products
+\end_layout
+
+\begin_layout Itemize
+Observation is conditional choice probabilities of choosing different bundles
+ of attributes
+\end_layout
+
+\begin_layout Itemize
+Discrete choice model + utility enables calculation of elasticities
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Problems:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Demographics: need to observe multiple markets with variation in 
+\begin_inset Formula $\Pi D_{i}$
+\end_inset
+
+ to relate demographics and product characteristics to choices.
+ Nevo actually draws real individuals from the CPS.
+\end_layout
+
+\begin_layout Itemize
+Endogeneity of unobserved product characteristics if they are correlated
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Random Coefficients
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Identification comes from variation in price for products with similar positions
+ in characteristic space and different market shares vs.
+ products at different locations/market shares
+\end_layout
+
+\begin_layout Itemize
+Need observations in multiple markets
+\end_layout
+
+\begin_layout Itemize
+Product entry/exit or changes in characteristics helps identification
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Estimation
+\end_layout
+
+\begin_layout Enumerate
+Calculate parameter starting values
+\end_layout
+
+\begin_layout Enumerate
+Determine 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ and compute GMM criterion
+\end_layout
+
+\begin_layout Enumerate
+Find optimal parameters
+\end_layout
+
+\begin_layout Enumerate
+Repeat until stopping condition is satisfied
+\end_layout
+
+\begin_layout Description
+Unobserved 
+\begin_inset Formula $D_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\nu_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\epsilon_{i}$
+\end_inset
+
+, and 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Description
+Observed 
+\begin_inset Formula $x_{jt}$
+\end_inset
+
+, 
+\begin_inset Formula $p_{jt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ are unobserved product characteristics
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is econometric error term because everything else was integrated out
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is correlated with 
+\begin_inset Formula $p_{jt}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\therefore$
+\end_inset
+
+ estimate using nonlinear simultaneous equations model
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Berry's (1994) method
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $Z=\left[z_{1},\ldots,z_{M}\right]$
+\end_inset
+
+ are instruments
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbb{E}\left[Z_{m}\omega\left(\theta^{*}\right)\right]=0$
+\end_inset
+
+ is the GMM condition, 
+\begin_inset Formula $\theta^{*}=\mbox{the truth}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\hat{\theta}=\mathtt{argmin}\omega\left(\theta\right)^{'}Z\Phi^{-1}Z^{'}\omega\left(\theta\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\Phi$
+\end_inset
+
+ consistently estimates 
+\begin_inset Formula $\mathbb{E}\left[Z^{'}\omega\omega^{'}Z\right]$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Gives less weight to observations with high variance
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Does not use the difference between observed and predicted market shares
+ 
+\begin_inset Formula $s\left(\cdot\right)-S$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Instead, uses structural error 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Evaluate integral by simulation: draw 
+\begin_inset Formula $D_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\nu_{i}$
+\end_inset
+
+ accordingly
+\end_layout
+
+\begin_layout Itemize
+Intuition: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+for logit 
+\begin_inset Formula $\delta_{jt}=\log S_{jt}-\log S_{0t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If number choosing 
+\begin_inset Formula $S_{0t}$
+\end_inset
+
+ is off by a factor 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ then 
+\begin_inset Formula $\delta=\delta^{true}+\log\gamma$
+\end_inset
+
+ because 
+\begin_inset Formula $S_{jt}=\psi S_{jt}^{true}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{0t}=\dfrac{\psi}{\gamma}S_{0t}^{true}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Invert 
+\begin_inset Formula $s_{\cdot t}\left(\delta_{\cdot t};\theta\right)=S_{\cdot t}$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\delta_{\cdot t}$
+\end_inset
+
+ using contraction mapping (with poor convergence properties)
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\omega_{jt}=\delta_{jt}\left(S_{\cdot t};\theta\right)-\left(x_{jt}^{'}\beta-\alpha p_{jt}\right)\equiv\xi_{jt}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The estimator minimized the distance between the mean utility 
+\begin_inset Formula $\delta_{jt}$
+\end_inset
+
+ and the simple logit value from the linear model with 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Can use brand dummies if there are enough markets
+\end_layout
+
+\begin_layout Itemize
+For logit, this reduces to 2SLS with 
+\begin_inset Formula $\Phi=Z^{'}Z$
+\end_inset
+
+, i.e.
+ homoskedasticity for the equation
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\delta_{jt}=\log S_{jt}-\log S_{0t} & = & x_{jt}^{'}\beta-\alpha p_{jt}+\xi_{jt}\end{eqnarray*}
+
+\end_inset
+
+ because 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is now the structural error term....
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Subsubsection
+Instruments
+\end_layout
+
+\begin_layout Itemize
+Regressors are a bad choice:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $p=mc+Markup\left(\mbox{unobserved product characteristics}\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Markup is correlated with error so 
+\begin_inset Formula $p$
+\end_inset
+
+ is also
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Demand-side instruments
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+shift cost
+\end_layout
+
+\begin_layout Itemize
+uncorrelated with demand shock
+\end_layout
+
+\begin_layout Itemize
+But: need cost shifters which vary by brand
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Location
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+assume product location is exogenous or determined before `revelation of
+ the consumers' valuation of the unobserved product characteristics'
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\therefore$
+\end_inset
+
+ use product characteristics, sum of characteristics of firm's other products,
+ sum of char of rivals' products
+\end_layout
+
+\begin_layout Itemize
+But observed characteristics may be correlated with unobserved 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Problem: brand dummies fail if there is no variation in product characteristics
+ across markets
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Hausman/Nevo:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+City-specific valuation is 
+\begin_inset Formula $\Delta\xi_{jt}=\xi_{jt}-\xi_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Assumed independent across cities
+\end_layout
+
+\begin_layout Itemize
+Assumed correlated over time in same city
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\therefore$
+\end_inset
+
+ prices from other cities are good instruments: correlated via common marginal
+ cost, uncorrelated with market-specific valuation
+\end_layout
+
+\begin_layout Itemize
+Fails under national or regional shocks: national advertising, health scares
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Brand Dummies
+\end_layout
+
+\begin_layout Standard
+Should use:
+\end_layout
+
+\begin_layout Itemize
+Improve fit of model if observed characteristics insufficient
+\end_layout
+
+\begin_layout Itemize
+Improves instrumentation:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Need to instrument for correlation between 
+\begin_inset Formula $p_{jt}$
+\end_inset
+
+ and 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+, unobserved product characteristics
+\end_layout
+
+\begin_layout Itemize
+Brand-specific dummy 
+\begin_inset Formula $\xi_{j}$
+\end_inset
+
+ soaks up product-specific mean effect of characteristics which do not vary
+ across markets 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ no need to instrument for this correlation (i.e.
+ for corr( brand-specific mean quality, price)
+\end_layout
+
+\begin_layout Itemize
+Now error term is 
+\begin_inset Formula $\xi_{jt}-\xi_{j}$
+\end_inset
+
+...
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Possible objections:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Adds more parameters.
+ However only adds 
+\begin_inset Formula $J$
+\end_inset
+
+ more so not a big deal...
+\end_layout
+
+\begin_layout Itemize
+Taste coefficients 
+\begin_inset Formula $\beta$
+\end_inset
+
+ can no longer be identified.
+ `...not true.'
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Estimate with taste dummies, which capture full effect of observable quality
+\end_layout
+
+\begin_layout Itemize
+Then regress dummies on characteristics: 
+\begin_inset Formula $d=x^{'}\beta+\xi$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Brand dummies are an alternative to using product characteristics in the
+ linear part of 
+\begin_inset Formula $\delta_{jt}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Must determine 
+\begin_inset Formula $\beta$
+\end_inset
+
+ by regressing the brand dummy coefficient on product characteristics
+\end_layout
+
+\begin_layout Itemize
+Can still use product characteristics in nonlinear, random coefficient part
+ 
+\begin_inset Formula $\mu_{ijt}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Comments on the Appendix
+\end_layout
+
+\begin_layout Description
+p.5: What does sensitive mean? non-convergence of solver or convergence to
+ different values for different starting points
+\end_layout
+
+\begin_layout Description
+p.5: What does robust mean? non-convergence?
+\end_layout
+
+\begin_layout Description
+
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/bss/sbox/docs/research/bib/DiscreteChoiceWithKen"
+options "econometrica"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

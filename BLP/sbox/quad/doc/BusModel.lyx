@@ -1,0 +1,375 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Rust Reloaded
+\end_layout
+
+\begin_layout Section
+Statement of the Problem
+\end_layout
+
+\begin_layout Standard
+We reformulate 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "RustBusEngine1987"
+
+\end_inset
+
+'s famous paper on bus engine replacement.
+\end_layout
+
+\begin_layout Subsection
+Timing
+\end_layout
+
+\begin_layout Standard
+Several timing specifications are possible:
+\end_layout
+
+\begin_layout Enumerate
+After observing state 
+\begin_inset Formula $x$
+\end_inset
+
+ but before observing shock 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+After observing both state 
+\begin_inset Formula $x$
+\end_inset
+
+ and shock 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+We choose the first convention because it allows us to integrate out the
+ shock.
+\end_layout
+
+\begin_layout Subsection
+The Model
+\end_layout
+
+\begin_layout Standard
+Let
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x$
+\end_inset
+
+ is the state, 
+\begin_inset Formula $x^{+}$
+\end_inset
+
+ is next period's state.
+ (We use superscript 
+\begin_inset Formula $+$
+\end_inset
+
+ to denote next period terms)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is a multivariate shock, with one component for each possible decision
+ of the agent.
+ Component 
+\begin_inset Formula $d$
+\end_inset
+
+ corresponding to decision 
+\begin_inset Formula $d$
+\end_inset
+
+ (see below) is denoted 
+\begin_inset Formula $\epsilon_{d}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $d$
+\end_inset
+
+ be the decision, where 
+\begin_inset Formula $d\in D\left(x\right)$
+\end_inset
+
+ is the choice set containing the agent's possible actions
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $d=\delta\left(x,\epsilon;\theta\right)$
+\end_inset
+
+ is the policy function
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $u\left(x,\epsilon,d\right)$
+\end_inset
+
+ is the utility function (or, in the case of Rust, negative cost)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $V\left(x\right)$
+\end_inset
+
+ is the value function
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $W\left(x,\epsilon,d;\theta\right)$
+\end_inset
+
+ is the full information payoff to the agent, 
+\begin_inset Formula $W\left(x,\epsilon,d\right)=u\left(x,\epsilon,d\right)+\beta\mathbb{E}\left\{ V\left(x^{+}\right)\left|x,d\right.\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The agent can either replace or not replace the engine so
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\delta\left(x,\epsilon\right) & = & \begin{cases}
+d=0 & \mbox{if }W\left(x,\epsilon,0\right)\geq W\left(x,\epsilon,1\right)\\
+d=1 & \mbox{otherwise}\end{cases}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Additive Separability
+\end_layout
+
+\begin_layout Standard
+Assume additively separable utility: 
+\begin_inset Formula $u\left(x,\epsilon,d\right)=u\left(x,d\right)+\epsilon_{d}$
+\end_inset
+
+.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d=0$
+\end_inset
+
+ 
+\begin_inset Formula $\iff$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+u\left(x,0\right)+\epsilon_{0}+\beta\mathbb{E}\left\{ V\left(x^{+}\right)\left|x,d=0\right.\right\}  & \ge & u\left(x,1\right)+\epsilon_{1}+\beta\mathbb{E}\left\{ V\left(x^{+}\right)\left|x,d=1\right.\right\} \end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\iff$
+\end_inset
+
+ 
+\begin_inset Formula \begin{eqnarray*}
+\epsilon_{0}-\epsilon_{1} & \ge & \tilde{W}\left(x,d=1\right)-\tilde{W}\left(x,d=0\right)\\
+ & \equiv & \Delta\left(x\right)\end{eqnarray*}
+
+\end_inset
+
+ where 
+\begin_inset Formula $\tilde{W}\left(x,d\right)=u\left(x,d\right)+\beta\mathbb{E}\left\{ V\left(x^{+}\right)\left|x,d\right.\right\} $
+\end_inset
+
+.
+ Thus,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\Pr\left[d=0\right] & = & \Pr\left[\epsilon_{0}-\epsilon_{1}\ge\Delta\left(x\right)\right]\end{eqnarray*}
+
+\end_inset
+
+ i.e., 
+\begin_inset Formula $d=0$
+\end_inset
+
+ 
+\begin_inset Formula $\iff$
+\end_inset
+
+ 
+\begin_inset Formula \begin{eqnarray*}
+\epsilon_{0} & \ge & \Delta\left(x\right)+\epsilon_{1}\\
+ & \equiv & \overline{\epsilon_{0}}\left(x,\epsilon_{1}\right)\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\overline{\epsilon_{0}}$
+\end_inset
+
+ is the cutoff for 
+\begin_inset Formula $\epsilon_{0}$
+\end_inset
+
+.
+ Now we can write the value function as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\intop_{\overline{\epsilon_{0}}\left(x\right)}^{\infty}W\left(x,\epsilon,d=0\right)dF\left(\epsilon\right) & + & \intop_{-\infty}^{\overline{\epsilon_{0}}\left(x\right)}W\left(x,\epsilon,d=1\right)dF\left(\epsilon\right)\end{eqnarray*}
+
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon\sim F\left(\epsilon\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Thoughts on 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is i.i.d.
+ across buses, contemporaneously
+\end_layout
+
+\begin_layout Itemize
+Rust assumes that the agent is not capcity constrained when performing repairs
+ -- i.e., there are an infinite number of repair bays
+\end_layout
+
+\begin_layout Section
+Data
+\end_layout
+
+\begin_layout Standard
+The data consists of a time series 
+\begin_inset Formula $\left\{ d_{t}^{m},x_{t}^{m}\right\} $
+\end_inset
+
+ for a series of buses 
+\begin_inset Formula $m\in\left\{ 1,\ldots,M\right\} $
+\end_inset
+
+ over time 
+\begin_inset Formula $t\in\left\{ 0,\ldots,T\right\} $
+\end_inset
+
+.
+ The state 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ is observed by the agent and econometrician whereas the shock 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+ (sometimes 
+\begin_inset Formula $\eta_{t}$
+\end_inset
+
+ in Rust) is only observed by the agent.
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/bss/sbox/docs/research/bib/DiscreteChoiceWithKen"
+options "econometrica"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

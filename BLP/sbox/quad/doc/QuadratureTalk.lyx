@@ -1,0 +1,3334 @@
+#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass beamer
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman palatino
+\font_sans cmss
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title (Plain Frame)
+High Performance Quadrature Rules
+\end_layout
+
+\begin_layout Subtitle
+How Numerical Integration Affects a Popular Model of Product Differentiation
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka (UCL) 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+Kenneth L.
+ Judd (Hoover)
+\end_layout
+
+\begin_layout BeginFrame
+The Big Picture
+\end_layout
+
+\begin_layout Standard
+Accurate and efficient numerical approximation of multi-dimensional integrals
+ is crucial for modern economic research:
+\end_layout
+
+\begin_layout Itemize
+Unobserved heterogeneity
+\end_layout
+
+\begin_layout Itemize
+Uncertainty
+\end_layout
+
+\begin_layout Itemize
+Incomplete information (expectations)
+\end_layout
+
+\begin_layout Itemize
+Approximation of densities, functions, etc.
+ using basis functions: e.g., sieve estimation 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ Need to approximate integrals quickly and accurately!
+\end_layout
+
+\begin_layout Standard
+But, most researchers do not follow best practice....
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Research Objectives
+\end_layout
+
+\begin_layout Standard
+Our paper shows that polynomial-based quadrature rules are vastly superior
+ to 
+\series bold
+\bar under
+M
+\series default
+\bar default
+onte 
+\series bold
+\bar under
+C
+\series default
+\bar default
+arlo methods for multi-dimensional numerical integration:
+\end_layout
+
+\begin_layout Itemize
+Polynomial-based methods are both more accurate and more efficient
+\end_layout
+
+\begin_layout Itemize
+Using MC methods incorrectly compromises numerical results and may mask
+ identification problems
+\end_layout
+
+\begin_layout Itemize
+MC causes many problems in 
+\series bold
+\bar under
+B
+\series default
+\bar default
+erry, 
+\series bold
+\bar under
+L
+\series default
+\bar default
+evinsohn, & 
+\series bold
+\bar under
+P
+\series default
+\bar default
+akes (1995, 2004)-style models, including incorrect point estimates, incorrect
+ standard errors, multiple local optima, and non-convergence of Berry's
+ mapping
+\end_layout
+
+\begin_layout Standard
+Results currently based on five simulated data sets.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+A Bit of Literature
+\end_layout
+
+\begin_layout Standard
+Some integration literature:
+\end_layout
+
+\begin_layout Itemize
+Stroud (1971)
+\end_layout
+
+\begin_layout Itemize
+Genz (1993)
+\end_layout
+
+\begin_layout Itemize
+Cools (1997, 2002, 2003)
+\end_layout
+
+\begin_layout Itemize
+Judd (1998)
+\end_layout
+
+\begin_layout Itemize
+Heiss & Winschel (2008)
+\end_layout
+
+\begin_layout Standard
+Some discrete choice literature:
+\end_layout
+
+\begin_layout Itemize
+Berry, Levinsohn, & Pakes (1995, 2004); Nevo (2000a, 2000b, 2001)
+\end_layout
+
+\begin_layout Itemize
+McFadden & Train (2000)
+\end_layout
+
+\begin_layout Itemize
+Train (2009)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Just a Bit More Literature
+\end_layout
+
+\begin_layout Standard
+There is a growing, but young literature on identification:
+\end_layout
+
+\begin_layout Itemize
+Chiou & Walker (2007); Walker (2002); Walker, Ben-Akiva, & Bolduc (2004)
+\end_layout
+
+\begin_layout Itemize
+Berry & Haile (2009)
+\end_layout
+
+\begin_layout Standard
+Numerical literature:
+\end_layout
+
+\begin_layout Itemize
+Optimization: Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e, Fox, & Su (2009); Su & Judd (2009)
+\end_layout
+
+\begin_layout Itemize
+Inner loop inversion: Reynaerts, Varadhan & Nash (2010)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Roadmap
+\end_layout
+
+\begin_layout Standard
+The plan for this talk is:
+\end_layout
+
+\begin_layout Enumerate
+Review quadrature methods for multi-dimensional numerical integration
+\end_layout
+
+\begin_layout Enumerate
+Example: mixed logit
+\end_layout
+
+\begin_layout Enumerate
+BLP model
+\end_layout
+
+\begin_layout Enumerate
+Results
+\end_layout
+
+\begin_layout Enumerate
+Future Research
+\end_layout
+
+\begin_layout Enumerate
+Conclusions
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Numerical Integration Basics
+\end_layout
+
+\begin_layout Standard
+Want to approximate some (multidimensional) integral
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+I\left[f\right]:=\int_{\Omega}f\left(x\right)w\left(x\right)dx,\ \Omega\subset\mathbb{R}^{d},\ w\left(x\right)\geq0\,\forall x\in\Omega\]
+
+\end_inset
+
+ as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+Q\left[f\right]:=\underset{j=1}{\overset{R}{\sum}}w_{j}f\left(y_{j}\right),\ y_{j}\in\Omega\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The crucial issue is how to choose the nodes and weights, 
+\begin_inset Formula $\left(w_{j},y_{j}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Ideally, a rule should have 
+\begin_inset Formula $\underset{R\rightarrow\infty}{\lim}Q^{R}\left[f\right]=I\left[f\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Example: Mixed Logit
+\end_layout
+
+\begin_layout Standard
+Conditional shares with linear utility & Type I Extreme value:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+s_{ij}\left(\alpha_{i}\right)=\dfrac{\exp\left(-\alpha_{i}\log p_{j}+z_{j}^{T}\beta\right)}{\underset{k}{\sum}\exp\left(-\alpha_{i}\log p_{k}+z_{k}^{T}\beta\right)}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Computed market shares are then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{j} & = & \intop_{-\infty}^{\infty}s_{ij}\left(\alpha_{i}\right)\dfrac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\dfrac{1}{2\sigma^{2}}\left(\alpha_{i}-\alpha\right)^{2}\right)d\alpha_{i}\\
+ & = & \dfrac{1}{\sqrt{\pi}}\intop_{-\infty}^{\infty}s_{ij}\left(\sqrt{2}\sigma u\right)\exp\left(-u^{2}\right)du\\
+ & \approx & \dfrac{1}{\sqrt{\pi}}\underset{k}{\sum}w_{k}s_{ij}\left(\sqrt{2}\sigma u_{k}\right).\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note: mixed logit 
+\begin_inset Formula $\leftrightarrow$
+\end_inset
+
+ random coefficients
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Monte Carlo Methods
+\end_layout
+
+\begin_layout Standard
+MC methods are based on number theory:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\bar under
+p
+\series default
+\bar default
+seudo-
+\series bold
+\bar under
+MC
+\series default
+\bar default
+: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Draw 
+\begin_inset Formula $R$
+\end_inset
+
+ nodes, 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+, from weight function 
+\begin_inset Formula $w\left(x\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Set weights to 
+\begin_inset Formula $\nicefrac{1}{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Converges as 
+\begin_inset Formula $R^{-1/2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Warning: must increase draws 
+\begin_inset Formula $100$
+\end_inset
+
+x for each extra decimal point of accuracy!
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For high dimensions, MC may be the only option....
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Polynomial-based Rules
+\end_layout
+
+\begin_layout Standard
+Polynomial based rules are much more efficient:
+\end_layout
+
+\begin_layout Itemize
+Choose nodes and weights strategically:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Exact
+\emph default
+ for all polynomial integrands 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ whose degree is 
+\begin_inset Formula $\leq d$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+I.e.
+ 
+\begin_inset Formula $I\left[f\right]=Q^{R}\left[f\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+E.g., a one-dimension, a Gaussian rule with 
+\begin_inset Formula $R$
+\end_inset
+
+ nodes is exact for polynomials of degree 
+\begin_inset Formula $\leq2R-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\underset{R\rightarrow\infty}{\lim}Q^{R}\left[f\right]=I\left[f\right]\ \forall f\in\mathcal{C}^{1}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Very accurate if your function is well approximated by a polynomial over
+ the relevant portion of the domain:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Approximation can be poor where probability 
+\begin_inset Formula $\approx0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Polynomial approximates 
+\begin_inset Formula $f\left(\cdot\right)$
+\end_inset
+
+ in weighted 
+\begin_inset Formula $\mathcal{L}^{2}$
+\end_inset
+
+ norm, not point-wise
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Requires many fewer nodes than MC rules 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ no `curse of dimensionality' to increase accuracy
+\end_layout
+
+\begin_layout Itemize
+Easy to use: just look up nodes & weights in a table
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Example: Gauss-Hermite
+\end_layout
+
+\begin_layout Standard
+For five nodes we have:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $y_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $w_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.020182870456086e+00
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.995324205904591e-02
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.585724646138185e-01 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.936193231522410e-01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.453087204829417e-01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-9.585724646138185e-01 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.936193231522410e-01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-2.020182870456086e+00
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.995324205904591e-02
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+These nodes and weights will exactly integrate any polynomial of degree
+ 
+\begin_inset Formula $2\times5-1=9$
+\end_inset
+
+ or less
+\end_layout
+
+\begin_layout Itemize
+Note: choose the rule which is appropriate for your domain and weight function!
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Multidimensional Polynomial-based Methods
+\end_layout
+
+\begin_layout Standard
+Gaussian Product rules: 
+\end_layout
+
+\begin_layout Itemize
+Form tensor product of one-dimensional nodes and weights
+\end_layout
+
+\begin_layout Itemize
+The `benchmark' for accuracy
+\end_layout
+
+\begin_layout Standard
+Monomial Rules:
+\end_layout
+
+\begin_layout Itemize
+Monomial: 
+\begin_inset Formula $x^{\mathbf{p}}\equiv\underset{j}{\Pi}x_{j}^{p_{j}}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+where 
+\begin_inset Formula $\mathbf{p}=\left(p_{1},p_{2},\ldots,p_{J}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Degree is 
+\begin_inset Formula $\underset{j}{\sum}p_{j}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Exact for all monomials less than or equal to some degree
+\end_layout
+
+\begin_layout Itemize
+Uses absolute minimum of nodes
+\end_layout
+
+\begin_layout Itemize
+Look up in Stroud (1971) or Cools
+\end_layout
+
+\begin_layout Standard
+Sparse Grids: 
+\end_layout
+
+\begin_layout Itemize
+Easy to compute, but requires more nodes than monomial rule
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Sparse Grids
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fig/SparseGridsPicture.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure from Heiss & Winschel (2008)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+SGI Scaling
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fig/HeissWinschelNumNodes.png
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Table from Heiss & Winschel (2008)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+SGI vs.
+ Monomial Rule
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename fig/SGIProjection.jpg
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename fig/MonomialProjection.jpg
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The BLP Model
+\end_layout
+
+\begin_layout Standard
+BLP is a mixed logit with unobserved product-market heterogeneity for studying
+ product differentiation:
+\end_layout
+
+\begin_layout Itemize
+Individuals' random coefficients capture horizontal differences in taste
+\end_layout
+
+\begin_layout Itemize
+Product-market shock, 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+, captures vertical differences in quality
+\end_layout
+
+\begin_layout Itemize
+Traditional estimation strategy uses nested-fixed point (Rust, 1987):
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Outer loop uses 
+\begin_inset Formula $\hat{\xi}_{jt}^{n}$
+\end_inset
+
+ to compute parameter estimates, 
+\begin_inset Formula $\hat{\theta}^{n}$
+\end_inset
+
+, using GMM
+\end_layout
+
+\begin_layout Itemize
+Inner loop uses current parameter estimates 
+\begin_inset Formula $\hat{\theta}^{n}$
+\end_inset
+
+ to estimate 
+\begin_inset Formula $\hat{\xi}_{jt}^{n+1}$
+\end_inset
+
+ by equating observed (
+\begin_inset Formula $S_{jt}$
+\end_inset
+
+) and calculated market share integrals (
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+): 
+\begin_inset Formula $S_{jt}=s_{jt}\left(\delta\left(\xi;\theta_{1}\right);\theta_{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Market share integrals computed via pMC (inaccurate)
+\end_layout
+
+\begin_layout Itemize
+(Best practice is to use MPEC (Su & Judd, 2009; Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e, Fox, & Su, 2000))
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Specification
+\end_layout
+
+\begin_layout Standard
+Utility:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+u_{ijt} & = & V_{ijt}+\epsilon_{ijt}\\
+V_{ijt} & = & \alpha_{i}\left(y_{i}-p_{jt}\right)+x_{jt}'\beta_{i}+\xi_{jt}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Distributions:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\epsilon_{ijt} & \sim & \mbox{Type I Extreme Value}\\
+\left(\begin{array}{c}
+\alpha_{i}\\
+\beta_{i}\end{array}\right) & = & \left(\begin{array}{c}
+\bar{\alpha}\\
+\bar{\beta}\end{array}\right)+\Sigma\nu_{i}\\
+\nu_{i} & \sim & \mbox{N\ensuremath{\left(0,1\right)}}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By convention, 
+\begin_inset Formula $\theta=\left(\theta_{1},\theta_{2}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\theta_{1}=\left(\bar{\alpha},\bar{\beta}^{'}\right)^{'}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{2}=\mbox{vec}\left(\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Repackaging
+\end_layout
+
+\begin_layout Standard
+It is customary to repackage the utility into constant and stochastic parts:
+\end_layout
+
+\begin_layout Itemize
+Mean utility: 
+\begin_inset Formula $\delta_{jt}\left(\xi_{jt};\theta_{1}\right)=x_{jt}\bar{\beta}-\bar{\alpha}p_{jt}+\xi_{jt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Preference shock: 
+\begin_inset Formula $\mu_{ijt}\left(\nu_{i};\Sigma\right)=\left[-p_{jt}\ x_{jt}\right]\left(\Sigma\nu_{i}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Outer Loop
+\end_layout
+
+\begin_layout Standard
+The outer loop estimates the parameters via GMM:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\hat{\theta} & = & \underset{\theta}{\mbox{arg max}}\left(Z^{'}\xi\right)^{'}W\left(Z^{'}\xi\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset Formula $Z$
+\end_inset
+
+ instruments (e.g.
+ Hausman, `product market' control (BLP), or cost shifters)
+\end_layout
+
+\begin_layout Description
+\begin_inset Formula $\xi$
+\end_inset
+
+ unobserved product-market characteristic
+\end_layout
+
+\begin_layout Description
+\begin_inset Formula $W$
+\end_inset
+
+ Weighting matrix, typically 
+\begin_inset Formula $Z^{'}Z$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Inner Loop
+\end_layout
+
+\begin_layout Standard
+The inner loop inverts the market share equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+S_{jt} & = & s_{jt}\left(\delta\left(\xi,p,x;\theta_{1}\right);\theta_{2}\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+to obtain the mean utility 
+\begin_inset Formula $\delta_{jt}$
+\end_inset
+
+ and, thus, 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ which is needed for the outer loop
+\end_layout
+
+\begin_layout Itemize
+Usual procedure is to use Berry's mapping, aka `The Contraction Mapping'
+\end_layout
+
+\begin_layout Itemize
+Shown to converge only for the case of exact integrals (Berry, 1994)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\exp\left(\delta_{jt}^{n+1}\right) & = & \exp\left(\delta_{jt}^{n}\right)\times S_{jt}/s_{jt}\left(\delta_{jt}^{n};\theta_{2}\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Remark: The mapping is written this way for performance reasons -- 
+\begin_inset Formula $\log$
+\end_inset
+
+ is more expensive than 
+\begin_inset Formula $\exp$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Remark: For simple logit, 
+\begin_inset Formula $\delta_{jt}=\log\left(s_{jt}\right)-\log\left(s_{0t}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Calculated Share Integrals
+\end_layout
+
+\begin_layout Standard
+A central part of BLP is the computation of the market share integrals:
+\end_layout
+
+\begin_layout Itemize
+Conditional market shares:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi;\theta_{1}\right)\left|\theta_{2}\right.\right) & = & \dfrac{\exp\left(\delta_{jt}+\mu_{ijt}\left(\nu\right)\right)}{\sum\exp\left(\delta_{kt}+\mu_{ikt}\left(\nu\right)\right)}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Unconditional market shares:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi;\theta_{1}\right);\theta_{2}\right) & = & \intop_{\mathbb{R}^{K+1}}\dfrac{\exp\left(\delta_{jt}+\mu_{ijt}\left(\nu\right)\right)}{\sum\exp\left(\delta_{kt}+\mu_{ikt}\left(\nu\right)\right)}\phi\left(\nu\right)d\nu\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Monte Carlo Experiments
+\end_layout
+
+\begin_layout Standard
+We investigate the performance of BLP using synthetic data:
+\end_layout
+
+\begin_layout Itemize
+Currently five MC data sets
+\end_layout
+
+\begin_layout Itemize
+Simulate typical BLP data setup with five random coefficients:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Endogenous price 
+\end_layout
+
+\begin_layout Itemize
+BLP Instruments 
+\end_layout
+
+\begin_layout Itemize
+Diagonal 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ (`industry standard' assumption -- facilitates identification)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Code based on Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e, Fox, & Su (2009)
+\end_layout
+
+\begin_layout Itemize
+All pseudo-random numbers created with MATLAB
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttrademark
+\end_layout
+
+\end_inset
+
+'s 
+\family typewriter
+rand()
+\family default
+ and 
+\family typewriter
+randn()
+\end_layout
+
+\begin_layout Itemize
+Sparse grids generated using code from 
+\family typewriter
+www.sparse-grids.de
+\end_layout
+
+\begin_layout Itemize
+Gaussian nodes & weights from Press et al.
+ (1992)
+\end_layout
+
+\begin_layout Itemize
+Monomial rule 11-1 from Stroud (1971)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Computed Market Shares
+\end_layout
+
+\begin_layout Standard
+We computed the 
+\begin_inset Formula $5$
+\end_inset
+
+-dimensional, market share integrals, 
+\begin_inset Formula $s_{jt}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Itemize
+Compared different quadrature rules:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+pMC
+\end_layout
+
+\begin_layout Itemize
+GH product rule with 
+\begin_inset Formula $3^{5},5^{5},7^{5}$
+\end_inset
+
+ nodes
+\end_layout
+
+\begin_layout Itemize
+Sparse grids: exact for degree 11 monomials with 993 nodes.
+\end_layout
+
+\begin_layout Itemize
+Stroud monomial rule 11-1: exact for all degree 
+\begin_inset Formula $11$
+\end_inset
+
+ monomials with just 983 nodes
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Evaluated at MPEC parameter estimates 
+\begin_inset Formula $\hat{\theta}^{MPEC}$
+\end_inset
+
+ and at nine points drawn from 
+\begin_inset Formula $\mbox{N}\left(\hat{\theta}^{MPEC},\nicefrac{1}{4}\left\Vert \hat{\theta}^{MPEC}\right\Vert \right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+pMC: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $N=100$
+\end_inset
+
+ replications with 
+\begin_inset Formula $R=\left\{ 100,1000,10000\right\} $
+\end_inset
+
+ draws 
+\end_layout
+
+\begin_layout Itemize
+Same draws for each integral
+\end_layout
+
+\end_deeper
+\begin_layout BeginFrame
+Share Integral Approximation
+\end_layout
+
+\begin_layout Standard
+Recall the original share integral:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi;\theta_{1}\right);\theta_{2}\right) & = & \intop_{\mathbb{R}^{K+1}}\dfrac{\exp\left(\delta_{jt}+\mu_{ijt}\left(\nu\right)\right)}{\sum\exp\left(\delta_{kt}+\mu_{ikt}\left(\nu\right)\right)}\phi\left(\nu\right)d\nu\end{eqnarray*}
+
+\end_inset
+
+We approximate it as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{jt}\left(\delta\left(\xi;\theta_{1}\right);\theta_{2}\right) & = & \underset{m\in\mathcal{N}}{\sum}w_{m}\dfrac{\exp\left(\delta_{jt}+\mu_{ijt}\left(y_{m}\right)\right)}{\sum\exp\left(\delta_{kt}+\mu_{ikt}\left(y_{m}\right)\right)}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Remark: The kernel 
+\begin_inset Formula $\phi\left(\cdot\right)$
+\end_inset
+
+ disappears because either we take pseudo-random draws from 
+\begin_inset Formula $\mbox{N}\left(0,1\right)$
+\end_inset
+
+ or use a polynomial rule with 
+\begin_inset Formula $w\left(x\right)=\exp\left(-x^{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Remark: A Cholesky decomposition of the variance is necessary to transform
+ the nodes
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results
+\end_layout
+
+\begin_layout Standard
+We now discuss the following results:
+\end_layout
+
+\begin_layout Itemize
+Market share integrals
+\end_layout
+
+\begin_layout Itemize
+Optimization
+\end_layout
+
+\begin_layout Itemize
+Point estimates & standard errors
+\end_layout
+
+\begin_layout Itemize
+Berry's mapping
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Market Shares
+\end_layout
+
+\begin_layout Standard
+Polynomial rules clearly superior to pMC:
+\end_layout
+
+\begin_layout Itemize
+Polynomials approximate smooth functions like the logit well
+\end_layout
+
+\begin_layout Itemize
+All polynomial-based rules clustered in center of MC cloud, usually at exactly
+ the same point
+\end_layout
+
+\begin_layout Itemize
+Polynomial-based rules close to mean of pMC simulations, as expected, because
+ pMC is unbiased.
+\end_layout
+
+\begin_layout Itemize
+Monomial rule and sparse grids use many fewer nodes than GH product rule
+ or MC.
+\end_layout
+
+\begin_layout Standard
+Key issue, however, is to approximate the gradient of the GMM objective
+ function accurately!
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginPlainFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /Users/bss/sbox/quad/src/DataJ25T50/Seed0001/Fig-SharesVsStdDevN01000.jpg
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginPlainFrame
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename /Users/bss/sbox/quad/src/DataJ25T50/Seed0001/Fig-CloseUpSharesVsStdDevN01000.jpg
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Market Shares in Numbers
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="4">
+<features>
+<column alignment="left" valignment="top" width="15col%">
+<column alignment="center" valignment="top" width="20col%">
+<column alignment="left" valignment="top" width="19col%">
+<column alignment="left" valignment="top" width="19col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $N_{nodes}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Max Abs Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Ave Abs Error
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+pMC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.28782e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.73236e-04
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1,000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.59546e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.19284e-04
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10,000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.05101e-03
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.82600e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Product 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $3^{5}=243$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.20663e-03
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.60235e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $4^{5}=1,024$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.51442e-04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.51356e-06
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $5^{5}=3,125$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.94445e-05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.42722e-07
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $7^{5}=16,807$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Stroud
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+983
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.35871e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.80393e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+11-1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+983
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.14304e-02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.01983e-05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Sparse
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+993
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.98042e-04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.09252e-06
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+* Errors relative to GH product rule with 
+\begin_inset Formula $7^{5}$
+\end_inset
+
+ nodes.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Optimization Overview
+\end_layout
+
+\begin_layout Standard
+We compute point estimates:
+\end_layout
+
+\begin_layout Itemize
+Five starting values for a variety of quadrature rules and draws
+\end_layout
+
+\begin_layout Itemize
+Five MC data sets
+\end_layout
+
+\begin_layout Itemize
+Used both KNITRO and SNOPT without significant change in results
+\end_layout
+
+\begin_layout Itemize
+`non-convergence' means:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Exceeded iteration limit of 
+\begin_inset Formula $100$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Solver aborts with an error message, e.g.
+ the problem is unbounded, the solver cannot make progress, all constraints
+ cannot be satisfied, logit produces NaNs
+\end_layout
+
+\begin_layout Itemize
+Numerical problems evaluating constraints indicative of nearly singular
+ Hessian
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+With MPEC, quadrature rules only affect result via constraint that observed
+ market shares equal calculated market shares
+\end_layout
+
+\begin_layout Itemize
+MPEC and NXP are equivalent (Dub
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+'
+\end_layout
+
+\end_inset
+
+e, Fox, & Su, 2009)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Overview of Results
+\end_layout
+
+\begin_layout Standard
+Polynomial-based rules outperform pMC:
+\end_layout
+
+\begin_layout Itemize
+Monomial rules, Sparse grids, and GH product rules always find the same
+ optimum when they converge:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Same point estimates for all starting values and across rules
+\end_layout
+
+\begin_layout Itemize
+Same value of the objective function for all starting values
+\end_layout
+
+\begin_layout Itemize
+When the best pMC solution is used as a starting value, solver converges
+ to SGI optimum or fails to converge
+\end_layout
+
+\begin_layout Itemize
+Require much less CPU time and memory than pMC
+\end_layout
+
+\begin_layout Itemize
+No curse of dimensionality to increase accuracy
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+pMC rarely finds the same optimum:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Different point estimates and values of objective function
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+With different starting values and the same pMC draws
+\end_layout
+
+\begin_layout Itemize
+With same starting value and different pMC draws
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Monte Carlo approximation creates spurious local optima
+\end_layout
+
+\begin_layout Itemize
+Artificially tight standard errors
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Optimization Results for Dataset 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.f_k.Short.pMC.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.f_k.Short.poly.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Optimization Results for Dataset 5
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.f_k.Short.pMC.5.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.f_k.Short.poly.5.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+CPU Time for Dataset 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.CPUTime.Short.pMC.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/CmpSolResults.CPUTime.Short.poly.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with GH Product Rule
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-GH7-5Good-Short5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with GH Product Rule
+\end_layout
+
+\begin_layout Standard
+
+\size scriptsize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-GH7-5Good-Short5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with pMC (
+\begin_inset Formula $R=1,000$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC5Good-R01000-Short5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing single
+
+\family typewriter
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with pMC (
+\begin_inset Formula $R=1,000$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC5Good-R01000-Short5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size scriptsize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with pMC (
+\begin_inset Formula $R=10,000$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC-R10000-Short5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with pMC (
+\begin_inset Formula $R=10,000$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-pMC-R10000-Short5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size scriptsize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with SGI
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-SGI5Good-Short5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with SGI
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-SGI5Good-Short5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size scriptsize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with Monomial Rule
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-Mono5Good-Short5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Point Estimates with Monomial Rule
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing other 0.85
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-SE-Mono5Good-Short5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\size scriptsize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-GH7-5Good-GH7Cmp.5.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+pMC: One Start, Multiple Draws
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/SolverResults-ND-Short1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+pMC: One Start, Multiple Draws
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-ND-Short1.1.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+input{/Users/bss/sbox/quad/doc/tables/PointEst-ND-Short1.2.inc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Numerical Identification
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Numerical Identification
+\emph default
+ occurs when the solver converges to (the same) optimum, i.e.
+ it finds the global optimum:
+\end_layout
+
+\begin_layout Itemize
+Lack of convergence means:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A numerical problem (scaling, poor choice of variables)
+\end_layout
+
+\begin_layout Itemize
+Problems with numerical accuracy
+\end_layout
+
+\begin_layout Itemize
+Lack of variation in the data
+\end_layout
+
+\begin_layout Itemize
+The model is weakly- or un-identified
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+That SNOPT 7 is often superior to KNITRO supports the weak identification
+ story because SNOPT 7 was recently upgraded to handle rank deficient systems
+ better
+\end_layout
+
+\begin_layout Itemize
+Walker (2002) shows that taking too few draws will mask an identification
+ problem in mixed logit models
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Importance Sampling
+\end_layout
+
+\begin_layout Standard
+Importance sampling will not rescue pMC:
+\end_layout
+
+\begin_layout Itemize
+Importance sampling is really just a non-linear change of variables
+\end_layout
+
+\begin_layout Itemize
+Consequently, it will help any numerical method
+\end_layout
+
+\begin_layout Itemize
+The fundamental problem with pMC is using an inaccurate method to approximate
+ the integral
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Results: Berry's Mapping
+\end_layout
+
+\begin_layout Standard
+Berry's (1994) `contraction' mapping drives estimation procedure:
+\end_layout
+
+\begin_layout Itemize
+Used to invert calculated market shares 
+\begin_inset Formula $S_{jt}=s_{jt}\left(\delta\left(\xi;\theta_{1}\right);\theta_{2}\right)$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A contraction in theory (Berry, 1994): does Berry's theorem hold for MC
+ approximation?
+\end_layout
+
+\begin_layout Itemize
+BLP use importance sampling but few other authors employ variance reduction
+ methods
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+I met someone at the scanner data conference using Halton draws, but he
+ was only taking 
+\begin_inset Formula $30$
+\end_inset
+
+ draws....
+\end_layout
+
+\begin_layout Itemize
+Conlon (2009) uses sparse grids -- the only non-pMC BLP paper I know of
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Expensive to compute even with Nevo's transform
+\end_layout
+
+\begin_layout Itemize
+Stopping criterion: 
+\begin_inset Formula $\left\Vert \exp\left[\delta^{n+1}\right]-\exp\left[\delta^{n}\right]\right\Vert <\epsilon_{Inner}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Convergence of Berry's Mapping
+\end_layout
+
+\begin_layout Standard
+We find:
+\end_layout
+
+\begin_layout Itemize
+Berry's mapping converges slowly at best, typically requiring 
+\begin_inset Formula $\sim1,000$
+\end_inset
+
+ iterations (not Gaussian!)
+\end_layout
+
+\begin_layout Itemize
+Approximation of integral affects results:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Convergence for pMC requires more iterations as number of draws, 
+\begin_inset Formula $R$
+\end_inset
+
+, increases
+\end_layout
+
+\begin_layout Itemize
+Slower convergence as 
+\begin_inset Formula $T$
+\end_inset
+
+ and 
+\begin_inset Formula $J$
+\end_inset
+
+ increase
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Fails sufficiency conditions in BLP's contraction mapping theorem 
+\begin_inset Formula $\sim10\%$
+\end_inset
+
+ of the time
+\end_layout
+
+\begin_layout Itemize
+With some Monte Carlo datasets, the mapping never converges (
+\begin_inset Formula $N_{iter}>2500$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Iterations until Convergence
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename /Users/bss/sbox/quad/src/DataJ25T50/Seed0001/Fig-HistBerryN01000.jpg
+	scale 15
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Properties of the Mapping
+\end_layout
+
+\begin_layout Standard
+We also investigate the properties of Berry's mapping:
+\end_layout
+
+\begin_layout Itemize
+Jacobian of mapping is nearly singular: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Condition number 
+\begin_inset Formula $\sim19$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A few eigenvalues near 
+\begin_inset Formula $1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The majority close to 
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We estimate rate of contraction, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, using (Judd, 1998)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\mbox{\lambda} & = & \left[\left\Vert \exp\left(\delta^{k+2\Delta}\right)-\exp\left(\delta^{k+\Delta}\right)\right\Vert /\left\Vert \exp\left(\delta^{k+\Delta}\right)-\exp\left(\delta^{k}\right)\right\Vert \right]^{1/\Delta}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is always close to 
+\begin_inset Formula $1$
+\end_inset
+
+ and often exceeds it, i.e.
+ the Berry's approximate mapping diverges
+\end_layout
+
+\begin_layout Itemize
+Decreasing 
+\begin_inset Formula $T$
+\end_inset
+
+ and 
+\begin_inset Formula $J$
+\end_inset
+
+ slows convergence which should facilitate convergence for a block diagonal
+ system unless increasing size of the system increases chance of finding
+ a local basin of attraction due to MC simulation error
+\end_layout
+
+\begin_layout Itemize
+An identification problem?
+\end_layout
+
+\begin_layout Itemize
+It appears that MC creates local regions of attraction where incorrect solutions
+ are possible
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginPlainFrame
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fig/MarketShareVsMapError.jpg
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Remark: Berry's mapping has trouble making progress for larger share values
+ (
+\begin_inset Formula $\Delta=25$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Conclusion
+\end_layout
+
+\begin_layout Standard
+There are several dangers to poor numerical approximations of integrals:
+\end_layout
+
+\begin_layout Itemize
+Inaccurate results
+\end_layout
+
+\begin_layout Itemize
+Much greater computational costs
+\end_layout
+
+\begin_layout Itemize
+Masking of identification problems
+\end_layout
+
+\begin_layout Standard
+For multidimensional problems of moderate dimension:
+\end_layout
+
+\begin_layout Itemize
+Monomial-rules and Sparse Grids Integration are best options for integrals
+ 
+\end_layout
+
+\begin_layout Itemize
+Polynomial-based rules 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Provide superior efficiency and accuracy
+\end_layout
+
+\begin_layout Itemize
+Require many fewer extra points to increase accuracy (no `curse of dimensionalit
+y')
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Conclusion
+\end_layout
+
+\begin_layout Standard
+Use of pMC in BLP models cause several problems:
+\end_layout
+
+\begin_layout Itemize
+Incorrect point estimates
+\end_layout
+
+\begin_layout Itemize
+Inaccurate share values
+\end_layout
+
+\begin_layout Itemize
+Different solutions for different starting values
+\end_layout
+
+\begin_layout Itemize
+Non-convergence of solver and Berry's mapping
+\end_layout
+
+\begin_layout Itemize
+These problems are usually a sign of identification problems
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Best Practice
+\end_layout
+
+\begin_layout Standard
+Best practice is:
+\end_layout
+
+\begin_layout Itemize
+Polynomial rules:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Perform sensitivity testing by using rules of increasing accuracy until
+ there is no effect
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+MC
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Try 3+ replications
+\end_layout
+
+\begin_layout Itemize
+Different draws for different integrals (McFadden, 1989)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Global optimization:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Must use multiple restarts
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Future Research
+\end_layout
+
+\begin_layout Standard
+Custom Monomial Rules:
+\end_layout
+
+\begin_layout Itemize
+Given importance of mixed logit, use modern tools to create custom rules
+ which exploit structure of economic problems such as mixed logit with normally-
+distributed taste shocks
+\end_layout
+
+\begin_layout Itemize
+For maximum efficiency and accuracy
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Future Research
+\end_layout
+
+\begin_layout Standard
+Convergence Issues:
+\end_layout
+
+\begin_layout Itemize
+Is the approximate Berry mapping a contraction?
+\end_layout
+
+\begin_layout Itemize
+Does the solution from Berry's map agree with better methods for solving
+ non-linear equations?
+\end_layout
+
+\begin_layout Itemize
+What drives non-convergence of solvers? Lack of identification?
+\end_layout
+
+\begin_layout Standard
+Identification:
+\end_layout
+
+\begin_layout Itemize
+Under what conditions is BLP identified?
+\end_layout
+
+\begin_layout Itemize
+When does poor integration mask identification problems in BLP
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,1201 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Discrete Choice Framework
+\end_layout
+
+\begin_layout Author
+Benjamin S.
+ Skrainka
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+This document explains basic assumptions and techniques used in current
+ discrete choice work, focusing on the (multinomial) logit family of models.
+ My discussion mostly summarizes 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Train2003DiscreteChoiceMethodsBook"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Some basic terminology:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P_{ni} & = & \textnormal{Probability agent }n\textnormal{ chooses alternative }i\\
+ & = & \Pr\left[U_{ni}\geq U_{nj}\forall j\in J\right]\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $J$
+\end_inset
+
+ is the set of the agent's alternatives.
+ It is commonly assumed that the utility is additively separable, 
+\begin_inset Formula $U_{ni}=V_{ni}+\epsilon_{ni}$
+\end_inset
+
+, where 
+\begin_inset Formula $\epsilon_{ni}$
+\end_inset
+
+ is some kind of shock -- Type I Extreme Value, Normal, etc.
+ Consequently,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P_{ni} & = & \Pr\left[\epsilon_{nj}-\epsilon_{ni}<V_{ni}-V_{nj},\forall j\in J\right]\\
+ & = & \int_{\epsilon}\mathbb{I}\left[\epsilon_{nj}-\epsilon_{ni}<V_{ni}-V_{nj},\forall j\in J\right]f\left(\epsilon_{n}\right)d\epsilon_{n}\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbb{I}$
+\end_inset
+
+ is the indicator function and 
+\begin_inset Formula $f\left(\epsilon_{n}\right)$
+\end_inset
+
+ is the PDF for the vector of shocks, 
+\begin_inset Formula $\epsilon_{n}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Indentification
+\end_layout
+
+\begin_layout Standard
+This simple framework already has several important implications:
+\end_layout
+
+\begin_layout Itemize
+Only differences in utility affect behavior
+\end_layout
+
+\begin_layout Itemize
+Alternative-specific fixed effects can only be identified relative to one
+ choice -- i.e., their levels must be normalized
+\end_layout
+
+\begin_layout Itemize
+Demographic terms -- i.e.
+ those dependent on agent attributes, can only be identified if they are
+ interacted with alternative-specific characteristics.
+\end_layout
+
+\begin_layout Itemize
+Utility is only identified up to scale
+\end_layout
+
+\begin_layout Itemize
+Independence of error terms: only differences in utility matter so the integral
+ above reduces to dimension 
+\begin_inset Formula $J-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+i.i.d.
+ 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ WLOG must address normalization by setting variance, 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+, to something appropriate such as 
+\begin_inset Formula $1$
+\end_inset
+
+ or 
+\begin_inset Formula $\dfrac{\pi^{2}}{6}$
+\end_inset
+
+ to fix scale of utility
+\end_layout
+
+\begin_layout Itemize
+Correlation of errors can also be addressed, p.
+ 31
+\end_layout
+
+\begin_layout Section
+Logit Choice Probability Formulas
+\end_layout
+
+\begin_layout Standard
+The multinomial logit probability choice formula arrises from the assumption
+ of the Type I Extreme Value distribution for 
+\begin_inset Formula $\epsilon_{ni}$
+\end_inset
+
+ and i.i.d.
+ errors.
+ Then the computation of the above integral gives:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P_{ni} & \left|\epsilon_{ni}\right.= & \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}-V_{nj}}f\left(\epsilon_{nj}\right)d\epsilon_{nj}\\
+P_{ni} & = & \intop_{-\infty}^{\infty}\Pr\left[i\left|\epsilon,n\right.\right]d\epsilon\\
+ & = & \intop_{-\infty}^{\infty}\left\{ \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}-V_{nj}}f\left(\epsilon_{nj}\right)d\epsilon_{nj}\right\} d\epsilon_{ni}\end{eqnarray*}
+
+\end_inset
+
+where the distributional assumption is crucial in obtaining the MNL result
+ that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+P_{ni} & = & \dfrac{\exp^{V_{ni}}}{\underset{j\in J}{\sum}\exp^{V_{nj}}}.\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Strengths and Weaknesses of Logit
+\end_layout
+
+\begin_layout Subsubsection
+Strengths
+\end_layout
+
+\begin_layout Itemize
+Ease of computation
+\end_layout
+
+\begin_layout Itemize
+Closed form solution
+\end_layout
+
+\begin_layout Itemize
+Easy computation of consumer surplus:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\mathbb{E}\left[CS_{n}\right] & = & \dfrac{1}{\alpha_{n}}\log\left[\underset{j\in J}{\sum}\exp^{V_{nj}}\right]+C\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\alpha_{n}=\dfrac{dU_{n}}{dY}$
+\end_inset
+
+ or equivalent to convert 
+\begin_inset Formula $CS_{n}$
+\end_inset
+
+ into monetary units.
+ The change is consumer surplus is then, obviously,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\Delta\mathbb{E}\left[CS_{n}\right] & = & \dfrac{1}{\alpha_{n}}\left\{ \log\left[\underset{j\in J}{\sum}\exp^{V_{nj}}\right]-\log\left[\underset{k\in\tilde{J}}{\sum}\exp^{\tilde{V}_{nk}}\right]\right\} \end{eqnarray*}
+
+\end_inset
+
+after a change in choice set or product attributes.
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Weaknesses
+\end_layout
+
+\begin_layout Itemize
+IIA
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Withdrawal of a product 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ market share is split among other products proportionally
+\end_layout
+
+\begin_layout Itemize
+Red Bus - Blue Bus: alternatives of other choices don't impact odds ratio
+ of two choices because
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\dfrac{\Pr\left[i\right]}{\Pr\left[j\right]} & = & \dfrac{\exp^{V_{i}}}{\exp^{V_{j}}}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+IIA is caused by lack of correlation between alternatives 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ See Train, p.
+ 143.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Unrealistic Substitution Patterns (I assume that linear utility, 
+\begin_inset Formula $V_{j}=z_{j}'\beta-\alpha p_{j}$
+\end_inset
+
+, with price 
+\begin_inset Formula $p_{j}$
+\end_inset
+
+ and product characteristics 
+\begin_inset Formula $z_{j}$
+\end_inset
+
+.)
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{j}\left(p\right) & = & \dfrac{\exp\left(z_{j}'\beta-\alpha p_{j}\right)}{\underset{k\in K}{\sum}\exp\left(z_{j}'\beta-\alpha p_{k}\right)}\\
+\partial s_{j}/\partial p_{j} & = & -\alpha\left(1-s_{j}\right)s_{j}\\
+\partial s_{j}/\partial p_{i} & = & \alpha s_{j}s_{i}\end{eqnarray*}
+
+\end_inset
+
+so the elasticities of substitution are
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\eta_{jj} & = & -\alpha\left(1-s_{j}\right)p_{j}\\
+\eta_{ij} & = & \alpha s_{i}p_{i}\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Also note that small firms have very low cross price elasticities and don't
+ compete much; small and large firms have small own-price elasticities;
+ only mid-sized firms have large own-price elasticities.
+\end_layout
+
+\begin_layout Section
+Mixed Logit
+\end_layout
+
+\begin_layout Standard
+The mixed logit or random coefficients logit is a way to fix the MNL's problems
+ with IIA and unrealistic substitution patterns.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Another less effective or subsidiary method is to include demographic variables
+ in the utility.
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "mcfadden1984econometric"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ The mixed logit assumes that each consumer's preference parameters are
+ drawn from a distribution, 
+\begin_inset Formula $G\left(\theta\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ represents all the parameters in the utility.
+ Then, expected market share (or choice probability) is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+s_{in}=P_{ni} & =\intop_{\Theta} & \left[\intop_{-\infty}^{\infty}\left\{ \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}\left(\theta\right)-V_{nj}\left(\theta\right)}f\left(\epsilon_{nj-i}\left|\epsilon_{ni}\right.\right)d\epsilon_{nj}\right\} f\left(\epsilon_{ni}\right)d\epsilon_{ni}\right]g\left(\theta\right)\, d\theta.\end{eqnarray*}
+
+\end_inset
+
+The utility is now a function of 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ For example, 
+\begin_inset Formula $V_{ni}=z_{ni}'\beta-\alpha p_{j}$
+\end_inset
+
+ , 
+\begin_inset Formula $\theta=\left(\beta,\alpha\right)$
+\end_inset
+
+, 
+\begin_inset Formula $\theta\sim g\left(\nu\right)$
+\end_inset
+
+, and 
+\begin_inset Formula $\nu$
+\end_inset
+
+ is some parameter(s) which specify the distribution.
+ Typically, 
+\begin_inset Formula $g\left(\nu\right)$
+\end_inset
+
+ is the Normal distribution.
+ Consequently, there the econometrician must compute two integrals: the
+ integral over 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ to compute the conditional choice probability, 
+\begin_inset Formula $P_{ni}\left|\theta\right.$
+\end_inset
+
+ , and then the integral over 
+\begin_inset Formula $\theta$
+\end_inset
+
+ to compute 
+\begin_inset Formula $P_{ni}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To compute elasticities, we must differentiate the above expression with
+ respect to price or the relevant characteristic.
+ For price, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\dfrac{\partial s_{in}}{\partial p_{k}} & =\dfrac{\partial s_{in}}{\partial p_{k}}\intop_{\Theta} & \left[\intop_{-\infty}^{\infty}\left\{ \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}\left(\theta\right)-V_{nj}\left(\theta\right)}f\left(\epsilon_{nj-i}\left|\epsilon_{ni}\right.\right)d\epsilon_{nj}\right\} f\left(\epsilon_{ni}\right)d\epsilon_{ni}\right]g\left(\theta\right)\, d\theta.\\
+ & = & \intop_{\Theta}\left[\intop_{-\infty}^{\infty}\left\{ \underset{j\neq i,k}{\Pi}\dfrac{\partial V_{nk}}{\partial p_{k}}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}\left(\theta\right)-V_{nj}\left(\theta\right)}f\left(\epsilon_{nj-i-k},\epsilon_{ni}+V_{ni}-V_{nk}\left|\epsilon_{ni}\right.\right)d\epsilon_{nj}\right\} \right]\\
+ &  & \times f\left(\epsilon_{ni}\right)d\epsilon_{ni}g\left(\theta\right)\, d\theta\end{eqnarray*}
+
+\end_inset
+
+This must be multiplied by 
+\begin_inset Formula $\dfrac{p_{k}}{s_{in}}$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $\eta_{ik}=\dfrac{p_{k}}{s_{in}}\dfrac{\partial s_{in}}{\partial p_{k}}$
+\end_inset
+
+.
+ The own price elasticity is similar but will have many terms from the product
+ rule.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\dfrac{\partial s_{in}}{\partial p_{i}} & =\dfrac{\partial s_{in}}{\partial p_{i}}\intop_{\Theta} & \left[\intop_{-\infty}^{\infty}\left\{ \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}\left(\theta\right)-V_{nj}\left(\theta\right)}f\left(\epsilon_{nj-i}\left|\epsilon_{ni}\right.\right)d\epsilon_{nj}\right\} f\left(\epsilon_{ni}\right)d\epsilon_{ni}\right]g\left(\theta\right)\, d\theta.\\
+ & = & \intop_{\Theta}\left[\intop_{-\infty}^{\infty}\underset{k\neq i}{\sum}\dfrac{\partial V_{ni}}{\partial p_{i}}\left\{ \underset{j\neq i}{\Pi}\intop_{-\infty}^{\epsilon_{ni}+V_{ni}\left(\theta\right)-V_{nj}\left(\theta\right)}f\left(\ldots,\epsilon_{ni}+V_{ni}-V_{nk},\ldots\left|\epsilon_{ni}\right.\right)d\epsilon_{nj}\right\} \right]\\
+ &  & \times f\left(\epsilon_{ni}\right)d\epsilon_{ni}g\left(\theta\right)\, d\theta\end{eqnarray*}
+
+\end_inset
+
+so the own-price elasticity is 
+\begin_inset Formula $\eta_{ii}=\dfrac{p_{i}}{s_{in}}\dfrac{\partial s_{in}}{\partial p_{i}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+BLP
+\end_layout
+
+\begin_layout Standard
+BLP is a special case of the mixed logit which uses a utility of the form
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+V_{ijt} & = & \alpha_{i}\left(y_{i}-p_{jt}\right)+x_{jt}'\beta_{i}+\xi_{jt}+\epsilon_{ijt}\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $i$
+\end_inset
+
+ is the agent, 
+\begin_inset Formula $j\in J$
+\end_inset
+
+ the product, and 
+\begin_inset Formula $t\in T$
+\end_inset
+
+ the market.
+ 
+\begin_inset Formula $\xi_{jt}$
+\end_inset
+
+ is the unobserved to the econometrician product-market shock.
+ 
+\begin_inset Formula $\epsilon_{ijt}$
+\end_inset
+
+ is the Type I Extreme value heterogeneity.
+ The coefficients 
+\begin_inset Formula $\theta_{i}=\left(\alpha_{i},\beta_{i}\right)$
+\end_inset
+
+ have a normal distribution.
+ Often demographics are added to the equations for 
+\begin_inset Formula $\theta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\left(\begin{array}{c}
+\alpha_{i}\\
+\beta_{i}\end{array}\right) & = & \left(\begin{array}{c}
+\alpha\\
+\beta\end{array}\right)+\Pi D_{i}+\Sigma\nu_{i}.\end{eqnarray*}
+
+\end_inset
+
+Demographics 
+\begin_inset Formula $D_{i}\sim P_{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $\nu_{i}\sim P_{\nu}$
+\end_inset
+
+.
+ These distributions are parametric.
+ 
+\begin_inset Formula $\Pi$
+\end_inset
+
+ determines how demographics affect tastes.
+ Consequently, the market shares are the expectation of the regular MNL
+ choice probabilities with respect to 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We also need to model the outside option.
+ Because it is not observed, we typically use
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+V_{i0t} & = & \alpha_{i}y_{i}+\epsilon_{i0t}.\end{eqnarray*}
+
+\end_inset
+
+ See 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "nevo2000practitioner"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+NOTE: which fraction of people have negative coefficients on price, i.e.
+ 
+\begin_inset Formula $\alpha_{i}<0$
+\end_inset
+
+? Does the distribution need to be truncated so that 
+\begin_inset Formula $\alpha_{i}>0$
+\end_inset
+
+ for all agents?
+\end_layout
+
+\begin_layout Section
+Simulation
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Train2003DiscreteChoiceMethodsBook"
+
+\end_inset
+
+ discusses estimating discrete choice models using simulation to compute
+ the necessary integrals.
+ He does not cover BLP or discrete/continuous choice models.
+\end_layout
+
+\begin_layout Standard
+Some key issues he covers are:
+\end_layout
+
+\begin_layout Itemize
+Sampling:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Accept/Reject (AR)
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Often bad because of step function behavior: estimates are unchanged until
+ the parameters cross some threshold and then there is a big jump because
+ there is a change in choice
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+(Logit) Smooted Accept/Reject
+\end_layout
+
+\begin_layout Itemize
+Importance Sampling
+\end_layout
+
+\begin_layout Itemize
+Quasi-Monte Carlo:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Halton Draws
+\end_layout
+
+\begin_layout Itemize
+Niederreiter, etc.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+More complicated
+\end_layout
+
+\begin_layout Itemize
+But, better
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Probit Normalization is key and deceptive
+\end_layout
+
+\begin_layout Itemize
+Logit + linear in parameters utility has a global maximum and is globally
+ concave
+\end_layout
+
+\begin_layout Subsection
+Maximum Simulated Likelihood (MSL)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\hat{\theta}_{MSL}=\mbox{arg max}\sum\ell_{n}\left(\theta\right)$
+\end_inset
+
+ or
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\hat{\theta}_{MSL}$
+\end_inset
+
+ solves 
+\begin_inset Formula $\sum s_{i}\left(\theta\right)=0$
+\end_inset
+
+ where 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ is the score
+\end_layout
+
+\begin_layout Itemize
+Recipie:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Simulate 
+\begin_inset Formula $\check{P_{ni}}$
+\end_inset
+
+, the probability that 
+\begin_inset Formula $n$
+\end_inset
+
+ chooses 
+\begin_inset Formula $i$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+Compute 
+\begin_inset Formula $SLL\left(\theta\right)=\underset{n}{\sum}\log\check{P_{ni}}$
+\end_inset
+
+, the simulated log-likelihood, or solve 
+\begin_inset Formula $\sum\check{s}_{n}\left(\theta\right)=0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Caveat:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\check{P}_{ni}\left(\theta\right)$
+\end_inset
+
+ is an unbiased simulator of 
+\begin_inset Formula $P_{ni}\left(\theta\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $\mathbb{E}\left[\check{P}_{ni}\left(\theta\right)\right]=P_{ni}\left(\theta\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+But 
+\begin_inset Formula $\log$
+\end_inset
+
+ is a nonlinear transformation so 
+\begin_inset Formula $\log\check{P}_{ni}$
+\end_inset
+
+ is not an unbiased simulator of 
+\begin_inset Formula $\log P_{ni}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Key issue is how bias behaves with increased sample size 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ Does 
+\begin_inset Formula $R$
+\end_inset
+
+ also increase?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Fixed 
+\begin_inset Formula $R\Rightarrow$
+\end_inset
+
+ estimator does not converge to the truth
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $R$
+\end_inset
+
+ increases with 
+\begin_inset Formula $N\Rightarrow$
+\end_inset
+
+ simulation bias disappears as 
+\begin_inset Formula $N\rightarrow\infty$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $R$
+\end_inset
+
+ must increase faster than 
+\begin_inset Formula $\sqrt{N}$
+\end_inset
+
+.
+ Then estimator is consistent, unbiased, and equivalent to MLE
+\end_layout
+
+\begin_layout Itemize
+Would prefer that estimator is consistent and unbiased for fixed 
+\begin_inset Formula $R$
+\end_inset
+
+.
+ This is the case for MSM and MSS
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Method of Simulated Moments (MSM)
+\end_layout
+
+\begin_layout Itemize
+MOM depends on fact that residuals of model are uncorrelated with exogenous
+ factors
+\end_layout
+
+\begin_layout Itemize
+MOM estimator is value of parameters such that residuals are uncorrelated
+ with exogenous instruments:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\underset{n}{\sum}\underset{j}{\sum}\left(d_{j}-P_{nj}\left(\theta\right)\right)z_{nj} & = & 0\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+instruments = covariates if they are exogneous
+\end_layout
+
+\begin_layout Itemize
+More efficient when 
+\begin_inset Formula $\mbox{correl}\left(x,z\right)$
+\end_inset
+
+ is greater
+\end_layout
+
+\begin_layout Itemize
+MOM reduces to MLE if the instruments are the scores, 
+\begin_inset Formula $z_{nj}=s_{nj}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+MSM estimator is the 
+\begin_inset Formula $\hat{\theta}_{MSM}$
+\end_inset
+
+ which solves
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\underset{n}{\sum}\underset{j}{\sum}\left(d_{j}-\check{P}_{nj}\left(\theta\right)\right)z_{nj} & = & 0\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\check{P}_{nj}$
+\end_inset
+
+ enters linearly so an unbiased estimator of 
+\begin_inset Formula $\check{P}_{nj}$
+\end_inset
+
+ produces an unbiased estimator of 
+\begin_inset Formula $\hat{\theta}_{MSM}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Even for fixed 
+\begin_inset Formula $R$
+\end_inset
+
+.
+ So MSM is avoids simulation bias
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Loss in efficiency:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+When ideal instruments aren't used
+\end_layout
+
+\begin_layout Itemize
+Simulation bias if instruments are the score, just like MSL
+\end_layout
+
+\begin_layout Itemize
+Non-ideal weights are common
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Maximum Simulated Score (MSS)
+\end_layout
+
+\begin_layout Itemize
+Can provide efficiency and unbiased estimators
+\end_layout
+
+\begin_layout Itemize
+Cost: poor numerical properties
+\end_layout
+
+\begin_layout Itemize
+Uses same equation as MSL: 
+\begin_inset Formula $\sum\check{s}_{n}\left(\theta\right)=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Difference is how 
+\begin_inset Formula $\check{s}_{n}$
+\end_inset
+
+ is simulated
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Must use unbiased score simulator to avoid 
+\begin_inset Formula $\log$
+\end_inset
+
+ bias
+\end_layout
+
+\begin_layout Itemize
+Efficient and unbiased for fixed 
+\begin_inset Formula $R$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Trick is to find an unbiased simulator of 
+\begin_inset Formula $\dfrac{1}{P_{nj}\left(\theta\right)}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Details
+\end_layout
+
+\begin_layout Itemize
+Want weighting matrix 
+\begin_inset Formula $W=-H$
+\end_inset
+
+ where 
+\begin_inset Formula $H$
+\end_inset
+
+ is the Hessian.
+ Then estimator is maximally efficient
+\end_layout
+
+\begin_layout Itemize
+Always use same draws in each iteration when optimizing to avoid `chatter',
+ i.e.
+ so differences are from changes in parameters, not changes in the draws....
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\check{g}_{n}\left(\theta\right)=A+B+C$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+A traditional estimator, 
+\begin_inset Formula $g_{n}\left(\theta^{*}\right)\overset{d}{\rightarrow}N\left(0,\sigma^{2}\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Description
+B simulation bias, 
+\begin_inset Formula $\mathbb{E}_{r}\check{g}_{n}\left(\theta^{*}\right)-g_{n}\left(\theta^{*}\right)$
+\end_inset
+
+, 
+\begin_inset Formula $\sqrt{N}B=\dfrac{\sqrt{N}}{R}\mathcal{Z}$
+\end_inset
+
+ for MSL so need 
+\begin_inset Formula $R>\sqrt{N}$
+\end_inset
+
+ as 
+\begin_inset Formula $N\rightarrow\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+C simulation noise, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\check{g}_{n}\left(\theta^{*}\right)-\mathbb{E}_{r}\check{g}_{n}\left(\theta^{*}\right)$
+\end_inset
+
+, 
+\begin_inset Formula $\rightarrow0$
+\end_inset
+
+ as 
+\begin_inset Formula $NR\rightarrow\infty$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Results for MSL:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $R$
+\end_inset
+
+ fixed: MSL is inconsistent
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $R$
+\end_inset
+
+ rises more slowly than 
+\begin_inset Formula $\sqrt{N}$
+\end_inset
+
+ : consistent but not asymptotically normal
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $R$
+\end_inset
+
+ rises more quickly than 
+\begin_inset Formula $\sqrt{N}$
+\end_inset
+
+ : consistent, asymptotically normal, and efficient.
+ Equivalent to MLE
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Results for MSM:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Depends on the instruments
+\end_layout
+
+\begin_layout Itemize
+Instruments simulated without bias and independent of probability in residual
+ 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ equivalent to MOM? with fixed weights
+\end_layout
+
+\begin_layout Itemize
+Bias + non-ideal weights 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ same as MSL except not efficient
+\end_layout
+
+\end_deeper
+\begin_layout Section
+To Discuss
+\end_layout
+
+\begin_layout Itemize
+Include sensible parameter values, e.g.
+ numbers which show up in point estimate with ExtremeValueDistribution[].
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/bss/sbox/docs/research/bib/DiscreteChoiceWithKen"
+options "econometrica"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
